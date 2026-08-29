@@ -5,7 +5,7 @@ It is deliberately separate from AIR and both candidate implementations.
 
 The Rust host embeds Wasmtime 48.0.1 and exposes one table-scoped SQLite insertion import.
 It supplies no ambient WASI filesystem, environment, network, clock, random, or process interfaces.
-Both candidates receive the same 4 MiB memory limit, ten million fuel units per request, HTTP adapter, JSON handling, SQLite connection, and error mapping.
+Both candidates receive the same 4 MiB memory limit, ten million fuel units per request, one bounded internal Wasm table, HTTP adapter, JSON handling, SQLite connection, and error mapping.
 
 Run the complete engineering baseline from the repository root:
 
@@ -25,3 +25,32 @@ reports/001-post-users.md                     Human-readable comparison
 
 Node.js orchestrates the tests and independently inspects the final SQLite database.
 It is not the execution host for either candidate.
+
+## Controlled AI-generation experiment
+
+The generation runner invokes Codex in isolated temporary workspaces and captures its JSONL event stream.
+It does not expose the repository, candidate from the other target, hidden tests, attacks, or prior runs to the generator.
+Every failed candidate may receive at most three automated repair turns containing only independent evaluator diagnostics.
+
+Run the frozen 20-pair experiment:
+
+```sh
+node benchmark-runner/ai-generation/run.mjs \
+  --experiment-id b001-gpt-5-6-luna-medium-r20-v1 \
+  --runs 20 \
+  --max-repairs 3 \
+  --model gpt-5.6-luna \
+  --reasoning medium
+```
+
+The runner is resumable and skips completed run files.
+Generate its statistical report with the same arguments:
+
+```sh
+node benchmark-runner/ai-generation/report.mjs \
+  --experiment-id b001-gpt-5-6-luna-medium-r20-v1 \
+  --runs 20 \
+  --max-repairs 3 \
+  --model gpt-5.6-luna \
+  --reasoning medium
+```

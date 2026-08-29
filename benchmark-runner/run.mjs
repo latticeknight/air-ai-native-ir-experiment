@@ -102,7 +102,8 @@ const environment = {
     fuel_per_request: 10_000_000,
     max_instances: 1,
     max_memories: 1,
-    max_tables: 0,
+    max_tables: 1,
+    max_table_elements: 1_024,
   },
 };
 

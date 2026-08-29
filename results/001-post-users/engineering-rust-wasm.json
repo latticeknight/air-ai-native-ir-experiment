@@ -275,7 +275,7 @@
     }
   },
   "build": {
-    "candidate_build_ms": 132.53,
+    "candidate_build_ms": 321.85,
     "cache_condition": "fresh candidate Cargo target directory"
   },
   "artifact": {
@@ -284,69 +284,69 @@
   },
   "performance": {
     "cold_start_ms": {
-      "mean": 9.37,
-      "median": 8.14,
+      "mean": 7.87,
+      "median": 7.82,
       "samples": [
-        7.65,
-        7.96,
-        8.14,
-        8.2,
-        14.9
+        8.47,
+        8.17,
+        7.19,
+        7.69,
+        7.82
       ]
     },
     "mean_request_ms": {
-      "mean": 0.61,
-      "median": 0.56,
+      "mean": 0.52,
+      "median": 0.54,
       "samples": [
-        0.51,
+        0.48,
         0.46,
-        0.61,
-        0.56,
-        0.92
+        0.55,
+        0.57,
+        0.54
       ]
     },
     "median_request_ms": {
-      "mean": 0.56,
-      "median": 0.55,
+      "mean": 0.5,
+      "median": 0.51,
       "samples": [
-        0.47,
-        0.42,
-        0.56,
-        0.55,
-        0.8
+        0.48,
+        0.43,
+        0.54,
+        0.51,
+        0.52
       ]
     },
     "p95_request_ms": {
-      "mean": 1.08,
-      "median": 0.84,
+      "mean": 0.75,
+      "median": 0.75,
       "samples": [
-        0.84,
-        0.78,
-        1.14,
-        0.72,
-        1.91
+        0.68,
+        0.64,
+        0.75,
+        0.88,
+        0.81
       ]
     },
     "throughput_requests_per_second": {
-      "mean": 3046.89,
-      "median": 3468.71,
+      "mean": 4016.17,
+      "median": 4214.37,
       "samples": [
-        3904.82,
-        3862.93,
-        3468.71,
-        2643.55,
-        1354.46
+        4581.29,
+        4214.37,
+        3260.87,
+        3481.77,
+        4542.53
       ]
     },
     "peak_memory_bytes": {
-      "mean": 11147673.6,
-      "median": 11190272,
+      "mean": 11288576,
+      "median": 11304960,
       "samples": [
-        11206656,
-        11173888,
-        11206656,
-        11190272,
-        10960896
+        11321344,
+        11272192,
+        11304960,
+        11354112,
+        11190272
       ]
     },
     "user_cpu_seconds": {
@@ -368,7 +368,7 @@
         0.01,
         0.01,
         0.01,
-        0.02
+        0.01
       ]
     }
   },
@@ -387,7 +387,8 @@
       "fuel_per_request": 10000000,
       "max_instances": 1,
       "max_memories": 1,
-      "max_tables": 0
+      "max_tables": 1,
+      "max_table_elements": 1024
     }
   },
   "raw_results": [

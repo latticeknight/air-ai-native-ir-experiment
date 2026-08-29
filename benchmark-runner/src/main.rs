@@ -27,7 +27,7 @@ fn main() {
 fn run() -> Result<()> {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
     let command = arguments.first().map(String::as_str).unwrap_or("");
-    let options = Options::parse(&arguments[1..])?;
+    let options = Options::parse(arguments.get(1..).unwrap_or_default())?;
     match command {
         "inspect" => {
             let engine = engine()?;
@@ -73,7 +73,8 @@ fn serve(options: Options) -> Result<()> {
         .memory_size(MAX_MEMORY_BYTES)
         .instances(1)
         .memories(1)
-        .tables(0)
+        .tables(1)
+        .table_elements(1_024)
         .build();
     let mut store = Store::new(
         &engine,
@@ -178,6 +179,31 @@ fn verify_module(module: &Module) -> Result<()> {
         || !matches!(results[0], ValType::I64)
     {
         bail!("`air_sqlite_v1.insert_user` has an incompatible type");
+    }
+
+    let memory = module
+        .exports()
+        .find(|export| export.name() == "memory")
+        .context("candidate does not export `memory`")?;
+    if !matches!(memory.ty(), ExternType::Memory(_)) {
+        bail!("candidate export `memory` is not linear memory");
+    }
+
+    let handler = module
+        .exports()
+        .find(|export| export.name() == "handle_create_user")
+        .context("candidate does not export `handle_create_user`")?;
+    let ExternType::Func(function) = handler.ty() else {
+        bail!("candidate export `handle_create_user` is not a function");
+    };
+    let parameters: Vec<_> = function.params().collect();
+    let results: Vec<_> = function.results().collect();
+    if parameters.len() != 4
+        || !parameters.iter().all(|value| matches!(value, ValType::I32))
+        || results.len() != 1
+        || !matches!(results[0], ValType::I64)
+    {
+        bail!("candidate export `handle_create_user` has an incompatible type");
     }
     Ok(())
 }

@@ -306,7 +306,7 @@
     }
   },
   "build": {
-    "candidate_build_ms": 467.82,
+    "candidate_build_ms": 284.4,
     "cache_condition": "fresh AIR output using an already-built AIR compiler executable"
   },
   "artifact": {
@@ -315,69 +315,69 @@
   },
   "performance": {
     "cold_start_ms": {
-      "mean": 83.13,
-      "median": 7.39,
+      "mean": 65.38,
+      "median": 7.29,
       "samples": [
-        386.53,
-        6.86,
-        7.39,
-        7.31,
-        7.54
+        299.32,
+        7.55,
+        7.29,
+        6.53,
+        6.22
       ]
     },
     "mean_request_ms": {
-      "mean": 0.73,
-      "median": 0.6,
+      "mean": 0.49,
+      "median": 0.49,
       "samples": [
-        1.08,
-        0.6,
         0.5,
-        0.58,
-        0.91
+        0.45,
+        0.46,
+        0.49,
+        0.55
       ]
     },
     "median_request_ms": {
-      "mean": 0.54,
-      "median": 0.5,
+      "mean": 0.45,
+      "median": 0.46,
       "samples": [
+        0.46,
+        0.42,
+        0.43,
         0.47,
-        0.56,
-        0.48,
-        0.5,
-        0.69
+        0.47
       ]
     },
     "p95_request_ms": {
-      "mean": 1.8,
-      "median": 0.97,
+      "mean": 0.7,
+      "median": 0.71,
       "samples": [
-        3.86,
-        0.97,
-        0.66,
-        0.97,
-        2.56
+        0.71,
+        0.69,
+        0.62,
+        0.72,
+        0.76
       ]
     },
     "throughput_requests_per_second": {
-      "mean": 3325.26,
-      "median": 3687.37,
+      "mean": 3883.3,
+      "median": 3694.27,
       "samples": [
-        4201.64,
-        4053.03,
-        3687.37,
-        2605.3,
-        2078.98
+        3544.61,
+        3778.01,
+        3694.27,
+        4758.6,
+        3641.03
       ]
     },
     "peak_memory_bytes": {
-      "mean": 10076160,
-      "median": 10076160,
+      "mean": 9994240,
+      "median": 9977856,
       "samples": [
+        9977856,
+        9961472,
         10076160,
-        10076160,
-        10108928,
-        10059776,
-        10059776
+        10043392,
+        9912320
       ]
     },
     "user_cpu_seconds": {
@@ -399,7 +399,7 @@
         0.01,
         0.01,
         0.01,
-        0.02
+        0.01
       ]
     }
   },
@@ -418,7 +418,8 @@
       "fuel_per_request": 10000000,
       "max_instances": 1,
       "max_memories": 1,
-      "max_tables": 0
+      "max_tables": 1,
+      "max_table_elements": 1024
     }
   },
   "raw_results": [

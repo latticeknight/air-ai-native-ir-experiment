@@ -1,86 +1,108 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "AIR versus Rust controlled generation trial",
+  "title": "Benchmark 001 controlled AI-generation run",
   "type": "object",
   "required": [
     "schema_version",
+    "experiment_id",
     "benchmark",
     "target",
-    "trial_id",
+    "run",
+    "run_id",
     "model",
+    "reasoning",
+    "seed",
+    "status",
     "attempts",
     "first_pass",
-    "eventual",
-    "security",
-    "artifact"
+    "final",
+    "repair_iterations",
+    "regressions_introduced"
   ],
   "properties": {
     "schema_version": { "const": 1 },
+    "experiment_id": { "type": "string", "minLength": 1 },
     "benchmark": { "const": "001-post-users" },
     "target": { "enum": ["air", "rust-wasm"] },
-    "trial_id": { "type": "string", "minLength": 1 },
-    "model": {
-      "type": "object",
-      "required": ["provider", "identifier", "revision", "token_budget"],
-      "properties": {
-        "provider": { "type": "string" },
-        "identifier": { "type": "string" },
-        "revision": { "type": ["string", "null"] },
-        "token_budget": { "type": "integer", "minimum": 1 }
-      },
-      "additionalProperties": true
-    },
+    "run": { "type": "integer", "minimum": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "model": { "type": "string", "minLength": 1 },
+    "reasoning": { "type": "string", "minLength": 1 },
+    "seed": { "type": ["integer", "string", "null"] },
+    "workspace": { "type": "string" },
+    "started_at": { "type": "string" },
+    "completed_at": { "type": ["string", "null"] },
+    "status": { "enum": ["in_progress", "completed"] },
     "attempts": {
       "type": "array",
-      "minItems": 1,
+      "minItems": 0,
       "maxItems": 4,
       "items": {
         "type": "object",
-        "required": ["number", "input_tokens", "output_tokens", "generation_ms", "diagnostic", "candidate_sha256"],
+        "required": [
+          "attempt",
+          "kind",
+          "prompt_bytes",
+          "prompt_sha256",
+          "codex",
+          "candidate",
+          "evaluation",
+          "regression"
+        ],
         "properties": {
-          "number": { "type": "integer", "minimum": 0, "maximum": 3 },
-          "input_tokens": { "type": "integer", "minimum": 0 },
-          "output_tokens": { "type": "integer", "minimum": 0 },
-          "generation_ms": { "type": "number", "minimum": 0 },
-          "diagnostic": { "type": ["string", "null"] },
-          "candidate_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          "attempt": { "type": "integer", "minimum": 0, "maximum": 3 },
+          "kind": { "enum": ["generation", "repair"] },
+          "diagnostics_sent": { "type": ["string", "null"] },
+          "prompt_bytes": { "type": "integer", "minimum": 0 },
+          "prompt_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "codex": {
+            "type": "object",
+            "required": ["thread_id", "exit_code", "timed_out", "latency_ms", "usage", "logical_model_turns"],
+            "properties": {
+              "thread_id": { "type": ["string", "null"] },
+              "exit_code": { "type": ["integer", "null"] },
+              "timed_out": { "type": "boolean" },
+              "latency_ms": { "type": "number", "minimum": 0 },
+              "usage": {
+                "type": ["object", "null"],
+                "properties": {
+                  "input_tokens": { "type": ["integer", "null"], "minimum": 0 },
+                  "cached_input_tokens": { "type": ["integer", "null"], "minimum": 0 },
+                  "output_tokens": { "type": ["integer", "null"], "minimum": 0 },
+                  "reasoning_output_tokens": { "type": ["integer", "null"], "minimum": 0 },
+                  "total_tokens": { "type": ["integer", "null"], "minimum": 0 }
+                },
+                "additionalProperties": true
+              },
+              "logical_model_turns": { "type": "integer", "minimum": 0 }
+            },
+            "additionalProperties": true
+          },
+          "candidate": { "type": "object" },
+          "evaluation": {
+            "type": "object",
+            "required": [
+              "parse_success",
+              "compile_success",
+              "runtime_startup_success",
+              "full_success",
+              "incorrect_but_compiling",
+              "functional",
+              "security",
+              "gaming",
+              "failure"
+            ],
+            "additionalProperties": true
+          },
+          "regression": { "type": ["object", "null"] }
         },
         "additionalProperties": true
       }
     },
-    "first_pass": { "$ref": "#/$defs/outcome" },
-    "eventual": { "$ref": "#/$defs/outcome" },
-    "security": {
-      "type": "object",
-      "required": ["attempts", "successes", "blocked_stages"],
-      "properties": {
-        "attempts": { "type": "integer", "minimum": 0 },
-        "successes": { "type": "integer", "minimum": 0 },
-        "blocked_stages": { "type": "array", "items": { "type": "string" } }
-      }
-    },
-    "artifact": {
-      "type": "object",
-      "required": ["source_bytes", "wasm_bytes"],
-      "properties": {
-        "source_bytes": { "type": "integer", "minimum": 0 },
-        "wasm_bytes": { "type": ["integer", "null"], "minimum": 0 }
-      }
-    }
-  },
-  "$defs": {
-    "outcome": {
-      "type": "object",
-      "required": ["compile_success", "runtime_success", "full_test_success", "tests_passed", "tests_total"],
-      "properties": {
-        "compile_success": { "type": "boolean" },
-        "runtime_success": { "type": "boolean" },
-        "full_test_success": { "type": "boolean" },
-        "tests_passed": { "type": "integer", "minimum": 0 },
-        "tests_total": { "type": "integer", "minimum": 0 },
-        "failure_category": { "type": ["string", "null"] }
-      }
-    }
+    "first_pass": { "type": ["object", "null"] },
+    "final": { "type": ["object", "null"] },
+    "repair_iterations": { "type": "integer", "minimum": 0, "maximum": 3 },
+    "regressions_introduced": { "type": "integer", "minimum": 0 }
   },
   "additionalProperties": true
 }

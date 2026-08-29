@@ -13,8 +13,12 @@ Held-out functional cases and attack fixtures remain unavailable to both generat
 
 ## Controlled variables
 
-The paired AIR and Rust runs must use the same model identifier, model revision, sampling parameters, system instruction, token budget, wall-clock budget, context-window policy, tool availability, and generation order randomisation.
-The language-specific appendix may name only the required compiler command, target, source file location, and guest ABI mapping.
+The paired AIR and Rust runs use the same model identifier, reasoning setting, system environment, wall-clock limit, context-window policy, tool availability, sandbox, repair budget, and fresh-context policy.
+AIR runs go first in odd-numbered pairs and Rust runs go first in even-numbered pairs.
+The installed Codex CLI does not expose a sampling seed or per-turn maximum output-token flag, so those controls are recorded as unavailable and both targets use identical defaults.
+The language-specific appendix may contain only information intrinsically required to generate that target.
+AIR requires an explicit grammar, capability digest set, and narrow verifier contract because the model has no pretrained AIR knowledge.
+Rust receives only its file, toolchain, dependency, and ABI constraints.
 Every difference between appendices must be retained with the raw trial record.
 
 ## Repair loop
@@ -27,14 +31,15 @@ Every candidate version, model response, diagnostic, token count, and elapsed ti
 
 ## Initial sample
 
-Run 20 independent trials for each language with paired and randomised ordering.
+Run 20 independent trials for each language with paired and alternating ordering.
 Do not stop early because one target appears ahead.
 Do not remove syntax-valid but behaviourally wrong programs.
 Do not change AIR, the Rust appendix, the shared host, the tests, or the report rules during the sample.
 
 ## Required telemetry
 
-Each model call must record input tokens, output tokens, generation time, finish reason, and model identity from provider telemetry.
+Each Codex turn must record input tokens, cached input tokens, output tokens, reasoning output tokens, wall-clock time, thread identity, and requested model identity from CLI telemetry.
+The CLI does not expose the number of internal inference calls inside one agent turn, so the report counts logical generation and repair turns and marks internal model calls unavailable.
 Each trial must record first-pass compile, runtime, and full-test success separately from eventual success.
 The final candidate is evaluated by the same functional and security harness used for the engineering baseline.
 Records must conform to `benchmarks/generation-trial.schema.json`.
@@ -43,3 +48,12 @@ Records must conform to `benchmarks/generation-trial.schema.json`.
 
 The current repository contains zero controlled generation trials.
 The existing AIR and independent Rust implementations are engineering baselines because their generation telemetry and matched context are unavailable.
+
+## Frozen decision thresholds
+
+A first-pass full-success difference of at least 15 percentage points is material.
+A difference of at most 10 percentage points is a tie.
+An average repair-count difference of at least 0.5 is material, and a difference of at most 0.25 is a tie.
+A reported-token-per-success difference of at least 20 percent is material, and a difference of at most 10 percent is a tie.
+Source representation differs materially at 20 percent.
+All other differences are reported as inconclusive rather than forced into a winner.

@@ -21,11 +21,11 @@ The required controlled same-model generation trials have not yet been run, so t
 | Candidate direct dependencies | 0 | 0 |
 | Candidate transitive dependencies | 0 | 0 |
 | Generated representation | 1108 bytes | 3581 bytes |
-| Candidate build time | 467.82 ms | 132.53 ms |
-| Median of median request latency | 0.5 ms | 0.55 ms |
-| Mean throughput | 3325.26 req/s | 3046.89 req/s |
-| Median cold start | 7.39 ms | 8.14 ms |
-| Median peak resident memory | 10076160 bytes | 11190272 bytes |
+| Candidate build time | 284.4 ms | 321.85 ms |
+| Median of median request latency | 0.46 ms | 0.51 ms |
+| Mean throughput | 3883.3 req/s | 4016.17 req/s |
+| Median cold start | 7.29 ms | 7.82 ms |
+| Median peak resident memory | 9977856 bytes | 11304960 bytes |
 
 All 5 measured runs for each target are retained under `results/001-post-users/raw/`.
 There were no omitted functional failures because there were no observed failures in these engineering baselines.
