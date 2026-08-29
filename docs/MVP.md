@@ -9,15 +9,16 @@ A larger language without generation and repair benchmarks would not answer it.
 
 ## Current seed
 
-The repository already provides the first executable vertical slice:
+The repository now provides two executable slices:
 
-- AIR 0.1 text with one function and two statements.
+- A command module with standard output and a Wasmtime/WASI execution path.
+- A specialised `POST /users` service with records, structured errors, effects, preconditions, a postcondition boundary, direct Wasm output, HTTP/JSON boundary adapters, and real SQLite insertion.
 - A hand-written parser with source-located errors.
-- A checker for version, control shape, effects, flat capability declarations, descriptor digests, and trusted issuers.
+- A checker for version, control shape, contracts, effects, flat capability declarations, descriptor digests, trusted issuers, exact table access, and endpoint shape.
 - A direct WebAssembly binary emitter with no compiler runtime dependencies.
-- A WASI standard-output import and Wasmtime CLI path.
-- Positive, negative, determinism, and runtime smoke tests.
-- Embedded provenance in the `air.meta` Wasm custom section.
+- A reference host that verifies the complete Wasm import list and embedded `air.meta` manifest before instantiation.
+- Positive, negative, deterministic, adversarial, runtime, HTTP, and persistence tests.
+- A frozen benchmark specification, result schema, and AIR trial runner that requires generation provenance.
 
 ## MVP scope
 
@@ -53,7 +54,7 @@ The first useful MVP should include:
 
 ### Evaluation
 
-- A versioned benchmark set of at least 100 tasks that were not used to design prompt examples.
+- A versioned benchmark set of at least 10 applications that were not used as prompt examples.
 - Multiple model families and repeated trials with fixed sampling records.
 - First-pass compile rate, repair attempts, behavioural correctness, excess-capability rate, output size, compile time, and runtime cost.
 - Adversarial tasks that try to induce undeclared I/O, dependency confusion, signer substitution, and contract evasion.
@@ -70,15 +71,16 @@ The first useful MVP should include:
 
 ## Milestones
 
-### M0: executable seed
+### M0: executable command seed
 
-The current repository is M0.
-It proves `AIR text -> parser -> checker -> Wasm -> WASI host` and rejects capability escalation.
+Complete.
+It proves `AIR text -> parser -> checker -> Wasm -> Wasmtime/WASI` for a standard-output command.
 
-### M1: useful pure programs
+### M1: POST /users vertical slice
 
-Add the core value model, functions, control flow, structured errors, canonical encoding, and differential tests against an independent interpreter.
-Run the first LLM generation benchmark on pure transformations.
+The AIR implementation and reference-host tests are complete.
+The fair, independent Rust/Wasm baseline and repeated generation trials are not complete.
+Until they exist, M1 provides engineering evidence only and no evidence that AIR is superior.
 
 ### M2: signed host interaction
 
@@ -94,13 +96,14 @@ Benchmark small applications that combine pure components with two or three cons
 
 Continue beyond the MVP only if all of these are true:
 
-- At least 70 percent of held-out tasks compile within two automated repair attempts.
-- At least 90 percent of compiled pure tasks pass their behavioural oracle.
+- AIR completes at least 8 of the 10 benchmark applications.
 - Capability tests have zero accepted undeclared effects.
-- The independent verifier agrees with the compiler on every accepted benchmark artifact.
-- Generated AIR is materially easier to validate or constrain than equivalent generated conventional source.
+- AIR needs fewer repair iterations than Rust/Wasm or shows another substantial reliability advantage.
+- AIR retains effectively zero arbitrary transitive dependency trees.
+- The same AIR application executes in at least two supported Wasm/WASI environments or architectures without source changes.
+- The verifier catches meaningful errors before execution.
+- AIR demonstrates at least one clear, material, measured advantage over AI-generated Rust/Wasm.
 - Reproducible builds produce byte-identical artifacts across two clean environments.
 
 The thresholds are initial hypotheses and should be frozen before running the benchmark.
 Failures should lead to a design decision, not to silently changing the test set or success criteria.
-

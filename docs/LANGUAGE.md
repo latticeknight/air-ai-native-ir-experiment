@@ -3,115 +3,131 @@
 ## Design constraints
 
 AIR 0.1 favours regularity over convenience.
-The syntax is intentionally explicit, unambiguous, easy to generate, and easy to reject.
-The text form is not intended to compete with human-oriented application languages.
+The syntax is explicit, deterministic, easy to generate, and easy to reject.
+It contains two benchmark-driven forms: a tiny command and the specialised `POST /users` service.
+These forms are not yet a general-purpose language.
 
-Every accepted program has:
+Every program starts with one AIR version, one stable program name, and one flat capability block.
+No declaration, condition, field, effect, operation, or capability is ignored.
 
-- One explicit AIR version.
-- One stable program name.
-- One flat capability block.
-- One `main` function with an explicit result type.
-- One effect block on the function.
-- A sequence of typed statements ending in exactly one return.
-
-## Grammar
-
-The implemented subset is described by this EBNF:
+## Shared grammar
 
 ```ebnf
 program          = "air", version, ";",
                    "program", identifier, ";",
                    capability-block,
-                   main-function ;
+                   ( command | user-service ) ;
 
 capability-block = "requires", "{", { capability }, "}" ;
 
 capability       = "capability", capability-id,
                    "digest", string,
                    "signed-by", string, ";" ;
-
-main-function    = "fn", "main", "(", ")", "->", "i32",
-                   effect-block,
-                   "{", { statement }, "}" ;
-
-effect-block     = "effects", "{", { capability-id, ";" }, "}" ;
-
-statement        = "print", string, ";"
-                 | "return", i32, ";" ;
 ```
 
 Identifiers and capability IDs are non-whitespace atoms that do not contain structural punctuation.
 Strings support `\n`, `\r`, `\t`, `\"`, and `\\` escapes.
 Comments begin with `#` and continue to the end of the line.
 
-## Static semantics
+## Command form
 
-`print` has the effect `wasi:stdout@1`.
-The effect must appear in `main`'s effect block.
-The same capability must appear in the program's `requires` block with the compiler-trusted digest and issuer.
+```ebnf
+command       = "fn", "main", "(", ")", "->", "i32",
+                effect-block,
+                "{", { statement }, "}" ;
 
-`main` returns `i32` and must end with exactly one return statement.
-The result is exported as `air_main`.
-The generated WASI `_start` function invokes it and discards its result in AIR 0.1.
+effect-block  = "effects", "{", { capability-id, ";" }, "}" ;
 
-The compiler rejects declarations it cannot verify.
-It does not warn and continue, download a similarly named component, select a newer version, or infer ambient authority.
-
-## Lowering
-
-An AIR 0.1 module lowers to one core WebAssembly module.
-The module exports linear memory, `air_main`, and `_start`.
-For standard output it imports only:
-
-```text
-wasi_snapshot_preview1.fd_write
+statement     = "print", string, ";"
+              | "return", i32, ";" ;
 ```
 
-String data is encoded as UTF-8 in linear memory.
-Each `print` statement becomes a call to `fd_write` with file descriptor 1.
+`print` requires `wasi:stdout@1` in both the application capability block and `main` effect block.
+The generated module exports `air_main` and WASI `_start` and imports only `wasi_snapshot_preview1.fd_write`.
 
-## Planned core model
+## POST /users service form
 
-The next language slice should add the following concepts without weakening the current capability rules:
+The first service form is deliberately specialised to the frozen benchmark.
+Its structural outline is:
 
-```text
-type UserId = u64;
-
-record User {
-  id: UserId;
-  email: string;
+```air
+record CreateUserInput {
+  name string;
+  email string;
 }
 
-fn create_user(email: string) -> result<User, CreateUserError>
+record CreateUserOutput {
+  id i64;
+}
+
+error CreateUserError {
+  invalid_json;
+  invalid_name;
+  invalid_email;
+  duplicate_email;
+  storage_failure;
+}
+
+fn create_user(input CreateUserInput)
+returns CreateUserOutput
+errors CreateUserError;
 effects {
-  db:users.write@1;
+  air:sqlite/users.insert@1;
 }
 requires {
-  valid_email(email);
+  input.name.nonempty;
+  input.email.valid;
 }
 ensures {
-  result.ok -> result.value.email == email;
+  result.id.positive;
 }
+{
+  insert air:sqlite/users.insert@1
+    table "users"
+    values {
+      name input.name;
+      email input.email;
+    }
+    returning id;
+}
+
+endpoint POST "/users" handler create_user;
 ```
 
-Planned value semantics include integers with explicit widths, booleans, UTF-8 strings, byte sequences, lists, records, tagged variants, options, and results.
-There will be no null value, implicit numeric conversion, undefined behaviour, or ambient exception mechanism.
+The verifier requires exactly those input and output fields, error variants, effects, preconditions, postcondition, insert mapping, endpoint method, path, and handler binding.
+This strictness is intentional.
+A benchmark does not justify general records, arbitrary SQL, general HTTP routing, or a general expression language yet.
 
-Function calls will carry an explicit effect set.
-The checker will prove that a caller's effect set contains every callee effect.
-Resources such as files, sockets, database sessions, and model handles will be affine values that cannot be duplicated or used after close.
+The generated module exports linear memory and `handle_create_user(name_ptr, name_len, email_ptr, email_len) -> i64`.
+Positive results are generated user IDs.
+Negative values are closed error codes mapped to the declared error type by the reference host.
 
-## Contracts
+The name non-empty and email-shape preconditions compile into Wasm control flow.
+SQLite insertion occurs only through the imported `air_sqlite_v1.insert_user` function.
+The host checks the complete Wasm import list before instantiation, so the module cannot request filesystem, environment, outbound network, another table, or another database operation.
 
-Preconditions, postconditions, and invariants are part of the language design but not yet implemented.
-Contracts will be divided into statically provable, runtime-checkable, and host-attested forms.
-The compiler must say which category it used and must never silently treat an unproved contract as proved.
+HTTP request parsing and JSON conversion occur at the trusted boundary.
+Malformed structures are rejected before invoking the AIR handler.
+The positive-ID postcondition is represented by the result contract: positive IDs are success, and every non-positive result maps to a declared error.
+
+## Rejection semantics
+
+The compiler rejects unknown language versions, syntax, capabilities, digests, issuers, effects, fields, contracts, tables, operations, and endpoints.
+It does not warn and continue, infer a capability, resolve a similarly named component, or select a newer version.
+
+## Planned value model
+
+Lists, booleans, byte sequences, general records, variants, options, results, local bindings, calls, conditionals, and bounded iteration remain planned.
+Each addition must be required by a frozen benchmark or safety property.
+There will be no null value, implicit numeric conversion, undefined behaviour, ambient exception mechanism, or implicit effect propagation.
+
+Contracts will eventually be classified as statically proved, runtime checked, or host attested.
+The compiler must record which category applies and must never silently treat an unproved contract as proved.
 
 ## Versioning
 
 AIR versioning applies to syntax and semantics together.
 Compilers reject unknown language versions.
 Capability major versions are part of capability IDs and never float during resolution.
-Minor compatible evolution belongs inside a signed interface contract and exact lock digest.
+Compatible evolution must still resolve to an exact signed descriptor and lock digest.
 

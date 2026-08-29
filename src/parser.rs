@@ -1,4 +1,7 @@
-use crate::ast::{CapabilityRequirement, Function, Program, Statement};
+use crate::ast::{
+    CapabilityRequirement, Endpoint, ErrorDefinition, Field, FieldValue, Function, InsertOperation,
+    Program, ProgramBody, RecordDefinition, Statement, UserHandler, UserService,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum TokenKind {
@@ -46,16 +49,20 @@ impl Parser {
         }
         self.expect_symbol('}')?;
 
-        let main = self.parse_main()?;
+        let body = if self.peek_atom("record") {
+            ProgramBody::UserService(Box::new(self.parse_user_service()?))
+        } else {
+            ProgramBody::Command(self.parse_main()?)
+        };
         if let Some(token) = self.peek() {
-            return Err(at(token, "unexpected content after main function"));
+            return Err(at(token, "unexpected content after program body"));
         }
 
         Ok(Program {
             version,
             name,
             capabilities,
-            main,
+            body,
         })
     }
 
@@ -100,6 +107,139 @@ impl Parser {
         })
     }
 
+    fn parse_user_service(&mut self) -> Result<UserService, String> {
+        let input = self.parse_record()?;
+        let output = self.parse_record()?;
+        let error = self.parse_error()?;
+        let handler = self.parse_user_handler()?;
+        let endpoint = self.parse_endpoint()?;
+        Ok(UserService {
+            input,
+            output,
+            error,
+            handler,
+            endpoint,
+        })
+    }
+
+    fn parse_record(&mut self) -> Result<RecordDefinition, String> {
+        self.expect_atom("record")?;
+        let name = self.take_atom("record name")?;
+        self.expect_symbol('{')?;
+        let mut fields = Vec::new();
+        while !self.peek_symbol('}') {
+            fields.push(Field {
+                name: self.take_atom("field name")?,
+                type_name: self.take_atom("field type")?,
+            });
+            self.expect_symbol(';')?;
+        }
+        self.expect_symbol('}')?;
+        Ok(RecordDefinition { name, fields })
+    }
+
+    fn parse_error(&mut self) -> Result<ErrorDefinition, String> {
+        self.expect_atom("error")?;
+        let name = self.take_atom("error type name")?;
+        self.expect_symbol('{')?;
+        let mut variants = Vec::new();
+        while !self.peek_symbol('}') {
+            variants.push(self.take_atom("error variant")?);
+            self.expect_symbol(';')?;
+        }
+        self.expect_symbol('}')?;
+        Ok(ErrorDefinition { name, variants })
+    }
+
+    fn parse_user_handler(&mut self) -> Result<UserHandler, String> {
+        self.expect_atom("fn")?;
+        let name = self.take_atom("function name")?;
+        self.expect_symbol('(')?;
+        let input_binding = self.take_atom("input binding")?;
+        let input_type = self.take_atom("input type")?;
+        self.expect_symbol(')')?;
+        self.expect_atom("returns")?;
+        let output_type = self.take_atom("output type")?;
+        self.expect_atom("errors")?;
+        let error_type = self.take_atom("error type")?;
+        self.expect_symbol(';')?;
+
+        self.expect_atom("effects")?;
+        let effects = self.parse_atom_block()?;
+        self.expect_atom("requires")?;
+        let preconditions = self.parse_atom_block()?;
+        self.expect_atom("ensures")?;
+        let postconditions = self.parse_atom_block()?;
+
+        self.expect_symbol('{')?;
+        let insert = self.parse_insert()?;
+        self.expect_symbol('}')?;
+
+        Ok(UserHandler {
+            name,
+            input_binding,
+            input_type,
+            output_type,
+            error_type,
+            effects,
+            preconditions,
+            postconditions,
+            insert,
+        })
+    }
+
+    fn parse_atom_block(&mut self) -> Result<Vec<String>, String> {
+        self.expect_symbol('{')?;
+        let mut values = Vec::new();
+        while !self.peek_symbol('}') {
+            values.push(self.take_atom("block value")?);
+            self.expect_symbol(';')?;
+        }
+        self.expect_symbol('}')?;
+        Ok(values)
+    }
+
+    fn parse_insert(&mut self) -> Result<InsertOperation, String> {
+        self.expect_atom("insert")?;
+        let capability = self.take_atom("insert capability")?;
+        self.expect_atom("table")?;
+        let table = self.take_string("quoted table name")?;
+        self.expect_atom("values")?;
+        self.expect_symbol('{')?;
+        let mut values = Vec::new();
+        while !self.peek_symbol('}') {
+            values.push(FieldValue {
+                field: self.take_atom("insert field")?,
+                expression: self.take_atom("insert value expression")?,
+            });
+            self.expect_symbol(';')?;
+        }
+        self.expect_symbol('}')?;
+        self.expect_atom("returning")?;
+        let result_binding = self.take_atom("result binding")?;
+        self.expect_symbol(';')?;
+        Ok(InsertOperation {
+            capability,
+            table,
+            values,
+            result_binding,
+        })
+    }
+
+    fn parse_endpoint(&mut self) -> Result<Endpoint, String> {
+        self.expect_atom("endpoint")?;
+        let method = self.take_atom("HTTP method")?;
+        let path = self.take_string("quoted HTTP path")?;
+        self.expect_atom("handler")?;
+        let handler = self.take_atom("endpoint handler")?;
+        self.expect_symbol(';')?;
+        Ok(Endpoint {
+            method,
+            path,
+            handler,
+        })
+    }
+
     fn parse_statement(&mut self) -> Result<Statement, String> {
         let token = self
             .peek()
@@ -131,6 +271,10 @@ impl Parser {
 
     fn peek_symbol(&self, expected: char) -> bool {
         matches!(self.peek().map(|token| &token.kind), Some(TokenKind::Symbol(actual)) if *actual == expected)
+    }
+
+    fn peek_atom(&self, expected: &str) -> bool {
+        matches!(self.peek().map(|token| &token.kind), Some(TokenKind::Atom(actual)) if actual == expected)
     }
 
     fn expect_atom(&mut self, expected: &str) -> Result<(), String> {
@@ -370,10 +514,10 @@ effects { wasi:stdout@1; }
         let program = parse(SOURCE).expect("valid AIR should parse");
         assert_eq!(program.version, "0.1");
         assert_eq!(program.name, "hello");
-        assert_eq!(
-            program.main.statements[0],
-            Statement::Print("hello\n".into())
-        );
+        let ProgramBody::Command(main) = program.body else {
+            panic!("expected command program");
+        };
+        assert_eq!(main.statements[0], Statement::Print("hello\n".into()));
     }
 
     #[test]

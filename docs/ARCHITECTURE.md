@@ -31,10 +31,10 @@ Verified AIR module
 WebAssembly encoder
    |
    v
-Core Wasm module importing only approved WASI functions
+Core Wasm module importing only approved platform functions
    |
    v
-Wasmtime host with matching grants
+Reference host with matching grants
 ```
 
 Each phase has one representation and one responsibility.
@@ -54,8 +54,12 @@ It controls what the program can do in that environment.
 Passing compilation does not imply a runtime grant.
 A production host must instantiate only the imports represented by the verified manifest and must reject additional imports.
 
-The current emitter imports only `wasi_snapshot_preview1.fd_write` for `wasi:stdout@1`.
-The MVP uses this narrow ABI because it permits a tiny executable proof today.
+Command modules import only `wasi_snapshot_preview1.fd_write` for `wasi:stdout@1` and execute under Wasmtime.
+The `POST /users` service module imports only `air_sqlite_v1.insert_user` and executes under the Node reference host, which owns inbound HTTP and JSON boundary handling.
+That host verifies the module's complete import list and `air.meta` capability manifest before instantiation.
+
+The service host is a Component Model precursor, not a completed WASI service runtime.
+It demonstrates that generated Wasm receives only table-scoped insertion authority, but the trusted Node process itself is not yet sandboxed from the operating system.
 A later compiler target will lower the same AIR capability to a typed WebAssembly component and versioned WASI interface without changing the source-level authority model.
 
 ## Flat capability model
@@ -101,7 +105,8 @@ The lock is evidence of a resolution decision.
 It is not authority by itself, and the runtime still enforces the host grant.
 
 The prototype implements a narrower precursor.
-It has one built-in trust anchor for `wasi:stdout@1`, checks the exact canonical descriptor digest and issuer ID, and rejects every external capability.
+It has built-in trust anchors for standard output, inbound HTTP serving, JSON encoding and decoding, and insertion into the `users` table.
+It checks each exact canonical descriptor digest and issuer ID and rejects every other capability.
 Real Ed25519 signature validation, trust-policy files, expiry, and revocation are an MVP exit requirement before third-party capabilities can run.
 
 ## Determinism and provenance
@@ -110,7 +115,7 @@ Given the same AIR input and compiler version, compilation should produce byte-i
 The emitted module contains an `air.meta` custom section with the AIR version, program name, and declared capability IDs.
 Future locks will also record compiler, interface, contract, component, and trust-policy digests.
 
-Time, randomness, environment variables, network access, and filesystem access are unavailable unless individually declared and granted.
+Time, randomness, environment variables, outbound network access, and arbitrary filesystem access are unavailable unless individually declared and granted.
 Deterministic programs therefore remain deterministic by default.
 
 ## Safety invariants
@@ -134,4 +139,3 @@ Text and binary forms must round-trip without semantic loss.
 The compiler should preserve a proof-carrying record from source contract to lowered Wasm imports.
 This does not require a general theorem prover in the first useful version.
 It requires every lowering step to produce checkable evidence for the invariants it claims to preserve.
-

@@ -1,0 +1,5 @@
+air-capability-v1
+id=air:sqlite/users.insert@1
+abi=air_sqlite_v1.insert_user
+rights=sqlite.table.users.insert
+

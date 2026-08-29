@@ -1,0 +1,5 @@
+air-capability-v1
+id=air:http/server@1
+abi=air_http_v1.server
+rights=http.listen
+

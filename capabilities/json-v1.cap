@@ -1,0 +1,5 @@
+air-capability-v1
+id=air:json@1
+abi=air_json_v1.codec
+rights=json.decode,json.encode
+
