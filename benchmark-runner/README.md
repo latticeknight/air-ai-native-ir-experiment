@@ -44,6 +44,9 @@ Its conclusion is `reports/001-air-specification-verification.md`.
 The generation runner invokes Codex in isolated temporary workspaces and captures its JSONL event stream.
 It does not expose the repository, candidate from the other target, hidden tests, attacks, or prior runs to the generator.
 Every failed candidate may receive at most three automated repair turns containing only independent evaluator diagnostics.
+Fresh run records contain local Codex session identifiers required by the repair loop.
+New experiment directories are ignored by Git until their telemetry has been reviewed and sanitised for publication.
+The committed historical experiment replaces session identifiers and machine-specific temporary-directory prefixes with neutral placeholders.
 
 Run the frozen 20-pair experiment:
 

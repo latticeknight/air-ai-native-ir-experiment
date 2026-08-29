@@ -449,6 +449,7 @@ The overall decision above applies that kill criterion directly.
 
 The experiment manifest is \`${summary.manifest}\`.
 Every run, attempt, diagnostic, candidate snapshot, raw Codex JSONL stream, functional result, and security result is retained below \`${path.relative(root, resultRoot)}/\`.
+The public archive replaces Codex thread identifiers and machine-specific temporary-directory prefixes with neutral placeholders without changing any experimental metric.
 
 The automation uses Codex's documented [non-interactive JSONL mode](https://developers.openai.com/codex/noninteractive), including per-turn usage metadata and resumable threads.
 The runner pins its workspace and network permissions through the documented [Codex configuration controls](https://developers.openai.com/codex/config-reference).

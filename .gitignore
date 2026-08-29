@@ -2,3 +2,10 @@
 /benchmark-runner/target/
 /benchmarks/001-post-users/rust/target/
 *.wasm
+.env
+.env.*
+!.env.example
+
+# Fresh controlled-generation runs contain local session identifiers.
+# Historical tracked evidence remains versioned after publication sanitisation.
+/results/001-post-users/generation/*/

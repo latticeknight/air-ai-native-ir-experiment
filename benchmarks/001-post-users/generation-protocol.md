@@ -39,6 +39,7 @@ Do not change AIR, the Rust appendix, the shared host, the tests, or the report 
 ## Required telemetry
 
 Each Codex turn must record input tokens, cached input tokens, output tokens, reasoning output tokens, wall-clock time, thread identity, and requested model identity from CLI telemetry.
+Thread identity is required locally for automated repair continuity but must be redacted before public release.
 The CLI does not expose the number of internal inference calls inside one agent turn, so the report counts logical generation and repair turns and marks internal model calls unavailable.
 Each trial must record first-pass compile, runtime, and full-test success separately from eventual success.
 The final candidate is evaluated by the same functional and security harness used for the engineering baseline.

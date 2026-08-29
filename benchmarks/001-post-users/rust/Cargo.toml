@@ -2,6 +2,7 @@
 name = "benchmark-001-post-users-rust"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
 publish = false
 
 [lib]
@@ -13,4 +14,3 @@ lto = true
 opt-level = "s"
 panic = "abort"
 strip = true
-
