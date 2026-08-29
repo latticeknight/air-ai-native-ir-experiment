@@ -9,6 +9,10 @@ publish = false
 name = "air-benchmark-host"
 path = "src/main.rs"
 
+[[bin]]
+name = "air-longitudinal-host"
+path = "src/longitudinal.rs"
+
 [dependencies]
 anyhow = "1.0.100"
 rusqlite = { version = "0.40.2", features = ["bundled"] }

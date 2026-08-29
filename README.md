@@ -1,6 +1,6 @@
 # AIR - AI-Native IR Experiment
 
-> **Status: Completed research experiment - development stopped after falsification tests.**
+> **Status: Frozen implementation archive with one preregistered longitudinal follow-up in progress.**
 
 AIR investigated whether software generated and maintained by AI would benefit from a machine-first portable representation instead of a conventional implementation language.
 The executable language was built, tested against Rust/Wasm, redirected toward specification-driven verification, and then stopped when ordinary tooling reproduced its measured advantages with less custom infrastructure.
@@ -9,8 +9,10 @@ The final result is negative:
 
 > AIR demonstrated that an AI-native intermediate representation is technically feasible, but the experiments did not demonstrate sufficient advantage over AI-generated Rust/Wasm and existing verification tooling to justify creating and maintaining a new language and compiler ecosystem.
 
-This repository is a completed research archive, not a production language, security product, or request for contributors to continue AIR development.
+This repository is a research archive, not a production language, security product, or request for contributors to resume AIR development.
 It preserves the working prototype, frozen benchmark, generated candidates, adversarial tests, mutation experiment, raw evidence, and the results that falsified the hypothesis.
+One narrowly scoped follow-up now tests whether a persistent AIR contract reduces intent drift during repeated AI-maintained changes.
+It does not add executable AIR features or alter the earlier conclusions.
 
 ## Question
 
@@ -171,6 +173,21 @@ AIR's generated capability manifest improved configuration coherence and reduced
 It did not provide enough unique verification capability to justify a custom schema, parser, validator, test generator, verifier, and long-term ecosystem maintenance.
 See the [final specification-layer report](reports/001-air-specification-verification.md).
 
+## Experiment 4 - Longitudinal specification drift
+
+AIR has been reopened only for one preregistered maintenance experiment.
+The new hypothesis is that a persistent machine-readable AIR contract may preserve requirements, capabilities, invariants, and intent more reliably across 20 sequential AI-driven versions than a strong conventional Rust, OpenAPI, JSON Schema, test, dependency-policy, and Wasmtime-policy workflow.
+
+Both pipelines begin with the same Rust/Wasm implementation and use the same model, shared Wasmtime host, flat database capabilities, independent oracle, repair limit, and fixed change sequence.
+AIR is a canonical JSON contract and generator in this experiment, not an executable implementation language.
+
+The protocol, complete change sequence, drift taxonomy, and materiality thresholds are committed before any experimental model call.
+Five paired chains per pipeline are required for the preregistered result.
+
+**Status: PREREGISTERED - EXECUTION NOT YET STARTED.**
+
+See the [longitudinal hypothesis](docs/drift-hypothesis.md) and [experiment protocol](experiments/longitudinal-drift/README.md).
+
 ## Final conclusion
 
 The original implementation-language hypothesis was not supported strongly enough to continue.
@@ -226,6 +243,7 @@ runtime/             Historical HTTP, JSON, and SQLite reference host
 verification/        Frozen AIR contract and derived-check prototype
 benchmarks/          Specification, candidates, attacks, mutations, and schemas
 benchmark-runner/    Shared Wasmtime host and independent evaluators
+experiments/         Preregistered longitudinal sequence, oracle, and controls
 results/             Raw evidence, generated candidates, and JSON summaries
 reports/             Human-readable comparisons and final conclusions
 docs/                Architecture, scope, methodology, and research decisions

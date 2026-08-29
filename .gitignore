@@ -9,3 +9,6 @@
 # Fresh controlled-generation runs contain local session identifiers.
 # Historical tracked evidence remains versioned after publication sanitisation.
 /results/001-post-users/generation/*/
+
+# Longitudinal runs keep resumable Codex session data and isolated workspaces private.
+/.private/
