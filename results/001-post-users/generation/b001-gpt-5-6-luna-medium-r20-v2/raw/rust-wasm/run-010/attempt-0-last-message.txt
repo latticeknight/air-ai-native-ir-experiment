@@ -1,0 +1,6 @@
+Created the required candidate files:
+
+- [candidate/Cargo.toml](.../candidate/Cargo.toml)
+- [candidate/src/lib.rs](.../candidate/src/lib.rs)
+
+The implementation is dependency-free Rust/Wasm, validates inputs, calls only `air_sqlite_v1.insert_user`, and maps ABI error codes correctly. No build or tests were run.

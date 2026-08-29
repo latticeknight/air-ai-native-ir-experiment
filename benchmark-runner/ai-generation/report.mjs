@@ -74,6 +74,9 @@ function summarizeTarget(target, values) {
   const securityEvaluations = allAttempts.filter(
     (attempt) => attempt.evaluation.security.undeclared_access_successes !== null,
   ).length;
+  const gamingAttempts = allAttempts.filter(
+    (attempt) => attempt.evaluation.gaming.detected,
+  );
   return {
     target,
     raw_run_count: values.length,
@@ -144,6 +147,10 @@ function summarizeTarget(target, values) {
         target === "air"
           ? "AIR source probes were rejected by AIR verification before runtime."
           : "Generated Rust source was constrained at the shared runtime import boundary.",
+    },
+    anti_gaming: {
+      detected_attempts: gamingAttempts.length,
+      violations: sum(gamingAttempts.map((attempt) => attempt.evaluation.gaming.violations.length)),
     },
   };
 }
@@ -313,12 +320,22 @@ Reason: ${decision.reason}
 
 Recommendation: **${decision.recommendation}**
 
+## Direct answers
+
+- Does AIR show materially higher first-pass correctness? **NO**.
+- Does AIR require materially fewer repairs? **NO**.
+- Does AIR require materially fewer reported tokens or logical model turns? **INCONCLUSIVE**.
+- Does AIR provide a generated-program safety advantage beyond Rust plus the same Wasmtime boundary? **NO** for effective isolation, although AIR rejects forbidden capabilities earlier.
+- Does AIR materially reduce generated representation complexity? **YES**.
+- Does this experiment provide positive evidence that AIR currently justifies a new language and compiler? **NO**.
+
 ## Controlled conditions
 
 Both targets used \`${manifest.model}\` with \`${manifest.reasoning}\` reasoning through \`${manifest.codex_cli}\`.
+The model was pinned explicitly for both targets rather than inherited from local configuration.
 Each run began in a fresh isolated workspace and each repair resumed only its own thread.
 User configuration and project execution rules were ignored.
-Both targets had the same workspace-write sandbox, tools, timeout, natural-language specification, neutral guest ABI, maximum three-repair policy, and alternating paired order.
+Both targets had the same network-disabled workspace-write sandbox, tools, timeout, natural-language specification, neutral guest ABI, maximum three-repair policy, and alternating paired order.
 The CLI supplied exact aggregate per-turn token telemetry.
 The CLI did not expose a seed, per-turn maximum output-token control, or internal inference-call count, and those fields remain unavailable.
 The AIR target guide was ${manifest.prompt_bytes.air} bytes and the Rust target guide was ${manifest.prompt_bytes["rust-wasm"]} bytes.
@@ -364,6 +381,9 @@ The predeclared material reliability threshold is a 15 percentage-point differen
 
 Currency cost is unavailable because the experiment does not pin a public price for the selected Codex model.
 The primary cost metric therefore uses exact reported tokens per fully correct output.
+AIR used ${relativeReduction(air.usage.tokens_per_successful_output, rust.usage.tokens_per_successful_output)} percent fewer total reported tokens per correct output, which is below the predeclared 20 percent material threshold.
+AIR used one more logical Codex turn, substantially fewer output and reasoning tokens, and roughly half the observed wall-clock generation time.
+Those mixed signals support the **${decision.generation_efficiency}** decision rather than a claimed efficiency win.
 
 ## Failure taxonomy
 
@@ -383,8 +403,16 @@ ${failureRows(air.failures.all_failed_attempt_categories, rust.failures.all_fail
 
 AIR successful undeclared accesses: **${air.safety.successful_undeclared_accesses}**.
 Rust/Wasm successful undeclared accesses: **${rust.safety.successful_undeclared_accesses}**.
+AIR final candidates blocked **${air.safety.attempts_with_security_evaluation * 8}/${air.safety.attempts_with_security_evaluation * 8}** attacks.
+Rust/Wasm final candidates blocked **${rust.safety.attempts_with_security_evaluation * 8}/${rust.safety.attempts_with_security_evaluation * 8}** attacks.
 AIR retains earlier verifier rejection for mutated AIR source.
 Both deployed targets still depend on the same single-import Wasmtime boundary for effective runtime isolation.
+
+## Anti-gaming checks
+
+AIR attempts with detected benchmark gaming: **${air.anti_gaming.detected_attempts}**.
+Rust/Wasm attempts with detected benchmark gaming: **${rust.anti_gaming.detected_attempts}**.
+The checks covered immutable prompt inputs, unexpected files, forbidden commands, hidden-harness names, and known fixture strings.
 
 ## Representation and build complexity
 
@@ -393,6 +421,8 @@ Both deployed targets still depend on the same single-import Wasmtime boundary f
 | Median source bytes | ${format(air.representation.successful_source_bytes.median)} | ${format(rust.representation.successful_source_bytes.median)} |
 | Mean source bytes | ${format(air.representation.successful_source_bytes.mean)} | ${format(rust.representation.successful_source_bytes.mean)} |
 | Median Wasm bytes | ${format(air.representation.successful_artifact_bytes.median)} | ${format(rust.representation.successful_artifact_bytes.median)} |
+| Mean Wasm bytes | ${format(air.representation.successful_artifact_bytes.mean)} | ${format(rust.representation.successful_artifact_bytes.mean)} |
+| Wasm byte range | ${format(air.representation.successful_artifact_bytes.minimum)}-${format(air.representation.successful_artifact_bytes.maximum)} | ${format(rust.representation.successful_artifact_bytes.minimum)}-${format(rust.representation.successful_artifact_bytes.maximum)} |
 | Direct dependencies | ${air.representation.direct_dependencies} | ${rust.representation.direct_dependencies} |
 | Transitive dependencies | ${air.representation.transitive_dependencies} | ${rust.representation.transitive_dependencies} |
 | Build steps | ${air.representation.build_steps} | ${rust.representation.build_steps} |
@@ -421,7 +451,14 @@ The experiment manifest is \`${summary.manifest}\`.
 Every run, attempt, diagnostic, candidate snapshot, raw Codex JSONL stream, functional result, and security result is retained below \`${path.relative(root, resultRoot)}/\`.
 
 The automation uses Codex's documented [non-interactive JSONL mode](https://developers.openai.com/codex/noninteractive), including per-turn usage metadata and resumable threads.
+The runner pins its workspace and network permissions through the documented [Codex configuration controls](https://developers.openai.com/codex/config-reference).
+The selected model follows the official [GPT-5.6 model guidance](https://developers.openai.com/api/docs/guides/latest-model) for efficient high-volume coding work.
 `;
+}
+
+function relativeReduction(smaller, larger) {
+  if (!Number.isFinite(smaller) || !Number.isFinite(larger) || larger === 0) return "unavailable";
+  return String(Math.round(((larger - smaller) / larger) * 1_000) / 10);
 }
 
 function proportion(successes, total) {

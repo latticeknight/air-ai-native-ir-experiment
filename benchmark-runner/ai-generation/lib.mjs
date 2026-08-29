@@ -76,6 +76,7 @@ export function createExperimentManifest(configuration) {
     timeout_ms_per_model_turn: configuration.timeoutMilliseconds,
     generation_order: "Paired by run number, AIR first on odd runs and Rust first on even runs.",
     sandbox: "workspace-write",
+    sandbox_network_access: false,
     user_config: "ignored",
     project_rules: "ignored",
     network_instruction: "forbidden",
@@ -93,6 +94,7 @@ export function createExperimentManifest(configuration) {
     prompt_files: Object.fromEntries(
       Object.entries(promptFiles).map(([name, file]) => [name, path.relative(root, file)]),
     ),
+    runner_git_commit: commandSync("git", ["rev-parse", "HEAD"]).stdout.trim(),
     codex_cli: commandSync("codex", ["--version"]).stdout.trim(),
     rustc: commandSync("rustc", ["--version"]).stdout.trim(),
     cargo: commandSync("cargo", ["--version"]).stdout.trim(),

@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "benchmark": "001-post-users",
+  "target": "rust-wasm",
+  "run_kind": "engineering_baseline",
+  "correctness": {
+    "tests_passed": 12,
+    "tests_total": 12,
+    "full_test_success": true,
+    "tests": [
+      {
+        "name": "valid user",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "invalid email",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "missing name",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "missing email",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "empty name",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "malformed JSON",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "duplicate email",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "large input",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "Unicode input",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "SQL-injection-like input",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "concurrent inserts",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "database unavailable",
+        "passed": true,
+        "failure": null
+      }
+    ]
+  },
+  "artifact": {
+    "bytes": 2195,
+    "sha256": "c61a5e95aa1915c013fafeaaaf214eb95c52b9bc2e413505e378b4a0a5424447"
+  },
+  "performance": {
+    "cold_start_ms": 11.24,
+    "mean_request_ms": 0.4,
+    "median_request_ms": 0.39,
+    "p95_request_ms": 0.53,
+    "throughput_requests_per_second": 3876.75,
+    "peak_memory_bytes": 11288576,
+    "user_cpu_seconds": 0,
+    "system_cpu_seconds": 0.01,
+    "latency_samples_ms": [
+      0.36,
+      0.46,
+      0.35,
+      0.42,
+      0.44,
+      0.4,
+      0.44,
+      0.41,
+      0.42,
+      0.4,
+      0.41,
+      0.4,
+      0.41,
+      0.4,
+      0.44,
+      0.61,
+      0.53,
+      0.39,
+      0.38,
+      0.38,
+      0.4,
+      0.39,
+      0.39,
+      0.39,
+      0.41,
+      0.39,
+      0.36,
+      0.35,
+      0.36,
+      0.51,
+      0.48,
+      0.43,
+      0.65,
+      0.38,
+      0.41,
+      0.34,
+      0.35,
+      0.36,
+      0.34,
+      0.35,
+      0.35,
+      0.35,
+      0.36,
+      0.34,
+      0.35,
+      0.35,
+      0.34,
+      0.34,
+      0.34,
+      0.36
+    ]
+  }
+}

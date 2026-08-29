@@ -1,0 +1,1 @@
+Revised `candidate/src/lib.rs` to fix the reported syntax error. No compiler or tests were run.

@@ -1,0 +1,6 @@
+Created the required candidate files:
+
+- `candidate/Cargo.toml`
+- `candidate/src/lib.rs`
+
+No build or tests were run.

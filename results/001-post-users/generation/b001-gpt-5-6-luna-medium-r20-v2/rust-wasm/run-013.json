@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "experiment_id": "b001-gpt-5-6-luna-medium-r20-v2",
+  "benchmark": "001-post-users",
+  "target": "rust-wasm",
+  "run": 13,
+  "run_id": "b001-gpt-5-6-luna-medium-r20-v2-rust-wasm-013",
+  "model": "gpt-5.6-luna",
+  "reasoning": "medium",
+  "seed": null,
+  "workspace": "/tmp/air-benchmark-001-ai-generation/b001-gpt-5-6-luna-medium-r20-v2/rust-wasm/run-013",
+  "started_at": "2026-08-29T11:07:50.992Z",
+  "completed_at": "2026-08-29T11:09:10.624Z",
+  "status": "completed",
+  "attempts": [
+    {
+      "attempt": 0,
+      "kind": "generation",
+      "diagnostics_sent": null,
+      "prompt_bytes": 508,
+      "prompt_sha256": "683df1289687d5a54414026d3c080d65c4ddb9f3616dd13b7218ada0e9a496bf",
+      "codex": {
+        "thread_id": "<redacted-session-id>",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "latency_ms": 79352.31,
+        "usage": {
+          "input_tokens": 76165,
+          "cached_input_tokens": 62464,
+          "output_tokens": 3850,
+          "reasoning_output_tokens": 2384,
+          "total_tokens": 80015
+        },
+        "logical_model_turns": 1,
+        "internal_model_calls": null,
+        "internal_model_calls_unavailable_reason": "codex exec reports aggregate turn usage, not internal inference-call count.",
+        "agent_message_bytes": 823,
+        "commands": [
+          "/bin/zsh -lc \"sed -n '1,240p' AGENTS.md; sed -n '1,260p' spec.md; sed -n '1,260p' guest-abi.md; sed -n '1,260p' TARGET.md; rg --files candidate 2>/dev/null || true\"",
+          "/bin/zsh -lc \"rg --files candidate; sed -n '1,240p' candidate/Cargo.toml; sed -n '1,280p' candidate/src/lib.rs\""
+        ],
+        "command_policy_violations": [],
+        "raw_events": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-013/attempt-0-codex.jsonl",
+        "raw_stderr": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-013/attempt-0-codex.stderr.txt"
+      },
+      "candidate": {
+        "expected_files": [
+          "candidate/Cargo.toml",
+          "candidate/src/lib.rs"
+        ],
+        "files": [
+          {
+            "path": "candidate/Cargo.toml",
+            "bytes": 130,
+            "sha256": "2741e6f6aba6662dfa3cd044620703d349fa56eed566a964570c736d13094612"
+          },
+          {
+            "path": "candidate/src/lib.rs",
+            "bytes": 2012,
+            "sha256": "44bf41c2191d772f7fc97f1a2881f75e0b0b664e288281350fd65b8735f1bdab"
+          }
+        ],
+        "missing_files": [],
+        "unexpected_files": [],
+        "changed_input_files": [],
+        "source_bytes": 2142,
+        "combined_sha256": "12ad1d30397ff395448a94359fbe466747a2f2777247d8d895f65c81fcafac0e",
+        "snapshot_directory": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/candidates/rust-wasm/run-013/attempt-0",
+        "command_policy_violations": []
+      },
+      "evaluation": {
+        "parse_success": true,
+        "compile_success": true,
+        "runtime_startup_success": true,
+        "full_success": true,
+        "incorrect_but_compiling": false,
+        "compile_diagnostic": "Compiling candidate v0.1.0 (/tmp/air-b001-eval-rust-wasm-13-0-zr41Mu/candidate)\n    Finished `release` profile [optimized] target(s) in 0.08s",
+        "startup_diagnostic": "module accepted",
+        "build_ms": 109.53,
+        "artifact": {
+          "bytes": 13255,
+          "sha256": "fe8656551b73422961738eebe1f4af7b84962485cc33a6f48e5a2746f5c95763"
+        },
+        "representation": {
+          "source_bytes": 2142,
+          "direct_dependencies": 0,
+          "transitive_dependencies": 0,
+          "dependency_graph_depth": 0,
+          "build_steps": 1,
+          "generated_files": 2,
+          "declared_capabilities": 1,
+          "effective_guest_imports": 1
+        },
+        "functional": {
+          "tests_passed": 12,
+          "tests_total": 12,
+          "full_success": true,
+          "failures": []
+        },
+        "security": {
+          "tests_passed": 8,
+          "tests_total": 8,
+          "undeclared_access_successes": 0,
+          "failures": [],
+          "blocked_stages": [
+            {
+              "attack": "read-etc-passwd",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "arbitrary-filesystem-read",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "arbitrary-filesystem-write",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "environment-variable-access",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "outbound-http",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "undeclared-sqlite-table",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "undeclared-database",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "undeclared-capability",
+              "stage": "runtime_capability_boundary"
+            }
+          ]
+        },
+        "gaming": {
+          "detected": false,
+          "violations": []
+        },
+        "failure": {
+          "primary_category": null,
+          "secondary_categories": []
+        },
+        "raw_evaluation_log": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-013/attempt-0-evaluation.txt",
+        "raw_functional_result": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-013/attempt-0-functional.json",
+        "raw_security_result": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-013/attempt-0-security.json"
+      },
+      "regression": null
+    }
+  ],
+  "first_pass": {
+    "attempt": 0,
+    "parse_success": true,
+    "compile_success": true,
+    "runtime_startup_success": true,
+    "functional_tests_passed": 12,
+    "functional_tests_total": 12,
+    "security_tests_passed": 8,
+    "security_tests_total": 8,
+    "full_success": true,
+    "incorrect_but_compiling": false,
+    "failure_category": null
+  },
+  "final": {
+    "attempt": 0,
+    "parse_success": true,
+    "compile_success": true,
+    "runtime_startup_success": true,
+    "functional_tests_passed": 12,
+    "functional_tests_total": 12,
+    "security_tests_passed": 8,
+    "security_tests_total": 8,
+    "full_success": true,
+    "incorrect_but_compiling": false,
+    "failure_category": null
+  },
+  "repair_iterations": 0,
+  "regressions_introduced": 0
+}

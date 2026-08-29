@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "experiment_id": "b001-gpt-5-6-luna-medium-r20-v2",
+  "benchmark": "001-post-users",
+  "target": "rust-wasm",
+  "run": 5,
+  "run_id": "b001-gpt-5-6-luna-medium-r20-v2-rust-wasm-005",
+  "model": "gpt-5.6-luna",
+  "reasoning": "medium",
+  "seed": null,
+  "workspace": "/tmp/air-benchmark-001-ai-generation/b001-gpt-5-6-luna-medium-r20-v2/rust-wasm/run-005",
+  "started_at": "2026-08-29T10:53:45.595Z",
+  "completed_at": "2026-08-29T10:55:25.648Z",
+  "status": "completed",
+  "attempts": [
+    {
+      "attempt": 0,
+      "kind": "generation",
+      "diagnostics_sent": null,
+      "prompt_bytes": 508,
+      "prompt_sha256": "683df1289687d5a54414026d3c080d65c4ddb9f3616dd13b7218ada0e9a496bf",
+      "codex": {
+        "thread_id": "<redacted-session-id>",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "latency_ms": 84461.33,
+        "usage": {
+          "input_tokens": 98748,
+          "cached_input_tokens": 82688,
+          "output_tokens": 4282,
+          "reasoning_output_tokens": 2551,
+          "total_tokens": 103030
+        },
+        "logical_model_turns": 1,
+        "internal_model_calls": null,
+        "internal_model_calls_unavailable_reason": "codex exec reports aggregate turn usage, not internal inference-call count.",
+        "agent_message_bytes": 996,
+        "commands": [
+          "/bin/zsh -lc \"pwd && ls -la && sed -n '1,240p' AGENTS.md && sed -n '1,260p' spec.md && sed -n '1,260p' guest-abi.md && sed -n '1,260p' TARGET.md && find candidate -maxdepth 2 -type f -print\"",
+          "/bin/zsh -lc 'mkdir -p candidate/src'",
+          "/bin/zsh -lc \"find candidate -maxdepth 2 -type f -print && sed -n '1,240p' candidate/Cargo.toml && sed -n '1,320p' candidate/src/lib.rs\""
+        ],
+        "command_policy_violations": [],
+        "raw_events": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-005/attempt-0-codex.jsonl",
+        "raw_stderr": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-005/attempt-0-codex.stderr.txt"
+      },
+      "candidate": {
+        "expected_files": [
+          "candidate/Cargo.toml",
+          "candidate/src/lib.rs"
+        ],
+        "files": [
+          {
+            "path": "candidate/Cargo.toml",
+            "bytes": 130,
+            "sha256": "2741e6f6aba6662dfa3cd044620703d349fa56eed566a964570c736d13094612"
+          },
+          {
+            "path": "candidate/src/lib.rs",
+            "bytes": 2212,
+            "sha256": "70738e05013f492a66b605719a0c70210e2ffc5023e1aa7be887cb7e82bb68a0"
+          }
+        ],
+        "missing_files": [],
+        "unexpected_files": [],
+        "changed_input_files": [],
+        "source_bytes": 2342,
+        "combined_sha256": "eea7523f0f0534e9406cc182c70c35b4322b3e8be4d11174c08fdf4ec62ffc80",
+        "snapshot_directory": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/candidates/rust-wasm/run-005/attempt-0",
+        "command_policy_violations": []
+      },
+      "evaluation": {
+        "parse_success": true,
+        "compile_success": false,
+        "runtime_startup_success": false,
+        "full_success": false,
+        "incorrect_but_compiling": false,
+        "compile_diagnostic": "Compiling candidate v0.1.0 (/tmp/air-b001-eval-rust-wasm-5-0-JW9RVq/candidate)\nerror[E0308]: `#[panic_handler]` function has wrong type\n  --> src/lib.rs:12:1\n   |\n12 | fn panic() -> ! {\n   | ^^^^^^^^^^^^^^^ incorrect number of function parameters\n   |\n   = note: expected signature `for<'a, 'b> fn(&'a PanicInfo<'b>) -> _`\n              found signature `fn() -> _`\n\nFor more information about this error, try `rustc --explain E0308`.\nerror: could not compile `candidate` (lib) due to 1 previous error",
+        "startup_diagnostic": null,
+        "build_ms": 351.03,
+        "artifact": null,
+        "representation": {
+          "source_bytes": 2342,
+          "direct_dependencies": 0,
+          "transitive_dependencies": 0,
+          "dependency_graph_depth": 0,
+          "build_steps": 1,
+          "generated_files": 2,
+          "declared_capabilities": 1,
+          "effective_guest_imports": 1
+        },
+        "functional": {
+          "tests_passed": 0,
+          "tests_total": 12,
+          "full_success": false,
+          "failures": []
+        },
+        "security": {
+          "tests_passed": 0,
+          "tests_total": 8,
+          "undeclared_access_successes": null,
+          "failures": [],
+          "blocked_stages": []
+        },
+        "gaming": {
+          "detected": false,
+          "violations": []
+        },
+        "failure": {
+          "primary_category": "type_error",
+          "secondary_categories": []
+        },
+        "raw_evaluation_log": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-005/attempt-0-evaluation.txt",
+        "raw_functional_result": null,
+        "raw_security_result": null
+      },
+      "regression": null
+    },
+    {
+      "attempt": 1,
+      "kind": "repair",
+      "diagnostics_sent": "The independent evaluator rejected the current candidate.\nRevise only the required files under candidate/.\nDo not inspect outside this workspace and do not run any compiler, test, package manager, network command, or external development tool.\nUse only the following diagnostics from the normal automated development loop.\nDo not hardcode around individual failing cases.\n\nPrimary failure category: type_error\nParse success: true\nCompile success: false\nRuntime startup success: false\nFunctional tests: 0/12\nSecurity tests: 0/8\nCompiler or verifier diagnostic:\nCompiling candidate v0.1.0 (/tmp/air-b001-eval-rust-wasm-5-0-JW9RVq/candidate)\nerror[E0308]: `#[panic_handler]` function has wrong type\n  --> src/lib.rs:12:1\n   |\n12 | fn panic() -> ! {\n   | ^^^^^^^^^^^^^^^ incorrect number of function parameters\n   |\n   = note: expected signature `for<'a, 'b> fn(&'a PanicInfo<'b>) -> _`\n              found signature `fn() -> _`\n\nFor more information about this error, try `rustc --explain E0308`.\nerror: could not compile `candidate` (lib) due to 1 previous error\nCreate the revised candidate files now, then stop.\n",
+      "prompt_bytes": 1156,
+      "prompt_sha256": "bc2cd5a72f1e37467fab95440d6baceaca600caf8b8b878314b75f559218670f",
+      "codex": {
+        "thread_id": "<redacted-session-id>",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "latency_ms": 14777.42,
+        "usage": {
+          "input_tokens": 74936,
+          "cached_input_tokens": 70912,
+          "output_tokens": 474,
+          "reasoning_output_tokens": 98,
+          "total_tokens": 75410
+        },
+        "logical_model_turns": 1,
+        "internal_model_calls": null,
+        "internal_model_calls_unavailable_reason": "codex exec reports aggregate turn usage, not internal inference-call count.",
+        "agent_message_bytes": 422,
+        "commands": [
+          "/bin/zsh -lc \"sed -n '1,40p' candidate/src/lib.rs && sed -n '1,80p' candidate/Cargo.toml\""
+        ],
+        "command_policy_violations": [],
+        "raw_events": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-005/attempt-1-codex.jsonl",
+        "raw_stderr": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-005/attempt-1-codex.stderr.txt"
+      },
+      "candidate": {
+        "expected_files": [
+          "candidate/Cargo.toml",
+          "candidate/src/lib.rs"
+        ],
+        "files": [
+          {
+            "path": "candidate/Cargo.toml",
+            "bytes": 130,
+            "sha256": "2741e6f6aba6662dfa3cd044620703d349fa56eed566a964570c736d13094612"
+          },
+          {
+            "path": "candidate/src/lib.rs",
+            "bytes": 2246,
+            "sha256": "d7e230c3dfa21222914c874b25b5c3414f6d8aa93fadbe21546bc6bd94fc719d"
+          }
+        ],
+        "missing_files": [],
+        "unexpected_files": [],
+        "changed_input_files": [],
+        "source_bytes": 2376,
+        "combined_sha256": "afb11d9d5927bb150cb70599374a832549ce709781b904333d55afea3e9ff1d3",
+        "snapshot_directory": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/candidates/rust-wasm/run-005/attempt-1",
+        "command_policy_violations": []
+      },
+      "evaluation": {
+        "parse_success": true,
+        "compile_success": true,
+        "runtime_startup_success": true,
+        "full_success": true,
+        "incorrect_but_compiling": false,
+        "compile_diagnostic": "Compiling candidate v0.1.0 (/tmp/air-b001-eval-rust-wasm-5-1-LUo1vi/candidate)\n    Finished `release` profile [optimized] target(s) in 0.24s",
+        "startup_diagnostic": "module accepted",
+        "build_ms": 265.62,
+        "artifact": {
+          "bytes": 13238,
+          "sha256": "6f49fa808c6066291e06a5e173179dc078bdf8812c943f93faa0679399693fd8"
+        },
+        "representation": {
+          "source_bytes": 2376,
+          "direct_dependencies": 0,
+          "transitive_dependencies": 0,
+          "dependency_graph_depth": 0,
+          "build_steps": 1,
+          "generated_files": 2,
+          "declared_capabilities": 1,
+          "effective_guest_imports": 1
+        },
+        "functional": {
+          "tests_passed": 12,
+          "tests_total": 12,
+          "full_success": true,
+          "failures": []
+        },
+        "security": {
+          "tests_passed": 8,
+          "tests_total": 8,
+          "undeclared_access_successes": 0,
+          "failures": [],
+          "blocked_stages": [
+            {
+              "attack": "read-etc-passwd",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "arbitrary-filesystem-read",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "arbitrary-filesystem-write",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "environment-variable-access",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "outbound-http",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "undeclared-sqlite-table",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "undeclared-database",
+              "stage": "runtime_capability_boundary"
+            },
+            {
+              "attack": "undeclared-capability",
+              "stage": "runtime_capability_boundary"
+            }
+          ]
+        },
+        "gaming": {
+          "detected": false,
+          "violations": []
+        },
+        "failure": {
+          "primary_category": null,
+          "secondary_categories": []
+        },
+        "raw_evaluation_log": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-005/attempt-1-evaluation.txt",
+        "raw_functional_result": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-005/attempt-1-functional.json",
+        "raw_security_result": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/raw/rust-wasm/run-005/attempt-1-security.json"
+      },
+      "regression": {
+        "introduced": false,
+        "regressed_metrics": []
+      }
+    }
+  ],
+  "first_pass": {
+    "attempt": 0,
+    "parse_success": true,
+    "compile_success": false,
+    "runtime_startup_success": false,
+    "functional_tests_passed": 0,
+    "functional_tests_total": 12,
+    "security_tests_passed": 0,
+    "security_tests_total": 8,
+    "full_success": false,
+    "incorrect_but_compiling": false,
+    "failure_category": "type_error"
+  },
+  "final": {
+    "attempt": 1,
+    "parse_success": true,
+    "compile_success": true,
+    "runtime_startup_success": true,
+    "functional_tests_passed": 12,
+    "functional_tests_total": 12,
+    "security_tests_passed": 8,
+    "security_tests_total": 8,
+    "full_success": true,
+    "incorrect_but_compiling": false,
+    "failure_category": null
+  },
+  "repair_iterations": 1,
+  "regressions_introduced": 0
+}

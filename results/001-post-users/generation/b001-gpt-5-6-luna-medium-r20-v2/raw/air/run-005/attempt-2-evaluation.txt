@@ -1,0 +1,298 @@
+air check
+exit=0 timeout=false elapsed_ms=2.02
+checked user_service (AIR 0.1)
+
+
+air build
+exit=0 timeout=false elapsed_ms=1.76
+wrote /tmp/air-b001-eval-air-5-2-UQSQvA/candidate.wasm
+
+
+shared host inspect
+exit=0 timeout=false elapsed_ms=6.99
+module accepted
+
+
+functional harness
+exit=0 timeout=false elapsed_ms=97.12
+{
+  "schema_version": 1,
+  "benchmark": "001-post-users",
+  "target": "air",
+  "run_kind": "engineering_baseline",
+  "correctness": {
+    "tests_passed": 12,
+    "tests_total": 12,
+    "full_test_success": true,
+    "tests": [
+      {
+        "name": "valid user",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "invalid email",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "missing name",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "missing email",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "empty name",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "malformed JSON",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "duplicate email",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "large input",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "Unicode input",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "SQL-injection-like input",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "concurrent inserts",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "database unavailable",
+        "passed": true,
+        "failure": null
+      }
+    ]
+  },
+  "artifact": {
+    "bytes": 460,
+    "sha256": "e854c32f6105ca98f1e95661006e4db7aa7fb8a8e11d45561e7075f89538f7c4"
+  },
+  "performance": {
+    "cold_start_ms": 6.43,
+    "mean_request_ms": 0.43,
+    "median_request_ms": 0.42,
+    "p95_request_ms": 0.5,
+    "throughput_requests_per_second": 4326.31,
+    "peak_memory_bytes": 9961472,
+    "user_cpu_seconds": 0,
+    "system_cpu_seconds": 0.01,
+    "latency_samples_ms": [
+      0.43,
+      0.46,
+      0.42,
+      0.46,
+      0.43,
+      0.4,
+      0.44,
+      0.45,
+      0.45,
+      0.44,
+      0.43,
+      0.44,
+      0.45,
+      0.42,
+      0.5,
+      0.44,
+      0.6,
+      0.4,
+      0.41,
+      0.41,
+      0.42,
+      0.42,
+      0.42,
+      0.43,
+      0.45,
+      0.42,
+      0.44,
+      0.42,
+      0.42,
+      0.42,
+      0.45,
+      0.4,
+      0.42,
+      0.67,
+      0.47,
+      0.41,
+      0.39,
+      0.4,
+      0.39,
+      0.39,
+      0.4,
+      0.39,
+      0.41,
+      0.38,
+      0.39,
+      0.38,
+      0.39,
+      0.37,
+      0.38,
+      0.39
+    ]
+  }
+}
+
+
+security harness
+exit=0 timeout=false elapsed_ms=61.49
+{
+  "schema_version": 1,
+  "benchmark": "001-post-users",
+  "target": "air",
+  "run_kind": "engineering_baseline",
+  "methodology": {
+    "candidate_baseline_checked": true,
+    "source_attack_probe": "Mutated AIR source was checked by the frozen AIR verifier.",
+    "runtime_attack_probe": "Synthetic Wasm modules requested one forbidden import and were inspected by the shared host."
+  },
+  "security": {
+    "undeclared_access_attempts": 8,
+    "undeclared_access_successes": 0,
+    "attacks": [
+      {
+        "attack": "read-etc-passwd",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "air_verification",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/read-etc-passwd.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi_snapshot_preview1.path_open`"
+        },
+        "air_source_probe": {
+          "rejected": true,
+          "diagnostic": "air: capability `air:filesystem/read@1` is not in the compiler's trusted capability set"
+        }
+      },
+      {
+        "attack": "arbitrary-filesystem-read",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "air_verification",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/arbitrary-filesystem-read.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi_snapshot_preview1.fd_read`"
+        },
+        "air_source_probe": {
+          "rejected": true,
+          "diagnostic": "air: capability `air:filesystem/read@1` is not in the compiler's trusted capability set"
+        }
+      },
+      {
+        "attack": "arbitrary-filesystem-write",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "air_verification",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/arbitrary-filesystem-write.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi_snapshot_preview1.fd_write`"
+        },
+        "air_source_probe": {
+          "rejected": true,
+          "diagnostic": "air: capability `air:filesystem/write@1` is not in the compiler's trusted capability set"
+        }
+      },
+      {
+        "attack": "environment-variable-access",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "air_verification",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/environment-variable-access.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi_snapshot_preview1.environ_get`"
+        },
+        "air_source_probe": {
+          "rejected": true,
+          "diagnostic": "air: create-user handler must request only `air:sqlite/users.insert@1`"
+        }
+      },
+      {
+        "attack": "outbound-http",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "air_verification",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/outbound-http.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi:http/outgoing-handler.handle`"
+        },
+        "air_source_probe": {
+          "rejected": true,
+          "diagnostic": "air: capability `air:http/client@1` is not in the compiler's trusted capability set"
+        }
+      },
+      {
+        "attack": "undeclared-sqlite-table",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "air_verification",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/undeclared-sqlite-table.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `air_sqlite_v1.query_table`"
+        },
+        "air_source_probe": {
+          "rejected": true,
+          "diagnostic": "air: insert operation exceeds the verified `users(name,email)` contract"
+        }
+      },
+      {
+        "attack": "undeclared-database",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "air_verification",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/undeclared-database.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `air_sqlite_v1.open_database`"
+        },
+        "air_source_probe": {
+          "rejected": true,
+          "diagnostic": "air: capability `air:sqlite/other.insert@1` is not in the compiler's trusted capability set"
+        }
+      },
+      {
+        "attack": "undeclared-capability",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "air_verification",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/undeclared-capability.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `air_sqlite_v1.delete_user`"
+        },
+        "air_source_probe": {
+          "rejected": true,
+          "diagnostic": "air: create-user handler must request only `air:sqlite/users.insert@1`"
+        }
+      }
+    ]
+  }
+}
+

@@ -1,0 +1,11 @@
+cargo build
+exit=101 timeout=false elapsed_ms=79.54
+   Compiling candidate v0.1.0 (/tmp/air-b001-eval-rust-wasm-9-0-BwVLlc/candidate)
+error: expected one of `.`, `;`, `?`, `}`, or an operator, found `{`
+  --> src/lib.rs:48:63
+   |
+48 |     dot_index <= at_index + 1 || dot_index + 1 >= bytes.len() {
+   |                                                               ^ expected one of `.`, `;`, `?`, `}`, or an operator
+
+error: could not compile `candidate` (lib) due to 1 previous error
+

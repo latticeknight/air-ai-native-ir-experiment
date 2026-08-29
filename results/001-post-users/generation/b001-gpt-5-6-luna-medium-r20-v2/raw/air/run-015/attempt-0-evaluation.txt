@@ -1,0 +1,4 @@
+air check
+exit=1 timeout=false elapsed_ms=3.94
+air: handler input, output, or error type does not resolve
+

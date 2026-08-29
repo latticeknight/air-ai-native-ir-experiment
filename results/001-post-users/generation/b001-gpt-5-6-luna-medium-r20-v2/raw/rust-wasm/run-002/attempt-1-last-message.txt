@@ -1,0 +1,1 @@
+Revised [candidate/src/lib.rs](.../candidate/src/lib.rs) by adding the required `no_std` panic handler. No compiler or tests were run.

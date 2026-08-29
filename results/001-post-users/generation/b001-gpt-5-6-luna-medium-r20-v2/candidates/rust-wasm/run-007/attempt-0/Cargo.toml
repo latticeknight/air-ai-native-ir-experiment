@@ -1,0 +1,16 @@
+[package]
+name = "candidate"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[target.wasm32-wasip1]
+rustflags = ["-C", "link-arg=--export=memory"]

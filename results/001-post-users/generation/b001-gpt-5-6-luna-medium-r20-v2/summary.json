@@ -1,0 +1,401 @@
+{
+  "schema_version": 1,
+  "experiment_id": "b001-gpt-5-6-luna-medium-r20-v2",
+  "benchmark": "001-post-users",
+  "generated_at": "2026-08-29T11:26:17.789Z",
+  "manifest": "results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/manifest.json",
+  "targets": {
+    "air": {
+      "target": "air",
+      "raw_run_count": 20,
+      "completed_run_count": 20,
+      "expected_run_count": 20,
+      "first_pass": {
+        "parse": {
+          "successes": 18,
+          "total": 20,
+          "rate": 0.9,
+          "confidence_interval_95": [
+            0.699,
+            0.9721
+          ]
+        },
+        "compile": {
+          "successes": 17,
+          "total": 20,
+          "rate": 0.85,
+          "confidence_interval_95": [
+            0.6396,
+            0.9476
+          ]
+        },
+        "runtime_startup": {
+          "successes": 17,
+          "total": 20,
+          "rate": 0.85,
+          "confidence_interval_95": [
+            0.6396,
+            0.9476
+          ]
+        },
+        "full_success": {
+          "successes": 17,
+          "total": 20,
+          "rate": 0.85,
+          "confidence_interval_95": [
+            0.6396,
+            0.9476
+          ]
+        },
+        "incorrect_but_compiling": {
+          "successes": 0,
+          "total": 20,
+          "rate": 0,
+          "confidence_interval_95": [
+            0,
+            0.1611
+          ]
+        }
+      },
+      "eventual": {
+        "full_success": {
+          "successes": 20,
+          "total": 20,
+          "rate": 1,
+          "confidence_interval_95": [
+            0.8389,
+            1
+          ]
+        },
+        "unrecoverable_failure": {
+          "successes": 0,
+          "total": 20,
+          "rate": 0,
+          "confidence_interval_95": [
+            0,
+            0.1611
+          ]
+        }
+      },
+      "repairs": {
+        "mean": 0.2,
+        "median": 0,
+        "distribution": {
+          "0": 17,
+          "1": 2,
+          "2": 1
+        },
+        "regressions_introduced": 0
+      },
+      "failures": {
+        "first_pass_categories": {
+          "syntax_parse_error": 2,
+          "type_error": 1
+        },
+        "all_failed_attempt_categories": {
+          "syntax_parse_error": 2,
+          "type_error": 2
+        }
+      },
+      "usage": {
+        "exact_turn_usage_complete": true,
+        "attempts_with_usage": 24,
+        "logical_model_turns": 24,
+        "internal_model_calls": null,
+        "totals": {
+          "input": 1710833,
+          "cached_input": 1504512,
+          "output": 28519,
+          "reasoning_output": 7471,
+          "total": 1739352
+        },
+        "tokens_per_successful_output": 86967.6,
+        "output_tokens_per_successful_output": 1425.95,
+        "wall_clock_generation_ms": 706373.4199999999,
+        "wall_clock_ms_per_successful_output": 35318.671,
+        "currency_cost": null,
+        "currency_cost_unavailable_reason": "The selected Codex model has no experiment-pinned public per-token price in this harness."
+      },
+      "representation": {
+        "successful_artifact_bytes": {
+          "count": 20,
+          "mean": 460.85,
+          "median": 460,
+          "minimum": 460,
+          "maximum": 467,
+          "samples": [
+            461,
+            461,
+            460,
+            460,
+            460,
+            460,
+            460,
+            460,
+            460,
+            467,
+            460,
+            460,
+            460,
+            460,
+            467,
+            460,
+            461,
+            460,
+            460,
+            460
+          ]
+        },
+        "successful_source_bytes": {
+          "count": 20,
+          "mean": 1062,
+          "median": 1068,
+          "minimum": 989,
+          "maximum": 1111,
+          "samples": [
+            1069,
+            1066,
+            1067,
+            1031,
+            1091,
+            1111,
+            1031,
+            1022,
+            1102,
+            1032,
+            1053,
+            989,
+            1103,
+            1067,
+            1069,
+            1031,
+            1069,
+            1073,
+            1073,
+            1091
+          ]
+        },
+        "direct_dependencies": 0,
+        "transitive_dependencies": 0,
+        "dependency_graph_depth": 0,
+        "build_steps": 1
+      },
+      "safety": {
+        "attempts_with_security_evaluation": 20,
+        "successful_undeclared_accesses": 0,
+        "effective_guest_imports": 1,
+        "earlier_static_rejection": "AIR source probes were rejected by AIR verification before runtime."
+      },
+      "anti_gaming": {
+        "detected_attempts": 0,
+        "violations": 0
+      }
+    },
+    "rust-wasm": {
+      "target": "rust-wasm",
+      "raw_run_count": 20,
+      "completed_run_count": 20,
+      "expected_run_count": 20,
+      "first_pass": {
+        "parse": {
+          "successes": 19,
+          "total": 20,
+          "rate": 0.95,
+          "confidence_interval_95": [
+            0.7639,
+            0.9911
+          ]
+        },
+        "compile": {
+          "successes": 17,
+          "total": 20,
+          "rate": 0.85,
+          "confidence_interval_95": [
+            0.6396,
+            0.9476
+          ]
+        },
+        "runtime_startup": {
+          "successes": 17,
+          "total": 20,
+          "rate": 0.85,
+          "confidence_interval_95": [
+            0.6396,
+            0.9476
+          ]
+        },
+        "full_success": {
+          "successes": 17,
+          "total": 20,
+          "rate": 0.85,
+          "confidence_interval_95": [
+            0.6396,
+            0.9476
+          ]
+        },
+        "incorrect_but_compiling": {
+          "successes": 0,
+          "total": 20,
+          "rate": 0,
+          "confidence_interval_95": [
+            0,
+            0.1611
+          ]
+        }
+      },
+      "eventual": {
+        "full_success": {
+          "successes": 20,
+          "total": 20,
+          "rate": 1,
+          "confidence_interval_95": [
+            0.8389,
+            1
+          ]
+        },
+        "unrecoverable_failure": {
+          "successes": 0,
+          "total": 20,
+          "rate": 0,
+          "confidence_interval_95": [
+            0,
+            0.1611
+          ]
+        }
+      },
+      "repairs": {
+        "mean": 0.15,
+        "median": 0,
+        "distribution": {
+          "0": 17,
+          "1": 3
+        },
+        "regressions_introduced": 0
+      },
+      "failures": {
+        "first_pass_categories": {
+          "compilation_error": 1,
+          "syntax_parse_error": 1,
+          "type_error": 1
+        },
+        "all_failed_attempt_categories": {
+          "compilation_error": 1,
+          "syntax_parse_error": 1,
+          "type_error": 1
+        }
+      },
+      "usage": {
+        "exact_turn_usage_complete": true,
+        "attempts_with_usage": 23,
+        "logical_model_turns": 23,
+        "internal_model_calls": null,
+        "totals": {
+          "input": 1913869,
+          "cached_input": 1639936,
+          "output": 68314,
+          "reasoning_output": 33365,
+          "total": 1982183
+        },
+        "tokens_per_successful_output": 99109.15,
+        "output_tokens_per_successful_output": 3415.7,
+        "wall_clock_generation_ms": 1426187.74,
+        "wall_clock_ms_per_successful_output": 71309.387,
+        "currency_cost": null,
+        "currency_cost_unavailable_reason": "The selected Codex model has no experiment-pinned public per-token price in this harness."
+      },
+      "representation": {
+        "successful_artifact_bytes": {
+          "count": 20,
+          "mean": 4010.2,
+          "median": 2047,
+          "minimum": 1816,
+          "maximum": 13522,
+          "samples": [
+            2037,
+            5318,
+            1969,
+            2257,
+            13238,
+            13522,
+            2030,
+            1816,
+            2048,
+            2195,
+            2084,
+            1995,
+            13255,
+            2032,
+            1904,
+            2046,
+            2022,
+            4058,
+            2351,
+            2027
+          ]
+        },
+        "successful_source_bytes": {
+          "count": 20,
+          "mean": 2213.5,
+          "median": 2187,
+          "minimum": 1885,
+          "maximum": 2593,
+          "samples": [
+            2165,
+            1974,
+            2167,
+            2337,
+            2376,
+            2019,
+            2014,
+            1918,
+            2259,
+            2207,
+            2444,
+            1963,
+            2142,
+            1885,
+            1988,
+            2593,
+            2534,
+            2371,
+            2518,
+            2396
+          ]
+        },
+        "direct_dependencies": 0,
+        "transitive_dependencies": 0,
+        "dependency_graph_depth": 0,
+        "build_steps": 1
+      },
+      "safety": {
+        "attempts_with_security_evaluation": 20,
+        "successful_undeclared_accesses": 0,
+        "effective_guest_imports": 1,
+        "earlier_static_rejection": "Generated Rust source was constrained at the shared runtime import boundary."
+      },
+      "anti_gaming": {
+        "detected_attempts": 0,
+        "violations": 0
+      }
+    }
+  },
+  "decisions": {
+    "reliability": "TIE",
+    "repairability": "TIE",
+    "generation_efficiency": "INCONCLUSIVE",
+    "safety": "TIE",
+    "simplicity": "AIR",
+    "overall": "INCONCLUSIVE",
+    "recommendation": "CHANGE DIRECTION",
+    "reason": "The primary metrics point in conflicting or statistically unresolved directions.",
+    "thresholds": {
+      "reliability_material_rate_difference": 0.15,
+      "reliability_tie_band": 0.1,
+      "repairability_material_mean_difference": 0.5,
+      "repairability_tie_band": 0.25,
+      "efficiency_material_relative_difference": 0.2,
+      "efficiency_tie_band": 0.1,
+      "simplicity_material_relative_difference": 0.2
+    }
+  }
+}

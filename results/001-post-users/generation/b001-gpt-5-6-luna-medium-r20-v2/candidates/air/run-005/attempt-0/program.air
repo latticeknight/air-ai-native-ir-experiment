@@ -1,0 +1,51 @@
+air 0.1;
+program user_service;
+
+requires {
+  capability air:http/server@1
+    digest "sha256:9d8f75ab79c9a2fc51c2cfa1aa42d946741b7fcac462b1767e607bf1018879b6"
+    signed-by "air:foundation";
+  capability air:json@1
+    digest "sha256:f276fd0e2abf43cd700d17ac7d5255969821283e5f2f184dd59f1d1bb6685a14"
+    signed-by "air:foundation";
+  capability air:sqlite/users.insert@1
+    digest "sha256:b5a70c72dc2df26dd59e7508fcd06e828b89dfb1f2c6b318d5eb713be826d131"
+    signed-by "air:foundation";
+}
+
+record CreateUserInput {
+  name string;
+  email string;
+}
+
+record CreateUserOutput {
+  id i64;
+}
+
+error CreateUserError {
+  invalid_json;
+  invalid_name;
+  invalid_email;
+  duplicate_email;
+  storage_failure;
+}
+
+fn create_user CreateUserInput input returns CreateUserOutput errors CreateUserError;
+effects {
+  air:sqlite/users.insert@1;
+}
+requires {
+  input.name.nonempty;
+  input.email.valid;
+}
+ensures {
+  result.id.positive;
+}
+{
+  insert air:sqlite/users.insert@1 table "users" values {
+    name input.name;
+    email input.email;
+  } returning id;
+}
+
+endpoint POST "/users" handler create_user;

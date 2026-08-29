@@ -1,5 +1,8 @@
 # Benchmark 001: AIR vs Rust/Wasm
 
+> This is the earlier engineering-baseline report.
+> The completed controlled-generation result is [AIR vs Rust/Wasm: Benchmark 001 AI-generation experiment](001-ai-generation-b001-gpt-5-6-luna-medium-r20-v2.md).
+
 ## Conclusion
 
 **Does Benchmark 001 currently provide evidence that AIR is meaningfully better than Rust/Wasm?**
@@ -8,7 +11,7 @@
 
 Both engineering baselines passed every functional case and every shared runtime capability attack.
 AIR adds earlier source-level rejection for the tested undeclared capabilities and emits a smaller module, but those results do not establish better AI-generation reliability, lower token cost, or a uniquely safer deployed system.
-The required controlled same-model generation trials have not yet been run, so the central experimental claim cannot be decided honestly.
+At this engineering-baseline stage, the controlled same-model generation trials had not yet been run, so the central experimental claim could not be decided honestly.
 
 ## Results
 

@@ -1,0 +1,1 @@
+2026-08-29T10:59:54.439780Z  WARN codex_core::responses_retry: stream disconnected - retrying sampling request (1/5 in 197ms)... turn_id=<redacted-session-id> retries=1 max_retries=5 sampling_error=stream disconnected before completion: WebSocket protocol error: Connection reset without closing handshake

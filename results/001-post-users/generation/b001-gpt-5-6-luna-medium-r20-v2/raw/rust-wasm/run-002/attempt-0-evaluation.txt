@@ -1,0 +1,7 @@
+cargo build
+exit=101 timeout=false elapsed_ms=82.8
+   Compiling candidate v0.1.0 (/tmp/air-b001-eval-rust-wasm-2-0-ol5FTz/candidate)
+error: `#[panic_handler]` function required, but not found
+
+error: could not compile `candidate` (lib) due to 1 previous error
+

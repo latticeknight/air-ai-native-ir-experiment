@@ -44,10 +44,13 @@ Each trial must record first-pass compile, runtime, and full-test success separa
 The final candidate is evaluated by the same functional and security harness used for the engineering baseline.
 Records must conform to `benchmarks/generation-trial.schema.json`.
 
-## Deferred status
+## Completed sample
 
-The current repository contains zero controlled generation trials.
-The existing AIR and independent Rust implementations are engineering baselines because their generation telemetry and matched context are unavailable.
+Experiment `b001-gpt-5-6-luna-medium-r20-v2` completed 20 controlled AIR trials and 20 controlled Rust/Wasm trials.
+The complete raw candidates, diagnostics, evaluator results, JSONL event streams, and exact per-turn usage telemetry are retained under `results/001-post-users/generation/b001-gpt-5-6-luna-medium-r20-v2/`.
+The statistical comparison is `reports/001-ai-generation-b001-gpt-5-6-luna-medium-r20-v2.md`.
+An earlier calibration sample was excluded before this experiment began because resumed repair turns were incorrectly read-only.
+No calibration result is included in the official sample or its metrics.
 
 ## Frozen decision thresholds
 

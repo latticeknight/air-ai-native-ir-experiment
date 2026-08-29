@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "experiment_id": "b001-gpt-5-6-luna-medium-r20-v2",
+  "benchmark": "001-post-users",
+  "model": "gpt-5.6-luna",
+  "reasoning": "medium",
+  "runs_per_target": 20,
+  "max_repairs": 3,
+  "timeout_ms_per_model_turn": 300000,
+  "generation_order": "Paired by run number, AIR first on odd runs and Rust first on even runs.",
+  "sandbox": "workspace-write",
+  "sandbox_network_access": false,
+  "user_config": "ignored",
+  "project_rules": "ignored",
+  "network_instruction": "forbidden",
+  "build_and_test_tools_during_generation": "forbidden",
+  "max_output_tokens": null,
+  "max_output_tokens_unavailable_reason": "The installed codex exec interface exposes no per-turn maximum output token flag.",
+  "context_window": "model default, identical for both targets",
+  "seed": null,
+  "seed_unavailable_reason": "The installed codex exec interface exposes no sampling seed.",
+  "model_call_count_semantics": "One logical Codex turn per generation or repair; internal inference-call count is not exposed.",
+  "prompt_sha256": {
+    "common": "683df1289687d5a54414026d3c080d65c4ddb9f3616dd13b7218ada0e9a496bf",
+    "agents": "25458806ef8388bd2cd608f450c3cf71b367d8e36d283c6ff4ac2b58e4e28c23",
+    "abi": "34e7bbb2bbe6b26b6b381c0b97ac71e48f3b7811192fcf3cef4920856fdff123",
+    "air": "f063dbcb8d1ddb2a1c87f7f205ecd253696ed6198315d9ba3d398435984a25a2",
+    "rust-wasm": "b1dc557d8cb7a32b23a129946ae62981b29a11d671af633a22b3bcf96d7a5df6",
+    "specification": "514b99238d4046783074f75a7b945f6ad60a0957476c5ef3edc9754b798c4526"
+  },
+  "prompt_bytes": {
+    "common": 508,
+    "agents": 873,
+    "abi": 1292,
+    "air": 2855,
+    "rust-wasm": 862,
+    "specification": 1985
+  },
+  "prompt_files": {
+    "common": "benchmarks/001-post-users/prompts/common.md",
+    "agents": "benchmarks/001-post-users/prompts/AGENTS.md",
+    "abi": "benchmarks/001-post-users/prompts/guest-abi.md",
+    "air": "benchmarks/001-post-users/prompts/air.md",
+    "rust-wasm": "benchmarks/001-post-users/prompts/rust.md",
+    "specification": "benchmarks/001-post-users/spec.md"
+  },
+  "runner_git_commit": "76dd796be78856dc51548649a492159fe3d4e8f9",
+  "codex_cli": "codex-cli 0.148.0-alpha.21",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+  "node": "v24.12.0",
+  "platform": "darwin 25.6.0 arm64",
+  "execution_environment": {
+    "wasmtime_embedding_crate": "48.0.1",
+    "guest_memory_bytes": 4194304,
+    "fuel_per_request": 10000000,
+    "maximum_instances": 1,
+    "maximum_memories": 1,
+    "maximum_tables": 1,
+    "maximum_table_elements": 1024
+  },
+  "created_at": "2026-08-29T10:45:39.738Z"
+}

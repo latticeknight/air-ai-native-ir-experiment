@@ -1,0 +1,6 @@
+Created the required candidate files:
+
+- `candidate/Cargo.toml`
+- `candidate/src/lib.rs`
+
+The candidate implements the specified Wasm ABI, UTF-8 and email validation, and the permitted SQLite insertion import. No build or tests were run.

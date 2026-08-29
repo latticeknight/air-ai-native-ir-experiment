@@ -123,4 +123,7 @@ The prototype proves one deliberately specialised `POST /users` pipeline and the
 It now has structural records, a result/error contract, runtime-checked preconditions, a checked postcondition boundary, a table-scoped insert effect, HTTP/JSON adapters, and real SQLite persistence.
 It does not yet implement general-purpose functions, lists, cryptographic signature verification, a hardened host process, or the WebAssembly Component Model.
 Benchmark 001 now compares the frozen AIR slice with an independent zero-dependency Rust/Wasm candidate under one shared Wasmtime and SQLite host.
-The engineering baseline is inconclusive because controlled repeated AI-generation trials have not yet been run.
+The [controlled 20-pair AI-generation experiment](reports/001-ai-generation-b001-gpt-5-6-luna-medium-r20-v2.md) found identical 85 percent first-pass correctness and 100 percent eventual correctness for AIR and Rust/Wasm.
+It found no material AIR reliability, repairability, generation-efficiency, or effective-safety advantage.
+AIR produced materially smaller source representations and Wasm artifacts, but that alone does not justify the additional language and compiler layer.
+The overall conclusion is **INCONCLUSIVE**, with a recommendation to **CHANGE DIRECTION** rather than expand AIR.

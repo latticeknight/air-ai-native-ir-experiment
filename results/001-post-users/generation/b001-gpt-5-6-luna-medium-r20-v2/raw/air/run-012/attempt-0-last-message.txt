@@ -1,0 +1,5 @@
+Created the required candidate file:
+
+- [candidate/program.air](/tmp/air-benchmark-001-ai-generation/b001-gpt-5-6-luna-medium-r20-v2/air/run-012/candidate/program.air)
+
+No build or tests were run.

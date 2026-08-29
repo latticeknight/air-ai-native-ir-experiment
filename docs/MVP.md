@@ -78,9 +78,10 @@ It proves `AIR text -> parser -> checker -> Wasm -> Wasmtime/WASI` for a standar
 
 ### M1: POST /users vertical slice
 
-The AIR implementation and reference-host tests are complete.
-The fair, independent Rust/Wasm baseline and repeated generation trials are not complete.
-Until they exist, M1 provides engineering evidence only and no evidence that AIR is superior.
+Complete.
+The AIR implementation, independent Rust/Wasm baseline, shared-host tests, adversarial tests, and 20-pair controlled generation experiment are complete.
+The experiment found no material AIR advantage in first-pass correctness, repairability, generation cost, or effective runtime safety.
+AIR remains frozen, and M2 must not begin without a new explicit decision because the current recommendation is to change direction.
 
 ### M2: signed host interaction
 
