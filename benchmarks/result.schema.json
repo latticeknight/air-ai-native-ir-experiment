@@ -1,50 +1,87 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "AIR comparative benchmark trial",
+  "title": "Benchmark 001 aggregate result",
   "type": "object",
   "required": [
     "schema_version",
-    "target",
     "benchmark",
-    "trial_id",
-    "generated_tokens",
-    "repair_tokens",
-    "model_calls",
-    "compile_success",
-    "runtime_success",
-    "tests_passed",
-    "tests_total",
-    "repair_iterations",
-    "direct_dependencies",
-    "transitive_dependencies",
-    "dependency_graph_depth",
-    "capability_violations",
-    "artifact_bytes",
-    "source_bytes"
+    "target",
+    "run_kind",
+    "generation",
+    "correctness",
+    "security",
+    "simplicity",
+    "build",
+    "artifact",
+    "performance",
+    "environment",
+    "raw_results"
   ],
   "properties": {
-    "schema_version": { "const": 1 },
-    "target": { "enum": ["air", "rust-wasm", "typescript-node"] },
-    "benchmark": { "type": "string", "minLength": 1 },
-    "trial_id": { "type": "string", "minLength": 1 },
-    "generated_tokens": { "type": "integer", "minimum": 0 },
-    "repair_tokens": { "type": "integer", "minimum": 0 },
-    "model_calls": { "type": "integer", "minimum": 1 },
-    "compile_success": { "type": "boolean" },
-    "runtime_success": { "type": "boolean" },
-    "tests_passed": { "type": "integer", "minimum": 0 },
-    "tests_total": { "type": "integer", "minimum": 0 },
-    "repair_iterations": { "type": "integer", "minimum": 0 },
-    "direct_dependencies": { "type": "integer", "minimum": 0 },
-    "transitive_dependencies": { "type": "integer", "minimum": 0 },
-    "dependency_graph_depth": { "type": "integer", "minimum": 0 },
-    "capability_violations": { "type": "integer", "minimum": 0 },
-    "artifact_bytes": { "type": "integer", "minimum": 0 },
-    "source_bytes": { "type": "integer", "minimum": 0 },
-    "compile_milliseconds": { "type": "number", "minimum": 0 },
-    "runtime_test_milliseconds": { "type": "number", "minimum": 0 },
-    "failure": { "type": ["string", "null"] }
+    "schema_version": { "const": 2 },
+    "benchmark": { "const": "001-post-users" },
+    "target": { "enum": ["air", "rust-wasm"] },
+    "run_kind": { "enum": ["engineering_baseline", "controlled_generation"] },
+    "generation": {
+      "type": "object",
+      "required": ["controlled_trials", "model", "generated_tokens", "repair_tokens", "model_calls", "repair_iterations"],
+      "properties": {
+        "controlled_trials": { "type": "integer", "minimum": 0 },
+        "model": { "type": ["string", "null"] },
+        "generated_tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "repair_tokens": { "type": ["integer", "null"], "minimum": 0 },
+        "model_calls": { "type": ["integer", "null"], "minimum": 0 },
+        "repair_iterations": { "type": ["integer", "null"], "minimum": 0 },
+        "unavailable_reason": { "type": ["string", "null"] }
+      },
+      "additionalProperties": true
+    },
+    "correctness": {
+      "type": "object",
+      "required": ["compile_success", "runtime_success", "full_test_success_rate", "tests_passed", "tests_total", "failures"],
+      "properties": {
+        "compile_success": { "type": "boolean" },
+        "runtime_success": { "type": "boolean" },
+        "full_test_success_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "tests_passed": { "type": "integer", "minimum": 0 },
+        "tests_total": { "type": "integer", "minimum": 0 },
+        "failures": { "type": "array" }
+      },
+      "additionalProperties": true
+    },
+    "security": {
+      "type": "object",
+      "required": ["undeclared_access_attempts", "undeclared_access_successes", "attacks"],
+      "properties": {
+        "undeclared_access_attempts": { "type": "integer", "minimum": 0 },
+        "undeclared_access_successes": { "type": "integer", "minimum": 0 },
+        "attacks": { "type": "array" }
+      },
+      "additionalProperties": true
+    },
+    "simplicity": {
+      "type": "object",
+      "required": [
+        "direct_dependencies",
+        "transitive_dependencies",
+        "dependency_graph_depth",
+        "declared_capabilities",
+        "effective_guest_imports",
+        "build_steps",
+        "required_external_tools",
+        "configuration_files",
+        "runtime_components",
+        "generated_representation_bytes",
+        "artifact_bytes",
+        "shared_host_dependencies"
+      ],
+      "additionalProperties": true
+    },
+    "build": { "type": "object" },
+    "artifact": { "type": "object" },
+    "performance": { "type": "object" },
+    "environment": { "type": "object" },
+    "raw_results": { "type": "array", "items": { "type": "string" } }
   },
   "additionalProperties": false
 }
-

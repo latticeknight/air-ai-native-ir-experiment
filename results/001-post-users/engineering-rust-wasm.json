@@ -1,0 +1,401 @@
+{
+  "schema_version": 2,
+  "benchmark": "001-post-users",
+  "target": "rust-wasm",
+  "run_kind": "engineering_baseline",
+  "generation": {
+    "controlled_trials": 0,
+    "model": null,
+    "generated_tokens": null,
+    "repair_tokens": null,
+    "model_calls": null,
+    "repair_iterations": null,
+    "unavailable_reason": "The frozen AIR candidate and independent Rust baseline were not produced in a controlled same-model trial with token telemetry."
+  },
+  "correctness": {
+    "compile_success": true,
+    "runtime_success": true,
+    "full_test_success_rate": 1,
+    "tests_passed": 60,
+    "tests_total": 60,
+    "failures": []
+  },
+  "security": {
+    "undeclared_access_attempts": 8,
+    "undeclared_access_successes": 0,
+    "attacks": [
+      {
+        "attack": "read-etc-passwd",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "runtime_capability_boundary",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/read-etc-passwd.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi_snapshot_preview1.path_open`"
+        }
+      },
+      {
+        "attack": "arbitrary-filesystem-read",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "runtime_capability_boundary",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/arbitrary-filesystem-read.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi_snapshot_preview1.fd_read`"
+        }
+      },
+      {
+        "attack": "arbitrary-filesystem-write",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "runtime_capability_boundary",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/arbitrary-filesystem-write.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi_snapshot_preview1.fd_write`"
+        }
+      },
+      {
+        "attack": "environment-variable-access",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "runtime_capability_boundary",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/environment-variable-access.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi_snapshot_preview1.environ_get`"
+        }
+      },
+      {
+        "attack": "outbound-http",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "runtime_capability_boundary",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/outbound-http.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `wasi:http/outgoing-handler.handle`"
+        }
+      },
+      {
+        "attack": "undeclared-sqlite-table",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "runtime_capability_boundary",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/undeclared-sqlite-table.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `air_sqlite_v1.query_table`"
+        }
+      },
+      {
+        "attack": "undeclared-database",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "runtime_capability_boundary",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/undeclared-database.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `air_sqlite_v1.open_database`"
+        }
+      },
+      {
+        "attack": "undeclared-capability",
+        "attempted": true,
+        "successful_undeclared_access": false,
+        "blocked_stage": "runtime_capability_boundary",
+        "runtime_boundary_probe": {
+          "fixture": "benchmarks/001-post-users/attacks/undeclared-capability.wat",
+          "rejected": true,
+          "diagnostic": "benchmark-host: undeclared capability import `air_sqlite_v1.delete_user`"
+        }
+      }
+    ]
+  },
+  "simplicity": {
+    "direct_dependencies": 0,
+    "transitive_dependencies": 0,
+    "dependency_graph_depth": 0,
+    "declared_capabilities": 1,
+    "effective_guest_imports": 1,
+    "build_steps": 1,
+    "required_external_tools": [
+      "cargo",
+      "rustc"
+    ],
+    "configuration_files": 3,
+    "runtime_components": [
+      "candidate Wasm",
+      "shared Wasmtime host",
+      "shared SQLite"
+    ],
+    "generated_representation_bytes": 3581,
+    "artifact_bytes": 1481,
+    "shared_host_dependencies": {
+      "direct": 5,
+      "transitive": 127,
+      "graph_depth": 16,
+      "packages": [
+        "addr2line",
+        "allocator-api2",
+        "anyhow",
+        "arbitrary",
+        "ascii",
+        "async-trait",
+        "bitflags",
+        "block-buffer",
+        "bumpalo",
+        "cc",
+        "cfg-if",
+        "chunked_transfer",
+        "cobs",
+        "cpp_demangle",
+        "cpufeatures",
+        "cranelift-assembler-x64",
+        "cranelift-assembler-x64-meta",
+        "cranelift-bforest",
+        "cranelift-bitset",
+        "cranelift-codegen",
+        "cranelift-codegen-meta",
+        "cranelift-codegen-shared",
+        "cranelift-control",
+        "cranelift-entity",
+        "cranelift-frontend",
+        "cranelift-isle",
+        "cranelift-native",
+        "cranelift-srcgen",
+        "crc32fast",
+        "crypto-common",
+        "digest",
+        "either",
+        "embedded-io",
+        "embedded-io",
+        "equivalent",
+        "errno",
+        "fallible-iterator",
+        "fallible-streaming-iterator",
+        "find-msvc-tools",
+        "fnv",
+        "foldhash",
+        "futures",
+        "futures-channel",
+        "futures-core",
+        "futures-io",
+        "futures-sink",
+        "futures-task",
+        "futures-util",
+        "generic-array",
+        "gimli",
+        "hashbrown",
+        "hashbrown",
+        "hashlink",
+        "heck",
+        "httpdate",
+        "indexmap",
+        "itertools",
+        "itoa",
+        "js-sys",
+        "leb128fmt",
+        "libc",
+        "libm",
+        "libsqlite3-sys",
+        "linux-raw-sys",
+        "log",
+        "mach2",
+        "memchr",
+        "memfd",
+        "object",
+        "once_cell",
+        "pin-project-lite",
+        "pkg-config",
+        "postcard",
+        "proc-macro2",
+        "pulley-interpreter",
+        "pulley-macros",
+        "quote",
+        "regalloc2",
+        "rsqlite-vfs",
+        "rusqlite",
+        "rustc-demangle",
+        "rustc-hash",
+        "rustix",
+        "rustversion",
+        "semver",
+        "serde",
+        "serde_core",
+        "serde_derive",
+        "serde_json",
+        "sha2",
+        "shlex",
+        "slab",
+        "smallvec",
+        "sqlite-wasm-rs",
+        "stable_deref_trait",
+        "syn",
+        "syn",
+        "target-lexicon",
+        "termcolor",
+        "thiserror",
+        "thiserror-impl",
+        "tiny_http",
+        "typenum",
+        "unicode-ident",
+        "unicode-width",
+        "vcpkg",
+        "version_check",
+        "wasm-bindgen",
+        "wasm-bindgen-macro",
+        "wasm-bindgen-macro-support",
+        "wasm-bindgen-shared",
+        "wasm-encoder",
+        "wasm-encoder",
+        "wasmparser",
+        "wasmparser",
+        "wasmprinter",
+        "wasmtime",
+        "wasmtime-environ",
+        "wasmtime-internal-component-util",
+        "wasmtime-internal-core",
+        "wasmtime-internal-cranelift",
+        "wasmtime-internal-fiber",
+        "wasmtime-internal-jit-debug",
+        "wasmtime-internal-jit-icache-coherence",
+        "wasmtime-internal-unwinder",
+        "wasmtime-internal-versioned-export-macros",
+        "wast",
+        "wat",
+        "winapi-util",
+        "windows-link",
+        "windows-sys",
+        "zmij"
+      ],
+      "note": "Common benchmark infrastructure, excluded from candidate dependency counts."
+    }
+  },
+  "build": {
+    "candidate_build_ms": 132.53,
+    "cache_condition": "fresh candidate Cargo target directory"
+  },
+  "artifact": {
+    "bytes": 1481,
+    "sha256": "e4ea115ba9596d3fb0bb223b85ae967daa744c387080616873d35ade8173dc33"
+  },
+  "performance": {
+    "cold_start_ms": {
+      "mean": 9.37,
+      "median": 8.14,
+      "samples": [
+        7.65,
+        7.96,
+        8.14,
+        8.2,
+        14.9
+      ]
+    },
+    "mean_request_ms": {
+      "mean": 0.61,
+      "median": 0.56,
+      "samples": [
+        0.51,
+        0.46,
+        0.61,
+        0.56,
+        0.92
+      ]
+    },
+    "median_request_ms": {
+      "mean": 0.56,
+      "median": 0.55,
+      "samples": [
+        0.47,
+        0.42,
+        0.56,
+        0.55,
+        0.8
+      ]
+    },
+    "p95_request_ms": {
+      "mean": 1.08,
+      "median": 0.84,
+      "samples": [
+        0.84,
+        0.78,
+        1.14,
+        0.72,
+        1.91
+      ]
+    },
+    "throughput_requests_per_second": {
+      "mean": 3046.89,
+      "median": 3468.71,
+      "samples": [
+        3904.82,
+        3862.93,
+        3468.71,
+        2643.55,
+        1354.46
+      ]
+    },
+    "peak_memory_bytes": {
+      "mean": 11147673.6,
+      "median": 11190272,
+      "samples": [
+        11206656,
+        11173888,
+        11206656,
+        11190272,
+        10960896
+      ]
+    },
+    "user_cpu_seconds": {
+      "mean": 0,
+      "median": 0,
+      "samples": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "system_cpu_seconds": {
+      "mean": 0.01,
+      "median": 0.01,
+      "samples": [
+        0.01,
+        0.01,
+        0.01,
+        0.01,
+        0.02
+      ]
+    }
+  },
+  "environment": {
+    "operating_system": "26.6.2",
+    "architecture": "arm64",
+    "cpu": "Apple M4 Pro",
+    "logical_cpus": 12,
+    "node": "v24.12.0",
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+    "wasmtime_embedding_crate": "48.0.1",
+    "wasi_profile": "wasm32-wasip1 target contract with zero ambient WASI imports linked",
+    "resource_limits": {
+      "guest_memory_bytes": 4194304,
+      "fuel_per_request": 10000000,
+      "max_instances": 1,
+      "max_memories": 1,
+      "max_tables": 0
+    }
+  },
+  "raw_results": [
+    "results/001-post-users/raw/rust-wasm-functional-01.json",
+    "results/001-post-users/raw/rust-wasm-functional-02.json",
+    "results/001-post-users/raw/rust-wasm-functional-03.json",
+    "results/001-post-users/raw/rust-wasm-functional-04.json",
+    "results/001-post-users/raw/rust-wasm-functional-05.json",
+    "results/001-post-users/raw/rust-wasm-security.json"
+  ]
+}

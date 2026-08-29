@@ -1,3 +1,4 @@
 /target/
+/benchmark-runner/target/
+/benchmarks/001-post-users/rust/target/
 *.wasm
-

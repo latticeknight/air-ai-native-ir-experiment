@@ -87,7 +87,8 @@ Resolution produces a content-addressed lock, not an unconstrained tree of insta
 ```text
 air/
 |-- capabilities/        Canonical trusted capability descriptors
-|-- benchmarks/          Frozen specifications, AIR trials, schema, and runner
+|-- benchmark-runner/    Shared Wasmtime host and independent black-box suites
+|-- benchmarks/          Frozen specifications, candidates, attacks, and schemas
 |-- docs/
 |   |-- ARCHITECTURE.md  Compiler, runtime, trust, and component design
 |   |-- LANGUAGE.md      AIR 0.1 syntax and static semantics
@@ -101,6 +102,8 @@ air/
 |   |-- wasm.rs          Direct WebAssembly binary emitter
 |   |-- lib.rs           Compiler API
 |   `-- main.rs          `air check`, `build`, `run`, and `serve`
+|-- reports/             Generated comparative conclusions and confound analysis
+|-- results/             Machine-readable aggregates and complete raw samples
 `-- tests/               Compiler, adversarial, Wasm, and HTTP/SQLite tests
 ```
 
@@ -118,5 +121,6 @@ air/
 This is a research seed, not a production language or security boundary.
 The prototype proves one deliberately specialised `POST /users` pipeline and the shape of capability enforcement.
 It now has structural records, a result/error contract, runtime-checked preconditions, a checked postcondition boundary, a table-scoped insert effect, HTTP/JSON adapters, and real SQLite persistence.
-It does not yet implement general-purpose functions, lists, cryptographic signature verification, a hardened host process, the WebAssembly Component Model, or a comparative Rust/Wasm benchmark.
-The successful demonstration is not evidence that AIR beats Rust/Wasm.
+It does not yet implement general-purpose functions, lists, cryptographic signature verification, a hardened host process, or the WebAssembly Component Model.
+Benchmark 001 now compares the frozen AIR slice with an independent zero-dependency Rust/Wasm candidate under one shared Wasmtime and SQLite host.
+The engineering baseline is inconclusive because controlled repeated AI-generation trials have not yet been run.
