@@ -1,0 +1,15 @@
+air 0.1;
+program rejected_ambient_output;
+
+requires {
+}
+
+fn main() -> i32
+effects {
+}
+{
+  # This fails because print has no declared or granted output capability.
+  print "This must not compile.\n";
+  return 0;
+}
+

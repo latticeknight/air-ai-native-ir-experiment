@@ -1,0 +1,13 @@
+[package]
+name = "air-lang"
+version = "0.1.0"
+edition = "2024"
+description = "An experimental AI-native portable intermediate representation"
+license = "MIT"
+publish = false
+
+[[bin]]
+name = "air"
+path = "src/main.rs"
+
+[dependencies]

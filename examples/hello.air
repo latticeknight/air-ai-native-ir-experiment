@@ -1,0 +1,17 @@
+air 0.1;
+program hello;
+
+requires {
+  capability wasi:stdout@1
+    digest "sha256:d09b856e2e70a9ad921ee7af4f22a274c3f2727c0f94193263eea4e3c3229782"
+    signed-by "air:foundation";
+}
+
+fn main() -> i32
+effects {
+  wasi:stdout@1;
+}
+{
+  print "Hello from AIR.\n";
+  return 0;
+}

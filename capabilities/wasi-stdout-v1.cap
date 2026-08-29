@@ -1,0 +1,5 @@
+air-capability-v1
+id=wasi:stdout@1
+abi=wasi_snapshot_preview1.fd_write
+rights=stdout.write
+
