@@ -184,7 +184,10 @@ AIR is a canonical JSON contract and generator in this experiment, not an execut
 The protocol, complete change sequence, drift taxonomy, and materiality thresholds are committed before any experimental model call.
 Five paired chains per pipeline are required for the preregistered result.
 
-**Status: PREREGISTERED - EXECUTION NOT YET STARTED.**
+**Status: PROTOCOL REVISION 2 PREREGISTERED - EXECUTION NOT YET STARTED.**
+
+Protocol revision 1 was aborted at version 2 because a required neutral tracking identifier was absent from both pipelines' input.
+No revision-1 partial output is treated as experimental evidence.
 
 See the [longitudinal hypothesis](docs/drift-hypothesis.md) and [experiment protocol](experiments/longitudinal-drift/README.md).
 

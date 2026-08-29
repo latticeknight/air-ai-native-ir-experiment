@@ -31,6 +31,8 @@ The complete paired raw values are retained rather than used for formal signific
 
 Fresh model context is enforced between versions, while repairs resume only the failing version's context.
 The persistent project itself carries prior intent, as intended by the hypothesis.
+The current change exposes its activated and retired requirement tracking identifiers equally because the evaluator requires exact registry keys.
+Revision 1 omitted those keys and was aborted rather than interpreted.
 Project instructions forbid parent-directory, oracle, future-sequence, and network inspection, and executed commands are audited for violations.
 The operating-system sandbox is not treated as proof that read access outside the workspace is impossible.
 

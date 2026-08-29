@@ -93,6 +93,7 @@ Recommendations map as follows:
 
 The complete sequence and thresholds are committed before the first experimental model call.
 Neither pipeline can read future change prompts or the independent oracle from its isolated workspace.
+Each pipeline receives the neutral tracking identifiers activated or retired by the current change so its required project registry can be updated deterministically.
 The oracle tests every active requirement at every version and separately tests removed behavior.
 The model may update project-owned tests, but those tests never define success.
 No human code fixes are permitted.
@@ -101,6 +102,10 @@ If a version remains broken, that broken state continues into the next version.
 
 The protocol must not be tuned after early results.
 A material harness defect requires aborting the experiment and preregistering a new protocol rather than silently repairing the active run.
+
+Protocol revision 1 was aborted after the first version-2 pair because it required exact tracking identifiers in project artifacts without providing those identifiers in the current-change input.
+Revision 2 exposes only the current change's activated and retired bookkeeping identifiers equally to both pipelines.
+No requirement wording, sequence, oracle check, threshold, model setting, repair rule, or outcome rule changed.
 
 ## Prior results remain unchanged
 

@@ -21,7 +21,7 @@ const privateRoot = path.join(repositoryRoot, ".private/longitudinal-drift");
 export function configuration(arguments_) {
   const values = parseArguments(arguments_);
   const result = {
-    experimentId: values.get("--experiment-id") ?? "preregistered-v1",
+    experimentId: values.get("--experiment-id") ?? "preregistered-v2",
     chains: integer(values.get("--chains") ?? String(protocol.chains_per_pipeline), "--chains", 1),
     throughVersion: integer(
       values.get("--through-version") ?? String(protocol.versions_per_chain),
@@ -31,10 +31,10 @@ export function configuration(arguments_) {
     only: values.get("--only") ?? null,
     dryRun: values.has("--dry-run"),
   };
-  if (result.experimentId === "preregistered-v1" && result.dryRun) {
+  if (result.experimentId === "preregistered-v2" && result.dryRun) {
     throw new Error("the preregistered result ID cannot be used for a dry run");
   }
-  if (result.experimentId === "preregistered-v1" && result.chains !== protocol.chains_per_pipeline) {
+  if (result.experimentId === "preregistered-v2" && result.chains !== protocol.chains_per_pipeline) {
     throw new Error("the preregistered result ID requires the frozen chain count");
   }
   return result;
@@ -344,7 +344,7 @@ function generationPrompt(change) {
     "",
     `Change ${change.id}: ${change.title}`,
     change.change_prompt,
-  ].join("\n")}\n`;
+  ].join("\n").trimEnd()}\n`;
 }
 
 function repairPrompt(change, evaluation) {
@@ -375,13 +375,17 @@ function repairPrompt(change, evaluation) {
   ].filter(Boolean).join("\n")}\n`;
 }
 
-function changeDocument(change) {
+export function changeDocument(change) {
   return `${[
     `# Change ${change.id}`,
     "",
     `## ${change.title}`,
     "",
     change.change_prompt,
+    "",
+    `Requirement IDs activated by this change: ${change.activates.length > 0 ? change.activates.join(", ") : "none"}.`,
+    `Requirement IDs retired by this change: ${change.retires.length > 0 ? change.retires.join(", ") : "none"}.`,
+    "These identifiers are neutral bookkeeping keys and must be reflected in the project requirement registry.",
     "",
     "This is the only new change for this version.",
     "Future changes are intentionally unavailable.",
@@ -415,7 +419,7 @@ function capabilityDocument(version) {
     "Every listed function uses `(input_pointer, input_length, output_pointer, output_capacity) -> output_length` and exchanges UTF-8 JSON.",
     "",
     ...entries,
-  ].join("\n")}\n`;
+  ].join("\n").trimEnd()}\n`;
 }
 
 function fullSuccess(evaluation) {

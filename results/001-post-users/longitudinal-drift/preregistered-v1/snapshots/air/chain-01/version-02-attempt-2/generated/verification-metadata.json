@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "4c950b35e52cb1c291bb6dd2f665919eda8e3a7d3c7c19883e50c6a326d137f5",
+  "contract_version": 2,
+  "active_requirements": [
+    "EV-002-bound-unicode-name-length",
+    "LD-001-capability-boundary",
+    "LD-001-create-user",
+    "LD-001-duplicate-email",
+    "LD-001-email-validation"
+  ],
+  "retired_requirements": [],
+  "route_count": 1,
+  "capability_count": 1,
+  "public_user_fields": [
+    "email",
+    "id",
+    "name"
+  ]
+}

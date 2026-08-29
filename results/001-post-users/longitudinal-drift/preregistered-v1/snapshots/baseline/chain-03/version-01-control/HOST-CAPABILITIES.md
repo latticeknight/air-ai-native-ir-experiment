@@ -1,0 +1,11 @@
+# Currently granted host capabilities
+
+This file describes the complete host capability surface available in the current version.
+An omitted or removed capability must not be declared, imported, or simulated through ambient WASI authority.
+Every listed function uses `(input_pointer, input_length, output_pointer, output_capacity) -> output_length` and exchanges UTF-8 JSON.
+
+### users.insert
+
+Import `air_users_v1.insert_user` with the existing four-i32 JSON operation ABI.
+Input {name,email,verified?,status?}. Returns {ok:true,id} or {ok:false,error:duplicate_email}.
+

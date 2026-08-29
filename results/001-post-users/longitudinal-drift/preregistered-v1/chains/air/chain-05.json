@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "experiment": "air-longitudinal-drift-001",
+  "experiment_id": "preregistered-v1",
+  "pipeline": "air",
+  "chain": 5,
+  "model": "gpt-5.6-luna",
+  "reasoning": "medium",
+  "workspace": "private isolated workspace",
+  "started_at": "2026-08-29T19:13:22.439Z",
+  "completed_at": null,
+  "invalidated": false,
+  "invalidation_reasons": [],
+  "versions": [
+    {
+      "version": 1,
+      "change_id": "EV-001",
+      "attempts": [],
+      "final_evaluation": {
+        "schema_version": 1,
+        "experiment": "air-longitudinal-drift-001",
+        "pipeline": "air",
+        "version": 1,
+        "build": {
+          "success": true,
+          "elapsed_ms": 3145.04,
+          "diagnostic": "   Compiling proc-macro2 v1.0.107\n   Compiling unicode-ident v1.0.24\n   Compiling quote v1.0.47\n   Compiling serde_core v1.0.229\n   Compiling zmij v1.0.23\n   Compiling serde v1.0.229\n   Compiling wee_alloc v0.4.5\n   Compiling serde_json v1.0.151\n   Compiling itoa v1.0.18\n   Compiling memchr v2.8.3\n   Compiling cfg-if v0.1.10\n   Compiling memory_units v0.4.0\n   Compiling syn v3.0.4\n   Compiling serde_derive v1.0.229\n   Compiling longitudinal-candidate v0.1.0 (<repository-root>/.private/longitudinal-drift/preregistered-v1/workspaces/air/chain-05)\n    Finished `release` profile [optimized] target(s) in 3.12s\n"
+        },
+        "runtime": {
+          "started": true,
+          "diagnostic": null
+        },
+        "retained_intent": {
+          "passed": 4,
+          "total": 4,
+          "rate": 1,
+          "requirements": [
+            {
+              "id": "LD-001-capability-boundary",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "LD-001-create-user",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "LD-001-duplicate-email",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "LD-001-email-validation",
+              "passed": true,
+              "diagnostic": null
+            }
+          ]
+        },
+        "obsolete_behavior": {
+          "failures": 0,
+          "checks": []
+        },
+        "capability": {
+          "expected_imports": [
+            {
+              "module": "air_users_v1",
+              "name": "insert_user"
+            }
+          ],
+          "actual_imports": [
+            {
+              "module": "air_users_v1",
+              "name": "insert_user"
+            }
+          ],
+          "project_policy_imports": [
+            {
+              "module": "air_users_v1",
+              "name": "insert_user"
+            }
+          ],
+          "extra_actual": [],
+          "missing_actual": [],
+          "extra_project_policy": [],
+          "missing_project_policy": [],
+          "capability_creep_events": 0,
+          "revocation_failures": [],
+          "successful_undeclared_accesses": 0,
+          "exact": true
+        },
+        "artifact_consistency": {
+          "passed": 5,
+          "total": 5,
+          "rate": 1,
+          "categories": [
+            {
+              "id": "requirement_registry",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "interface_schema",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "project_tests",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "capability_policy",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "dependency_policy",
+              "passed": true,
+              "diagnostic": null
+            }
+          ],
+          "checks": [
+            {
+              "id": "contract_version",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "contract_active_requirements",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "contract_retired_requirements",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "contract_routes",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "contract_public_fields",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "generated_capability-policy.json_current",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "generated_dependency-policy.json_current",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "generated_visible-cases.json_current",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "generated_openapi.json_current",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "generated_verification-metadata.json_current",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "contract_generated_policy_consistency",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "contract_generated_test_consistency",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "contract_name_validation",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "project_policy_matches_oracle",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "visible_tests_cover_active_requirements",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "openapi_routes_match_oracle",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "public_schema_matches_oracle",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "dependency_policy_matches_project",
+              "passed": true,
+              "diagnostic": null
+            },
+            {
+              "id": "dependency_policy_matches_oracle",
+              "passed": true,
+              "diagnostic": null
+            }
+          ]
+        },
+        "complexity": {
+          "rust_source_bytes": 5714,
+          "contract_bytes": 1023,
+          "project_representation_bytes": 18691,
+          "wasm_bytes": 64745,
+          "direct_dependencies": 3,
+          "transitive_dependencies": 11,
+          "dependency_graph_depth": 4,
+          "visible_tests": 4,
+          "manually_maintained_authoritative_artifacts": 2,
+          "machine_generated_artifacts": 5,
+          "build_steps": 1,
+          "verification_steps": 3
+        }
+      },
+      "completed_at": "2026-08-29T19:13:25.745Z"
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "protocol_revision": 2,
   "experiment": "air-longitudinal-drift-001",
   "benchmark": "001-post-users",
   "pipelines": ["baseline", "air"],
@@ -19,6 +20,7 @@
   "sandbox": "workspace-write",
   "network_access": false,
   "future_requirements_visible": false,
+  "current_requirement_identifiers_visible": true,
   "independent_oracle_visible": false,
   "human_code_fixes": false,
   "generation_order": "Paired by chain and version; baseline first on odd chains and AIR first on even chains.",

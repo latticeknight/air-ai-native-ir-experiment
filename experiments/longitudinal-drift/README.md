@@ -23,7 +23,12 @@ The AIR compiler, parser, verifier, language, package model, and previous conclu
 - `../../docs/drift-hypothesis.md` contains the hypothesis and decision rule.
 
 The model workspace receives the control project, its pipeline instructions, and only the current change in `CHANGE.md`.
+The current change includes its activated and retired requirement tracking identifiers because both project registries are scored against those exact keys.
 It cannot see future changes or the independent oracle through the experiment prompt.
+
+Protocol revision 1 was aborted before version 3 because it omitted those required identifiers from the model input.
+Its partial outputs are preserved under `results/001-post-users/longitudinal-drift/preregistered-v1/` and are not experimental evidence.
+Revision 2 changes only that neutral input-completeness defect.
 
 ## Reproduce
 
@@ -34,6 +39,7 @@ Build and check the controls before running model calls:
 cargo build --release --locked --manifest-path benchmark-runner/Cargo.toml --bin air-longitudinal-host
 node experiments/longitudinal-drift/oracle/state.test.mjs
 node experiments/longitudinal-drift/oracle/calibration.test.mjs
+node benchmark-runner/longitudinal-drift/protocol.test.mjs
 ```
 
 Run the preregistered five paired chains:

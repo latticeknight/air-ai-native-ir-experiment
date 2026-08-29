@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "experiment_id": "preregistered-v1",
+  "status": "aborted",
+  "valid_for_comparison": false,
+  "stopped_before_version": 3,
+  "completed_model_turns": 6,
+  "interrupted_model_turns": 1,
+  "reason": "The evaluator required exact requirement-registry identifiers that were absent from both pipelines' current-change input.",
+  "replacement_protocol": "preregistered-v2"
+}
