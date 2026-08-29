@@ -10,7 +10,7 @@ const comparison = {
   benchmark: "001-post-users",
   conclusion: "INCONCLUSIVE",
   reason:
-    "Both engineering baselines pass and the shared host gives both the same effective runtime capability boundary, but no controlled repeated AI-generation trials exist.",
+    "Both engineering baselines pass and the shared host gives both the same effective runtime capability boundary. This historical result is superseded by the controlled generation and specification-verification experiments.",
   targets: { air, "rust-wasm": rust },
 };
 
@@ -21,6 +21,9 @@ fs.writeFileSync(
 
 const report = `# Benchmark 001: AIR vs Rust/Wasm
 
+> This is the earlier engineering-baseline report.
+> The final project decision is [AIR Specification/Verification Experiment](001-air-specification-verification.md).
+
 ## Conclusion
 
 **Does Benchmark 001 currently provide evidence that AIR is meaningfully better than Rust/Wasm?**
@@ -29,7 +32,7 @@ const report = `# Benchmark 001: AIR vs Rust/Wasm
 
 Both engineering baselines passed every functional case and every shared runtime capability attack.
 AIR adds earlier source-level rejection for the tested undeclared capabilities and emits a smaller module, but those results do not establish better AI-generation reliability, lower token cost, or a uniquely safer deployed system.
-The required controlled same-model generation trials have not yet been run, so the central experimental claim cannot be decided honestly.
+At this engineering-baseline stage, the controlled same-model generation trials had not yet been run, so the central experimental claim could not be decided honestly.
 
 ## Results
 
@@ -83,10 +86,8 @@ The shared host has ${air.simplicity.shared_host_dependencies.direct} direct and
 
 ## AI-generation reliability
 
-No comparable percentage, mean, median, token total, or repair distribution exists yet.
-The AIR program predates this controlled comparison, and the independent Rust baseline was generated without captured token telemetry.
-They are therefore engineering baselines only, not the requested 20-run stochastic experiment.
-The frozen protocol and schema in \`benchmarks/001-post-users/generation-protocol.md\` and \`benchmarks/generation-trial.schema.json\` allow those runs to be added without changing success criteria.
+This report contains engineering baselines only.
+The later controlled 20-pair experiment is \`reports/001-ai-generation-b001-gpt-5-6-luna-medium-r20-v2.md\`.
 
 ## Confounding factors
 
@@ -105,8 +106,8 @@ The frozen protocol and schema in \`benchmarks/001-post-users/generation-protoco
 
 Benchmark 001 currently shows that AIR can satisfy the contract with earlier verifier rejection and a compact artifact.
 It also shows that a zero-dependency Rust guest behind the same narrow host boundary can satisfy the same contract and block the same deployed attacks.
-It does not yet show that AIR is more reliable or cheaper for an LLM to generate.
-AIR must remain frozen until the controlled generation experiment is run or this milestone is explicitly closed as inconclusive.
+It did not show that AIR was more reliable or cheaper for an LLM to generate.
+Later experiments closed both the implementation-language and specification-layer hypotheses without starting Benchmark 002.
 
 ## Implementation references
 

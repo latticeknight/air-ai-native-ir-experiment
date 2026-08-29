@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://air.invalid/schema/contract-v1.json",
+  "title": "AIR specification contract v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "kind",
+    "application",
+    "endpoint",
+    "input",
+    "outcomes",
+    "effects",
+    "postconditions",
+    "invariants",
+    "capabilities",
+    "dependencies",
+    "resources"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "kind": { "const": "air.contract" },
+    "application": {
+      "type": "object",
+      "required": ["id"],
+      "properties": { "id": { "type": "string", "minLength": 1 } },
+      "additionalProperties": false
+    },
+    "endpoint": {
+      "type": "object",
+      "required": ["method", "path", "content_type"],
+      "properties": {
+        "method": { "enum": ["POST"] },
+        "path": { "type": "string", "pattern": "^/" },
+        "content_type": { "const": "application/json" }
+      },
+      "additionalProperties": false
+    },
+    "input": { "type": "object" },
+    "outcomes": { "type": "object" },
+    "effects": { "type": "array" },
+    "postconditions": { "type": "array" },
+    "invariants": { "type": "array" },
+    "capabilities": { "type": "object" },
+    "dependencies": { "type": "object" },
+    "resources": { "type": "object" }
+  },
+  "additionalProperties": false
+}

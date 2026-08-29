@@ -1,17 +1,17 @@
-# AIR vision
+# AIR research decisions
 
-AIR is an experiment, not a conclusion.
-Its hypothesis is that a machine-oriented, capability-safe representation may let language models generate portable software more reliably and with less runtime and dependency complexity than conventional source languages.
+AIR began as an experiment in direct AI generation of a machine-oriented implementation language.
+Benchmark 001 found no material generation-reliability, repairability, generation-efficiency, or runtime-safety advantage over Rust/Wasm.
+That hypothesis was stopped.
 
-The important comparison is AIR against independently generated Rust targeting Wasm and WASI.
-TypeScript on Node.js is a secondary baseline.
-AIR should continue only if controlled benchmarks show a clear, material advantage.
+AIR then became a declarative specification, capability, and verification experiment above generated Rust/Wasm.
+The contract generated a Wasmtime runtime policy and derived static and dynamic checks.
+It detected all 14 seeded compiling faults while the existing baseline detected 8.
 
-The project must not claim success from architectural elegance, a successful demonstration, or security properties that Rust/Wasm can reproduce equally well.
-A failed hypothesis is a useful result.
+An ordinary augmented stack using OpenAPI and JSON Schema concepts, Cargo metadata policy, a manual Wasmtime manifest, and five additional integration cases also detected all 14 faults.
+The AIR manifest and manual runtime manifest enforced the same authority boundary.
+AIR reduced per-application policy fragmentation, but that drift-resistance benefit did not outweigh its custom schema and verifier tooling.
 
-The first milestone is intentionally limited to one `POST /users` application.
-Language features are added only when that application or a later frozen benchmark requires them.
-
-Stop or substantially redirect the project if AIR becomes Rust with different syntax, needs a conventional package ecosystem for basic work, is harder for models to generate or repair, cannot remain portable, or shows no material measured advantage after the benchmark suite.
-
+The final decision is **NOT PROMISING**.
+The recommendation is **STOP**.
+AIR-specific language, contract, verifier, component, and benchmark expansion must not continue without a new explicitly approved research question and evidence that standard tooling cannot answer it.

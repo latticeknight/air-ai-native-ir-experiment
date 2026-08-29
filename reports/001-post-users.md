@@ -1,7 +1,7 @@
 # Benchmark 001: AIR vs Rust/Wasm
 
 > This is the earlier engineering-baseline report.
-> The completed controlled-generation result is [AIR vs Rust/Wasm: Benchmark 001 AI-generation experiment](001-ai-generation-b001-gpt-5-6-luna-medium-r20-v2.md).
+> The final project decision is [AIR Specification/Verification Experiment](001-air-specification-verification.md).
 
 ## Conclusion
 

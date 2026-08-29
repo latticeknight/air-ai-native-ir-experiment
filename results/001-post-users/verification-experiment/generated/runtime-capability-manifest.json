@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "generated_from": "air.contract",
+  "source_contract_sha256": "82598b55a85ff9ee3f9e185b983a81740b44ced62e36398c4d06e43717f54ad2",
+  "allowed_imports": [
+    {
+      "capability": "sqlite.users.insert",
+      "module": "air_sqlite_v1",
+      "name": "insert_user",
+      "parameters": [
+        "i32",
+        "i32",
+        "i32",
+        "i32"
+      ],
+      "results": [
+        "i64"
+      ],
+      "resource": {
+        "kind": "sqlite_insert",
+        "database": "benchmark",
+        "table": "users",
+        "columns": [
+          "name",
+          "email"
+        ]
+      }
+    }
+  ],
+  "denied_categories": [
+    "filesystem",
+    "environment",
+    "outbound_http",
+    "sqlite_other_database",
+    "sqlite_other_table",
+    "sqlite_update",
+    "sqlite_delete"
+  ],
+  "resources": {
+    "guest_memory_bytes": 4194304,
+    "fuel_per_request": 10000000,
+    "maximum_instances": 1,
+    "maximum_memories": 1,
+    "maximum_tables": 1,
+    "maximum_table_elements": 1024
+  }
+}

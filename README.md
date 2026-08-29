@@ -1,31 +1,36 @@
-# AIR
+# AIR research archive
 
-AIR is an experiment in AI-native program representation.
-Its first question is deliberately narrow: can a language model generate useful, inspectable programs without first emitting a conventional source language?
+AIR tested whether a machine-oriented representation could improve AI-generated software.
+The standalone implementation-language hypothesis did not outperform Rust/Wasm on generation reliability, repairability, or runtime safety.
+The follow-up specification-layer hypothesis detected more mutations than the existing Benchmark 001 tests, but ordinary integration tests and Cargo policy reproduced the complete detection result with less custom tooling.
 
-This repository contains a working zero-dependency compiler prototype and the first HTTP/SQLite vertical slice.
-It parses AIR text, checks types, contracts, effects, and capabilities, emits a WebAssembly binary directly, and runs that module inside a capability-matched reference host.
+The current decision is to stop AIR-specific language and verification development.
+This repository retains both prototypes, raw evidence, and falsification reports so the negative results remain reproducible.
 
 ```text
-LLM or human intent
+Natural-language intent
         |
         v
-     AIR text
+AIR contract experiment
+        |
+        +--> generated runtime policy
+        +--> derived checks
         |
         v
- parser -> checker -> direct Wasm emitter
-                         |
-                         v
-            WebAssembly module
-                 /       \
-                v         v
-       Wasmtime + WASI   constrained HTTP/SQLite host
+generated Rust --> Wasm/WASI --> constrained Wasmtime host
 ```
 
-AIR is not intended to replace WebAssembly, WASI, LLVM, or native instruction sets.
-It is an executable specification layer above them, designed around explicit effects, deterministic structure, machine-checkable contracts, and capabilities that can be granted or withheld by the host.
+The final specification-layer result is [NOT PROMISING](reports/001-air-specification-verification.md).
+The useful engineering pattern is a narrow Wasmtime capability boundary combined with standard schemas, dependency policy, and focused integration tests.
 
-## Try it
+## Reproduce the specification experiment
+
+```sh
+node benchmark-runner/verification-experiment/run.mjs
+node benchmark-runner/verification-experiment/report.mjs
+```
+
+## Historical executable prototype
 
 The compiler requires a current stable Rust toolchain.
 The `POST /users` reference host requires Node.js 24 because it uses the built-in SQLite module.
@@ -68,7 +73,7 @@ effects {
 Removing `wasi:stdout@1` from either block makes the program fail closed.
 Changing the pinned digest or signer also makes it fail closed.
 
-## Why capabilities instead of packages
+## Historical capability and package hypothesis
 
 AIR does not allow a package to silently acquire ambient filesystem, network, clock, process, or database access.
 The root program declares one flat set of capabilities, and each function declares the subset it uses.
@@ -104,6 +109,7 @@ air/
 |   `-- main.rs          `air check`, `build`, `run`, and `serve`
 |-- reports/             Generated comparative conclusions and confound analysis
 |-- results/             Machine-readable aggregates and complete raw samples
+|-- verification/        Frozen contract validator and derived-check prototype
 `-- tests/               Compiler, adversarial, Wasm, and HTTP/SQLite tests
 ```
 
@@ -114,16 +120,18 @@ air/
 - [MVP scope](docs/MVP.md)
 - [Project vision and kill criteria](docs/vision.md)
 - [Capability model](docs/capability-model.md)
+- [Specification-layer scope](docs/SPECIFICATION_LAYER.md)
+- [Specification-layer experiment](reports/001-air-specification-verification.md)
 - [Benchmark methodology](docs/benchmark-methodology.md)
 
 ## Status
 
-This is a research seed, not a production language or security boundary.
-The prototype proves one deliberately specialised `POST /users` pipeline and the shape of capability enforcement.
-It now has structural records, a result/error contract, runtime-checked preconditions, a checked postcondition boundary, a table-scoped insert effect, HTTP/JSON adapters, and real SQLite persistence.
-It does not yet implement general-purpose functions, lists, cryptographic signature verification, a hardened host process, or the WebAssembly Component Model.
+This is a completed research archive, not a production language or security boundary.
+The executable prototype and specification-layer prototype are frozen.
 Benchmark 001 now compares the frozen AIR slice with an independent zero-dependency Rust/Wasm candidate under one shared Wasmtime and SQLite host.
 The [controlled 20-pair AI-generation experiment](reports/001-ai-generation-b001-gpt-5-6-luna-medium-r20-v2.md) found identical 85 percent first-pass correctness and 100 percent eventual correctness for AIR and Rust/Wasm.
 It found no material AIR reliability, repairability, generation-efficiency, or effective-safety advantage.
 AIR produced materially smaller source representations and Wasm artifacts, but that alone does not justify the additional language and compiler layer.
-The overall conclusion is **INCONCLUSIVE**, with a recommendation to **CHANGE DIRECTION** rather than expand AIR.
+The subsequent specification-layer experiment compiled 14 faulty Rust/Wasm candidates.
+The existing baseline caught 8, AIR-derived verification caught 14, and a small ordinary-tooling augmentation also caught 14.
+The final conclusion is **NOT PROMISING**, with a recommendation to **STOP** AIR-specific development.

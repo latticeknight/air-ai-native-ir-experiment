@@ -1,0 +1,54 @@
+{
+  "id": "accept-trailing-domain-dot",
+  "control": false,
+  "defect": "The guest accepts an email whose domain ends with a dot.",
+  "category": "input_validation",
+  "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+  "expected_baseline_detection": false,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1453,
+    "artifact_sha256": "463c479fc09ef3547672670ac53dda5b1f9dd37baba07a34f08138a77552eb40"
+  },
+  "baseline": {
+    "detected": false,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": false,
+    "functional_tests_passed": 12,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "predicate-email-air_email_v1"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": false,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": true
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3548,
+    "sha256": "46562efbfb1b4586fa42dc2b1920437ceb2cb274d28459e549de9e77953a1bb1"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/accept-trailing-domain-dot",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-trailing-domain-dot"
+}

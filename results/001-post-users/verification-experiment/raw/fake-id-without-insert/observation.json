@@ -1,0 +1,56 @@
+{
+  "id": "fake-id-without-insert",
+  "control": false,
+  "defect": "The guest returns a positive ID without performing the declared insert.",
+  "category": "missing_effect",
+  "ordinary_equivalent": "A duplicate or database-state integration test.",
+  "expected_baseline_detection": true,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1492,
+    "artifact_sha256": "28b635ea7eb24d9b30624e51365c6bcbf85571dda3df9e1f6074da338580bba8"
+  },
+  "baseline": {
+    "detected": true,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": true,
+    "functional_tests_passed": 8,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "postcondition-database_row_matches_response_id",
+      "invariant-unique-email",
+      "effect-unavailable-insert_user"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": true,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": false
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3636,
+    "sha256": "0de5b9aaa3a5eaa7312ae495a3ac5e9242af34df0199b1b5d8cea427fb53a1e4"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/fake-id-without-insert",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/fake-id-without-insert"
+}

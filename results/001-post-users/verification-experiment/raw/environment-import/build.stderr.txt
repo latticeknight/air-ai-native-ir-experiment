@@ -1,0 +1,2 @@
+   Compiling mutation-candidate v0.1.0 (/tmp/air-verification-environment-import-QvyIBr)
+    Finished `release` profile [optimized] target(s) in 0.11s

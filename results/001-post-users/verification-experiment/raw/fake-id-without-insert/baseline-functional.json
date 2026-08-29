@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "benchmark": "001-post-users",
+  "target": "fake-id-without-insert",
+  "run_kind": "engineering_baseline",
+  "correctness": {
+    "tests_passed": 8,
+    "tests_total": 12,
+    "full_test_success": false,
+    "tests": [
+      {
+        "name": "valid user",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "invalid email",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "missing name",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "missing email",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "empty name",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "malformed JSON",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "duplicate email",
+        "passed": false,
+        "failure": "Expected values to be strictly equal:\n\n201 !== 409\n"
+      },
+      {
+        "name": "large input",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "Unicode input",
+        "passed": true,
+        "failure": null
+      },
+      {
+        "name": "SQL-injection-like input",
+        "passed": false,
+        "failure": "SQL-looking text was not stored literally"
+      },
+      {
+        "name": "concurrent inserts",
+        "passed": false,
+        "failure": "Expected values to be strictly equal:\n\n1 !== 8\n"
+      },
+      {
+        "name": "database unavailable",
+        "passed": false,
+        "failure": "Expected values to be strictly equal:\n\n201 !== 500\n"
+      }
+    ]
+  },
+  "artifact": {
+    "bytes": 1492,
+    "sha256": "28b635ea7eb24d9b30624e51365c6bcbf85571dda3df9e1f6074da338580bba8"
+  },
+  "performance": {
+    "cold_start_ms": 7.6,
+    "mean_request_ms": 0.41,
+    "median_request_ms": 0.38,
+    "p95_request_ms": 0.66,
+    "throughput_requests_per_second": 4693.5,
+    "peak_memory_bytes": 11337728,
+    "user_cpu_seconds": 0,
+    "system_cpu_seconds": 0,
+    "latency_samples_ms": [
+      0.41,
+      0.42,
+      0.55,
+      0.42,
+      0.35,
+      0.33,
+      0.48,
+      0.38,
+      0.36,
+      0.37,
+      0.42,
+      0.46,
+      0.45,
+      0.33,
+      0.85,
+      0.46,
+      0.4,
+      0.35,
+      0.34,
+      0.35,
+      0.41,
+      0.38,
+      0.55,
+      0.55,
+      0.58,
+      0.34,
+      0.29,
+      0.33,
+      0.34,
+      0.39,
+      0.66,
+      0.39,
+      0.37,
+      0.35,
+      0.35,
+      0.41,
+      0.45,
+      0.43,
+      0.36,
+      0.3,
+      0.33,
+      0.32,
+      0.33,
+      0.3,
+      0.31,
+      0.34,
+      0.4,
+      0.37,
+      0.38,
+      0.9
+    ]
+  }
+}

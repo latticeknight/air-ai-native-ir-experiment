@@ -1,0 +1,8 @@
+{
+  "status": null,
+  "signal": null,
+  "timed_out": false,
+  "stdout": "",
+  "stderr": "",
+  "not_run": "existing baseline or ordinary static policy already detected the candidate"
+}

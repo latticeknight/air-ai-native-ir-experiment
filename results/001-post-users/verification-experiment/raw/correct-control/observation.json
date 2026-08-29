@@ -1,0 +1,52 @@
+{
+  "id": "correct-control",
+  "control": true,
+  "defect": null,
+  "category": "control",
+  "ordinary_equivalent": null,
+  "expected_baseline_detection": false,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1481,
+    "artifact_sha256": "e4ea115ba9596d3fb0bb223b85ae967daa744c387080616873d35ade8173dc33"
+  },
+  "baseline": {
+    "detected": false,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": false,
+    "functional_tests_passed": 12,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": false,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": false,
+    "failed_dynamic_checks": []
+  },
+  "ordinary_augmented": {
+    "detected": false,
+    "existing_baseline_detected": false,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": false
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3581,
+    "sha256": "7387fc946d9202885ccc8cff83ad17c497072f651b956c8744e35efb25d64e48"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/correct-control",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/correct-control"
+}

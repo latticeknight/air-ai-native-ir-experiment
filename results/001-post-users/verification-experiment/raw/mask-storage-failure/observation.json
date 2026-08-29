@@ -1,0 +1,54 @@
+{
+  "id": "mask-storage-failure",
+  "control": false,
+  "defect": "The guest converts storage failure into a successful ID.",
+  "category": "error_mapping",
+  "ordinary_equivalent": "The existing unavailable-storage integration test.",
+  "expected_baseline_detection": true,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1481,
+    "artifact_sha256": "ae219b678ddd26212aa557421a18297e913e7c9d02b5e1c3691e1bf652663c9c"
+  },
+  "baseline": {
+    "detected": true,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": true,
+    "functional_tests_passed": 11,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "effect-unavailable-insert_user"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": true,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": false
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3567,
+    "sha256": "8f837577c4c4c39b8c944f9518e96291b2024ea2676ee2d0aadc22678676e884"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/mask-storage-failure",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/mask-storage-failure"
+}

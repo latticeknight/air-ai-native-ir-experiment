@@ -1,0 +1,2 @@
+   Compiling mutation-candidate v0.1.0 (/tmp/air-verification-allow-duplicate-email-8D8vAO)
+    Finished `release` profile [optimized] target(s) in 0.11s

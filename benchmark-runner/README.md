@@ -26,6 +26,19 @@ reports/001-post-users.md                     Human-readable comparison
 Node.js orchestrates the tests and independently inspects the final SQLite database.
 It is not the execution host for either candidate.
 
+## Specification-layer mutation experiment
+
+Run the frozen AIR-contract versus ordinary-tooling mutation comparison:
+
+```sh
+node benchmark-runner/verification-experiment/run.mjs
+node benchmark-runner/verification-experiment/report.mjs
+```
+
+The experiment compiles one correct control and 14 faulty Rust/Wasm candidates.
+It retains every candidate and raw result under `results/001-post-users/verification-experiment/`.
+Its conclusion is `reports/001-air-specification-verification.md`.
+
 ## Controlled AI-generation experiment
 
 The generation runner invokes Codex in isolated temporary workspaces and captures its JSONL event stream.

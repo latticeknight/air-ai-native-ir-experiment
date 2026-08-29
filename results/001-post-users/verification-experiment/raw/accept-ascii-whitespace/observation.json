@@ -1,0 +1,54 @@
+{
+  "id": "accept-ascii-whitespace",
+  "control": false,
+  "defect": "The guest accepts an email containing ASCII whitespace.",
+  "category": "input_validation",
+  "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+  "expected_baseline_detection": false,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1420,
+    "artifact_sha256": "43bb8007a1046ea9049c10f3aa5cadf6e5b57d82f49d7f72e11fb442a6b25043"
+  },
+  "baseline": {
+    "detected": false,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": false,
+    "functional_tests_passed": 12,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "predicate-email-air_email_v1"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": false,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": true
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3526,
+    "sha256": "9571779ecf1eab310843f7efa757cee72e6a10b94f100dd931c63360ad761d2a"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/accept-ascii-whitespace",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-ascii-whitespace"
+}

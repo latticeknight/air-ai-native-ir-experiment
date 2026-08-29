@@ -1,0 +1,54 @@
+{
+  "id": "accept-multiple-at",
+  "control": false,
+  "defect": "The guest accepts an address containing more than one at sign.",
+  "category": "input_validation",
+  "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+  "expected_baseline_detection": false,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1460,
+    "artifact_sha256": "f77250752bc067f9448a99fb955d82e93c768032a930b47813583750e8d4bf91"
+  },
+  "baseline": {
+    "detected": false,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": false,
+    "functional_tests_passed": 12,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "predicate-email-air_email_v1"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": false,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": true
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3507,
+    "sha256": "aaf0a814a5916b41bfb16865c05c266fff8f292f0ee608cfd40d2bda1d3d2b4b"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/accept-multiple-at",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-multiple-at"
+}

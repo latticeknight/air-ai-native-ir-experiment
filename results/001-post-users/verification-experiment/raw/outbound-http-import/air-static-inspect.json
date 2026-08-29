@@ -1,0 +1,7 @@
+{
+  "status": 1,
+  "signal": null,
+  "timed_out": false,
+  "stdout": "",
+  "stderr": "benchmark-host: candidate requested 2 imports; capability manifest allows 1\n"
+}

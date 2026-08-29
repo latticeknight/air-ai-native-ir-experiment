@@ -1,5 +1,9 @@
 # AIR 0.1 language sketch
 
+> Historical executable-language syntax.
+> AIR 0.1 is frozen and no general-purpose constructs should be added.
+> The replacement specification contract is data rather than an implementation language, and its experiment concluded that ordinary tooling was equivalent.
+
 ## Design constraints
 
 AIR 0.1 favours regularity over convenience.
@@ -130,4 +134,3 @@ AIR versioning applies to syntax and semantics together.
 Compilers reject unknown language versions.
 Capability major versions are part of capability IDs and never float during resolution.
 Compatible evolution must still resolve to an exact signed descriptor and lock digest.
-

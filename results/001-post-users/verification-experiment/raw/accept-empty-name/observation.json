@@ -1,0 +1,54 @@
+{
+  "id": "accept-empty-name",
+  "control": false,
+  "defect": "The guest permits an empty name.",
+  "category": "input_validation",
+  "ordinary_equivalent": "The existing integration test.",
+  "expected_baseline_detection": true,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1477,
+    "artifact_sha256": "82bf3c7dbb14777d3da4159e9b95b834ed0ad68d49049b24eee1fbf32ea66cba"
+  },
+  "baseline": {
+    "detected": true,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": true,
+    "functional_tests_passed": 11,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "predicate-name-non_empty"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": true,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": false
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3590,
+    "sha256": "41903eef4520b06c1cf6b1b8a95fee9e4e8164413b47a5c641a3710fd1ebd32d"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/accept-empty-name",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-empty-name"
+}

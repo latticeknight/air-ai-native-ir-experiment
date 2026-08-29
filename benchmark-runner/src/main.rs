@@ -34,7 +34,8 @@ fn run() -> Result<()> {
             let module = Module::from_file(&engine, &options.wasm).map_err(|error| {
                 anyhow::anyhow!("could not load `{}`: {error}", options.wasm.display())
             })?;
-            verify_module(&module)?;
+            let policy = RuntimePolicy::load(options.capability_manifest.as_ref())?;
+            verify_module(&module, &policy)?;
             println!("module accepted");
             Ok(())
         }
@@ -44,6 +45,7 @@ fn run() -> Result<()> {
 }
 
 fn serve(options: Options) -> Result<()> {
+    let policy = RuntimePolicy::load(options.capability_manifest.as_ref())?;
     let database_path = options
         .database
         .as_ref()
@@ -67,14 +69,14 @@ fn serve(options: Options) -> Result<()> {
     let engine = engine()?;
     let module = Module::from_file(&engine, &options.wasm)
         .map_err(|error| anyhow::anyhow!("could not load `{}`: {error}", options.wasm.display()))?;
-    verify_module(&module)?;
+    verify_module(&module, &policy)?;
 
     let limits = StoreLimitsBuilder::new()
-        .memory_size(MAX_MEMORY_BYTES)
-        .instances(1)
-        .memories(1)
-        .tables(1)
-        .table_elements(1_024)
+        .memory_size(policy.maximum_memory_bytes)
+        .instances(policy.maximum_instances)
+        .memories(policy.maximum_memories)
+        .tables(policy.maximum_tables)
+        .table_elements(policy.maximum_table_elements)
         .build();
     let mut store = Store::new(
         &engine,
@@ -85,7 +87,7 @@ fn serve(options: Options) -> Result<()> {
         },
     );
     store.limiter(|state| &mut state.limits);
-    store.set_fuel(FUEL_PER_REQUEST)?;
+    store.set_fuel(policy.fuel_per_request)?;
 
     let mut linker = Linker::new(&engine);
     linker.func_wrap(
@@ -130,6 +132,7 @@ fn serve(options: Options) -> Result<()> {
         store,
         memory,
         handler,
+        fuel_per_request: policy.fuel_per_request,
     };
     let mut handled = 0_u64;
     loop {
@@ -152,22 +155,32 @@ fn engine() -> Result<Engine> {
     Ok(Engine::new(&configuration)?)
 }
 
-fn verify_module(module: &Module) -> Result<()> {
+fn verify_module(module: &Module, policy: &RuntimePolicy) -> Result<()> {
     let imports: Vec<_> = module.imports().collect();
-    if imports.len() != 1 {
+    if imports.len() != policy.allowed_imports.len() {
         bail!(
-            "candidate requested {} imports; exactly one table-scoped SQLite import is allowed",
-            imports.len()
+            "candidate requested {} imports; capability manifest allows {}",
+            imports.len(),
+            policy.allowed_imports.len()
         );
     }
-    let import = &imports[0];
-    if import.module() != "air_sqlite_v1" || import.name() != "insert_user" {
-        bail!(
-            "undeclared capability import `{}.{}`",
-            import.module(),
-            import.name()
-        );
+    for import in &imports {
+        let declared = policy
+            .allowed_imports
+            .iter()
+            .any(|allowed| allowed.module == import.module() && allowed.name == import.name());
+        if !declared {
+            bail!(
+                "undeclared capability import `{}.{}`",
+                import.module(),
+                import.name()
+            );
+        }
     }
+    let import = imports
+        .iter()
+        .find(|import| import.module() == "air_sqlite_v1" && import.name() == "insert_user")
+        .context("capability manifest contains an unsupported import")?;
     let ExternType::Func(function) = import.ty() else {
         bail!("`air_sqlite_v1.insert_user` must be a function");
     };
@@ -310,7 +323,7 @@ fn handle_http(mut request: Request, runtime: &mut Runtime) -> Result<()> {
     runtime
         .memory
         .write(&mut runtime.store, email_offset, email.as_bytes())?;
-    runtime.store.set_fuel(FUEL_PER_REQUEST)?;
+    runtime.store.set_fuel(runtime.fuel_per_request)?;
     let result = runtime.handler.call(
         &mut runtime.store,
         (
@@ -355,6 +368,7 @@ struct Runtime {
     store: Store<HostState>,
     memory: Memory,
     handler: TypedFunc<(i32, i32, i32, i32), i64>,
+    fuel_per_request: u64,
 }
 
 struct HostState {
@@ -370,6 +384,7 @@ struct Options {
     port: u16,
     max_requests: Option<u64>,
     storage_unavailable: bool,
+    capability_manifest: Option<PathBuf>,
 }
 
 impl Options {
@@ -380,6 +395,7 @@ impl Options {
         let mut port = 0_u16;
         let mut max_requests = None;
         let mut storage_unavailable = false;
+        let mut capability_manifest = None;
         let mut cursor = 0;
         while cursor < arguments.len() {
             let flag = &arguments[cursor];
@@ -399,6 +415,7 @@ impl Options {
                 "--max-requests" => {
                     max_requests = Some(value.parse().context("--max-requests must be a u64")?)
                 }
+                "--capability-manifest" => capability_manifest = Some(PathBuf::from(value)),
                 _ => bail!("unknown option `{flag}`"),
             }
             cursor += 2;
@@ -410,6 +427,179 @@ impl Options {
             port,
             max_requests,
             storage_unavailable,
+            capability_manifest,
         })
+    }
+}
+
+#[derive(Clone)]
+struct AllowedImport {
+    module: String,
+    name: String,
+}
+
+struct RuntimePolicy {
+    allowed_imports: Vec<AllowedImport>,
+    maximum_memory_bytes: usize,
+    fuel_per_request: u64,
+    maximum_instances: usize,
+    maximum_memories: usize,
+    maximum_tables: usize,
+    maximum_table_elements: usize,
+}
+
+impl RuntimePolicy {
+    fn load(path: Option<&PathBuf>) -> Result<Self> {
+        let Some(path) = path else {
+            return Ok(Self::benchmark_default());
+        };
+        let bytes = fs::read(path)
+            .with_context(|| format!("could not read capability manifest `{}`", path.display()))?;
+        let value: Value = serde_json::from_slice(&bytes)
+            .with_context(|| format!("invalid capability manifest `{}`", path.display()))?;
+        if value.get("schema_version").and_then(Value::as_u64) != Some(1) {
+            bail!("capability manifest schema_version must be 1");
+        }
+        let imports = value
+            .get("allowed_imports")
+            .and_then(Value::as_array)
+            .context("capability manifest allowed_imports must be an array")?;
+        let mut allowed_imports = Vec::new();
+        for import in imports {
+            let module = import
+                .get("module")
+                .and_then(Value::as_str)
+                .context("capability import module must be a string")?;
+            let name = import
+                .get("name")
+                .and_then(Value::as_str)
+                .context("capability import name must be a string")?;
+            allowed_imports.push(AllowedImport {
+                module: module.to_string(),
+                name: name.to_string(),
+            });
+        }
+        for (index, import) in allowed_imports.iter().enumerate() {
+            if import.module != "air_sqlite_v1" || import.name != "insert_user" {
+                bail!(
+                    "capability manifest requests unsupported import `{}.{}`",
+                    import.module,
+                    import.name
+                );
+            }
+            if allowed_imports[..index]
+                .iter()
+                .any(|earlier| earlier.module == import.module && earlier.name == import.name)
+            {
+                bail!(
+                    "capability manifest repeats import `{}.{}`",
+                    import.module,
+                    import.name
+                );
+            }
+        }
+        let resources = value
+            .get("resources")
+            .and_then(Value::as_object)
+            .context("capability manifest resources must be an object")?;
+        Ok(Self {
+            allowed_imports,
+            maximum_memory_bytes: resource_usize(resources, "guest_memory_bytes")?,
+            fuel_per_request: resource_u64(resources, "fuel_per_request")?,
+            maximum_instances: resource_usize(resources, "maximum_instances")?,
+            maximum_memories: resource_usize(resources, "maximum_memories")?,
+            maximum_tables: resource_usize(resources, "maximum_tables")?,
+            maximum_table_elements: resource_usize(resources, "maximum_table_elements")?,
+        })
+    }
+
+    fn benchmark_default() -> Self {
+        Self {
+            allowed_imports: vec![AllowedImport {
+                module: "air_sqlite_v1".to_string(),
+                name: "insert_user".to_string(),
+            }],
+            maximum_memory_bytes: MAX_MEMORY_BYTES,
+            fuel_per_request: FUEL_PER_REQUEST,
+            maximum_instances: 1,
+            maximum_memories: 1,
+            maximum_tables: 1,
+            maximum_table_elements: 1_024,
+        }
+    }
+}
+
+fn resource_u64(resources: &serde_json::Map<String, Value>, name: &str) -> Result<u64> {
+    let value = resources
+        .get(name)
+        .and_then(Value::as_u64)
+        .with_context(|| format!("capability manifest resource `{name}` must be an integer"))?;
+    if value == 0 {
+        bail!("capability manifest resource `{name}` must be positive");
+    }
+    Ok(value)
+}
+
+fn resource_usize(resources: &serde_json::Map<String, Value>, name: &str) -> Result<usize> {
+    usize::try_from(resource_u64(resources, name)?)
+        .with_context(|| format!("capability manifest resource `{name}` is too large"))
+}
+
+#[cfg(test)]
+mod tests {
+    use std::fs;
+    use std::time::{SystemTime, UNIX_EPOCH};
+
+    use super::RuntimePolicy;
+
+    const RESOURCES: &str = r#""resources": {
+      "guest_memory_bytes": 4194304,
+      "fuel_per_request": 10000000,
+      "maximum_instances": 1,
+      "maximum_memories": 1,
+      "maximum_tables": 1,
+      "maximum_table_elements": 1024
+    }"#;
+
+    #[test]
+    fn loads_supported_runtime_manifest() {
+        let path = temporary_manifest("supported");
+        fs::write(
+            &path,
+            format!(
+                r#"{{"schema_version":1,"allowed_imports":[{{"module":"air_sqlite_v1","name":"insert_user"}}],{RESOURCES}}}"#
+            ),
+        )
+        .unwrap();
+        let policy = RuntimePolicy::load(Some(&path)).unwrap();
+        fs::remove_file(path).unwrap();
+        assert_eq!(policy.allowed_imports.len(), 1);
+        assert_eq!(policy.fuel_per_request, 10_000_000);
+    }
+
+    #[test]
+    fn rejects_unsupported_runtime_manifest_import() {
+        let path = temporary_manifest("unsupported");
+        fs::write(
+            &path,
+            format!(
+                r#"{{"schema_version":1,"allowed_imports":[{{"module":"wasi_snapshot_preview1","name":"environ_get"}}],{RESOURCES}}}"#
+            ),
+        )
+        .unwrap();
+        let error = RuntimePolicy::load(Some(&path)).err().unwrap();
+        fs::remove_file(path).unwrap();
+        assert!(error.to_string().contains("unsupported import"));
+    }
+
+    fn temporary_manifest(name: &str) -> std::path::PathBuf {
+        let nonce = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        std::env::temp_dir().join(format!(
+            "air-benchmark-runtime-policy-{}-{name}-{nonce}.json",
+            std::process::id()
+        ))
     }
 }

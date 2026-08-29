@@ -1,0 +1,11 @@
+   Compiling mutation-candidate v0.1.0 (/tmp/air-verification-mask-storage-failure-6Birex)
+warning: constant `STORAGE_FAILURE` is never used
+  --> src/lib.rs:13:7
+   |
+13 | const STORAGE_FAILURE: i64 = -3;
+   |       ^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `mutation-candidate` (lib) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.11s

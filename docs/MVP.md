@@ -1,5 +1,9 @@
 # AIR MVP
 
+> Historical implementation-language roadmap.
+> M2 and M3 are cancelled by the Benchmark 001 kill criteria.
+> The specification-layer pivot was also tested and is documented separately.
+
 ## Research question
 
 Can an LLM reliably generate non-trivial AIR programs that pass deterministic verification, request no excess authority, compile to portable Wasm, and behave correctly under a constrained host?
@@ -85,13 +89,13 @@ AIR remains frozen, and M2 must not begin without a new explicit decision becaus
 
 ### M2: signed host interaction
 
-Add WIT-backed capabilities, real signature and revocation verification, affine resources, Component Model output, and Wasmtime host grants.
-Run adversarial capability and dependency tests.
+Cancelled.
+Do not add WIT-backed capabilities, signatures, affine resources, or Component Model output to AIR.
 
 ### M3: composed applications
 
-Add signed content-addressed components, deterministic flat resolution, interface compatibility checks, and reproducible locks.
-Benchmark small applications that combine pure components with two or three constrained host capabilities.
+Cancelled.
+Do not create Benchmark 002 or expand the component model under this project direction.
 
 ## Go or stop criteria
 

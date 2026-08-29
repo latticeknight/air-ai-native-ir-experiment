@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "kind": "air.contract",
+  "application": {
+    "id": "benchmark-001-post-users"
+  },
+  "endpoint": {
+    "method": "POST",
+    "path": "/users",
+    "content_type": "application/json"
+  },
+  "input": {
+    "kind": "closed_object",
+    "body_max_bytes": 32768,
+    "fields": {
+      "name": {
+        "type": "string",
+        "required": true,
+        "predicates": ["non_empty"],
+        "invalid_outcome": "invalid_name"
+      },
+      "email": {
+        "type": "string",
+        "required": true,
+        "predicates": ["air_email_v1"],
+        "invalid_outcome": "invalid_email"
+      }
+    },
+    "invalid_shape_outcome": "invalid_json"
+  },
+  "outcomes": {
+    "success": {
+      "status": 201,
+      "body": {
+        "kind": "closed_object",
+        "fields": {
+          "id": { "type": "positive_integer", "required": true }
+        }
+      }
+    },
+    "invalid_json": {
+      "status": 400,
+      "body": { "error": "invalid_json" }
+    },
+    "invalid_name": {
+      "status": 400,
+      "body": { "error": "invalid_name" }
+    },
+    "invalid_email": {
+      "status": 400,
+      "body": { "error": "invalid_email" }
+    },
+    "duplicate_email": {
+      "status": 409,
+      "body": { "error": "duplicate_email" }
+    },
+    "storage_failure": {
+      "status": 500,
+      "body": { "error": "storage_failure" }
+    }
+  },
+  "effects": [
+    {
+      "id": "insert_user",
+      "kind": "sqlite_insert",
+      "database": "benchmark",
+      "table": "users",
+      "columns": ["name", "email"],
+      "on_duplicate": "duplicate_email",
+      "on_unavailable": "storage_failure"
+    }
+  ],
+  "postconditions": [
+    {
+      "kind": "response_field",
+      "outcome": "success",
+      "field": "id",
+      "predicate": "positive_integer"
+    },
+    {
+      "kind": "database_row_matches_response_id",
+      "effect": "insert_user",
+      "response_field": "id",
+      "input_to_columns": {
+        "name": "name",
+        "email": "email"
+      }
+    }
+  ],
+  "invariants": [
+    {
+      "kind": "unique",
+      "effect": "insert_user",
+      "columns": ["email"],
+      "violation_outcome": "duplicate_email"
+    }
+  ],
+  "capabilities": {
+    "allowed": [
+      {
+        "id": "sqlite.users.insert",
+        "kind": "sqlite_insert",
+        "database": "benchmark",
+        "table": "users",
+        "columns": ["name", "email"],
+        "wasm_import": {
+          "module": "air_sqlite_v1",
+          "name": "insert_user",
+          "parameters": ["i32", "i32", "i32", "i32"],
+          "results": ["i64"]
+        }
+      }
+    ],
+    "forbidden": [
+      "filesystem",
+      "environment",
+      "outbound_http",
+      "sqlite_other_database",
+      "sqlite_other_table",
+      "sqlite_update",
+      "sqlite_delete"
+    ]
+  },
+  "dependencies": {
+    "maximum_direct": 0,
+    "maximum_transitive": 0,
+    "maximum_graph_depth": 0,
+    "build_scripts": false
+  },
+  "resources": {
+    "guest_memory_bytes": 4194304,
+    "fuel_per_request": 10000000,
+    "maximum_instances": 1,
+    "maximum_memories": 1,
+    "maximum_tables": 1,
+    "maximum_table_elements": 1024
+  }
+}

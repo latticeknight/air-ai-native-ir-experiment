@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "generated_from": "manual-baseline-policy",
+  "allowed_imports": [
+    {
+      "module": "air_sqlite_v1",
+      "name": "insert_user"
+    }
+  ],
+  "denied_categories": [
+    "filesystem",
+    "environment",
+    "outbound_http",
+    "sqlite_other_database",
+    "sqlite_other_table",
+    "sqlite_update",
+    "sqlite_delete"
+  ],
+  "resources": {
+    "guest_memory_bytes": 4194304,
+    "fuel_per_request": 10000000,
+    "maximum_instances": 1,
+    "maximum_memories": 1,
+    "maximum_tables": 1,
+    "maximum_table_elements": 1024
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "id": "allow-duplicate-email",
+  "control": false,
+  "defect": "The guest converts the duplicate-email result into a successful ID.",
+  "category": "business_invariant",
+  "ordinary_equivalent": "The existing duplicate integration test.",
+  "expected_baseline_detection": true,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1481,
+    "artifact_sha256": "fc91c92597afb72c8bd4701d797d9bd4d9c42860b8a0601add2dbfa57cdad61a"
+  },
+  "baseline": {
+    "detected": true,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": true,
+    "functional_tests_passed": 11,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "invariant-unique-email"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": true,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": false
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3567,
+    "sha256": "115eca908da1904c1ec7fcbe970a3408db5617cabda6c5d2e79516bb1059a23e"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/allow-duplicate-email",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/allow-duplicate-email"
+}

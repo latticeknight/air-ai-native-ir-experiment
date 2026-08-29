@@ -1,0 +1,52 @@
+{
+  "id": "environment-import",
+  "control": false,
+  "defect": "The guest requests an undeclared environment capability.",
+  "category": "capability",
+  "ordinary_equivalent": "A manually maintained Wasmtime import allowlist.",
+  "expected_baseline_detection": true,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1541,
+    "artifact_sha256": "aa339f06ffb244bb9f3aae9340bdf797cc477f36f129aa5d04f8b78bbe7cc8bc"
+  },
+  "baseline": {
+    "detected": true,
+    "compiler_detected": false,
+    "runtime_policy_detected": true,
+    "functional_tests_detected": false,
+    "functional_tests_passed": null,
+    "functional_tests_total": null
+  },
+  "air": {
+    "detected": true,
+    "static_detected": true,
+    "capability_manifest_detected": true,
+    "dependency_policy_detected": false,
+    "dynamic_detected": false,
+    "failed_dynamic_checks": []
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": true,
+    "manual_capability_policy_detected": true,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": false
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3841,
+    "sha256": "20d21f52aedf683eadfece38c7338ddc680e1628f10dae2b1eae706a4e90bd52"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/environment-import",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/environment-import"
+}

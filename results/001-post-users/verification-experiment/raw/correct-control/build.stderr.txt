@@ -1,0 +1,2 @@
+   Compiling mutation-candidate v0.1.0 (/tmp/air-verification-correct-control-hbXCDJ)
+    Finished `release` profile [optimized] target(s) in 0.26s

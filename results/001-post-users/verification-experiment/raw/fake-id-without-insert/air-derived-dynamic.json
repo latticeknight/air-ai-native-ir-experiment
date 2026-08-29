@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "plan": "results/001-post-users/verification-experiment/generated/derived-verification-plan.json",
+  "dynamic_checks_passed": 8,
+  "dynamic_checks_total": 11,
+  "full_success": false,
+  "checks": [
+    {
+      "id": "required-name",
+      "generated_from": "omit_required_field",
+      "passed": true,
+      "cases": [
+        {
+          "case": "omit name",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "predicate-name-non_empty",
+      "generated_from": "predicate_counterexamples",
+      "passed": true,
+      "cases": [
+        {
+          "case": "name=\"\"",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_name"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "required-email",
+      "generated_from": "omit_required_field",
+      "passed": true,
+      "cases": [
+        {
+          "case": "omit email",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "predicate-email-air_email_v1",
+      "generated_from": "predicate_counterexamples",
+      "passed": true,
+      "cases": [
+        {
+          "case": "email=\"not-an-email\"",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_email"
+            }
+          }
+        },
+        {
+          "case": "email=\"a@b\"",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_email"
+            }
+          }
+        },
+        {
+          "case": "email=\"a@@b.co\"",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_email"
+            }
+          }
+        },
+        {
+          "case": "email=\"alice @example.com\"",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_email"
+            }
+          }
+        },
+        {
+          "case": "email=\"a@.bc\"",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_email"
+            }
+          }
+        },
+        {
+          "case": "email=\"a@bc.\"",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_email"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "closed-input-object",
+      "generated_from": "add_unknown_field",
+      "passed": true,
+      "cases": [
+        {
+          "case": "unknown input field",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "body-size-limit",
+      "generated_from": "exceed_body_limit",
+      "passed": true,
+      "cases": [
+        {
+          "case": "body exceeds maximum",
+          "passed": true,
+          "observation": {
+            "status": 400,
+            "body": {
+              "error": "invalid_json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "success-outcome",
+      "generated_from": "valid_input",
+      "passed": true,
+      "cases": [
+        {
+          "case": "valid input",
+          "passed": true,
+          "observation": {
+            "status": 201,
+            "body": {
+              "id": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "postcondition-response_field",
+      "generated_from": "response_field",
+      "passed": true,
+      "cases": [
+        {
+          "case": "response field id",
+          "passed": true,
+          "observation": {
+            "status": 201,
+            "body": {
+              "id": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "postcondition-database_row_matches_response_id",
+      "generated_from": "database_row_matches_response_id",
+      "passed": false,
+      "cases": [
+        {
+          "case": "database row matches returned ID",
+          "passed": false,
+          "observation": {
+            "status": 201,
+            "body": {
+              "id": 1
+            }
+          },
+          "failure": "no users row exists for returned id 1"
+        }
+      ]
+    },
+    {
+      "id": "invariant-unique-email",
+      "generated_from": "unique",
+      "passed": false,
+      "cases": [
+        {
+          "case": "unique email",
+          "passed": false,
+          "failure": "Expected values to be strictly equal:\n\n201 !== 409\n"
+        }
+      ]
+    },
+    {
+      "id": "effect-unavailable-insert_user",
+      "generated_from": "capability_unavailable",
+      "passed": false,
+      "cases": [
+        {
+          "case": "capability unavailable",
+          "passed": false,
+          "failure": "Expected values to be strictly equal:\n\n201 !== 500\n"
+        }
+      ]
+    }
+  ]
+}

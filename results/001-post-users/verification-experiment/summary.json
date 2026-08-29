@@ -1,0 +1,869 @@
+{
+  "schema_version": 1,
+  "experiment": "air-specification-verification-benchmark-001",
+  "generated_at": "2026-08-29T12:56:14.473Z",
+  "source_contract": "benchmarks/001-post-users/verification/air.contract.json",
+  "contract_sha256": "82598b55a85ff9ee3f9e185b983a81740b44ced62e36398c4d06e43717f54ad2",
+  "seeded_defects": 14,
+  "compilation": {
+    "compiling_faults": 14,
+    "required_compiling_faults": 14
+  },
+  "baseline": {
+    "defects_detected": 8,
+    "defects_missed": 6,
+    "false_positives": 0,
+    "false_negatives": 6
+  },
+  "air": {
+    "defects_detected": 14,
+    "defects_missed": 0,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "static_detections": 4,
+    "dynamic_detections": 10
+  },
+  "ordinary_augmented": {
+    "defects_detected": 14,
+    "defects_missed": 0,
+    "false_positives": 0,
+    "false_negatives": 0,
+    "components": [
+      "OpenAPI and JSON Schema HTTP description",
+      "existing integration and security tests",
+      "manual Wasmtime capability manifest",
+      "Cargo metadata dependency limits",
+      "five additional hand-written email integration cases"
+    ]
+  },
+  "verification_lift": {
+    "additional_defects_detected": 6,
+    "defect_ids": [
+      "accept-domain-without-dot",
+      "accept-multiple-at",
+      "accept-ascii-whitespace",
+      "accept-leading-domain-dot",
+      "accept-trailing-domain-dot",
+      "undeclared-local-dependency"
+    ],
+    "definition": "Faults detected by AIR verification that passed compilation, the existing host policy, and the existing functional tests."
+  },
+  "runtime_manifest": {
+    "generated": "results/001-post-users/verification-experiment/generated/runtime-capability-manifest.json",
+    "manually_authored_comparator": "benchmarks/001-post-users/verification/baseline/runtime-capability-manifest.json",
+    "enforcement_equivalent": true,
+    "differences": []
+  },
+  "derived_checks": {
+    "generated": "results/001-post-users/verification-experiment/generated/derived-verification-plan.json",
+    "static_rules": 2,
+    "dynamic_rules": 11
+  },
+  "observations": [
+    {
+      "id": "correct-control",
+      "control": true,
+      "defect": null,
+      "category": "control",
+      "ordinary_equivalent": null,
+      "expected_baseline_detection": false,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1481,
+        "artifact_sha256": "e4ea115ba9596d3fb0bb223b85ae967daa744c387080616873d35ade8173dc33"
+      },
+      "baseline": {
+        "detected": false,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": false,
+        "functional_tests_passed": 12,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": false,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": false,
+        "failed_dynamic_checks": []
+      },
+      "ordinary_augmented": {
+        "detected": false,
+        "existing_baseline_detected": false,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3581,
+        "sha256": "7387fc946d9202885ccc8cff83ad17c497072f651b956c8744e35efb25d64e48"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/correct-control",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/correct-control"
+    },
+    {
+      "id": "accept-domain-without-dot",
+      "control": false,
+      "defect": "The guest accepts an address whose domain contains no dot.",
+      "category": "input_validation",
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+      "expected_baseline_detection": false,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1397,
+        "artifact_sha256": "16cd3c5cfcf49acf497a8106d7b85fa081c9a8cd8141a0568ae7098f918efa0d"
+      },
+      "baseline": {
+        "detected": false,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": false,
+        "functional_tests_passed": 12,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "predicate-email-air_email_v1"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": false,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": true
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3437,
+        "sha256": "539cc74b7d713f8a5b67206f50795f84b9f55056c3aab0af5079ef710d1daa16"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/accept-domain-without-dot",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-domain-without-dot"
+    },
+    {
+      "id": "accept-multiple-at",
+      "control": false,
+      "defect": "The guest accepts an address containing more than one at sign.",
+      "category": "input_validation",
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+      "expected_baseline_detection": false,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1460,
+        "artifact_sha256": "f77250752bc067f9448a99fb955d82e93c768032a930b47813583750e8d4bf91"
+      },
+      "baseline": {
+        "detected": false,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": false,
+        "functional_tests_passed": 12,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "predicate-email-air_email_v1"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": false,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": true
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3507,
+        "sha256": "aaf0a814a5916b41bfb16865c05c266fff8f292f0ee608cfd40d2bda1d3d2b4b"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/accept-multiple-at",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-multiple-at"
+    },
+    {
+      "id": "accept-ascii-whitespace",
+      "control": false,
+      "defect": "The guest accepts an email containing ASCII whitespace.",
+      "category": "input_validation",
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+      "expected_baseline_detection": false,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1420,
+        "artifact_sha256": "43bb8007a1046ea9049c10f3aa5cadf6e5b57d82f49d7f72e11fb442a6b25043"
+      },
+      "baseline": {
+        "detected": false,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": false,
+        "functional_tests_passed": 12,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "predicate-email-air_email_v1"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": false,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": true
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3526,
+        "sha256": "9571779ecf1eab310843f7efa757cee72e6a10b94f100dd931c63360ad761d2a"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/accept-ascii-whitespace",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-ascii-whitespace"
+    },
+    {
+      "id": "accept-leading-domain-dot",
+      "control": false,
+      "defect": "The guest accepts an email whose domain begins with a dot.",
+      "category": "input_validation",
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+      "expected_baseline_detection": false,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1447,
+        "artifact_sha256": "b5f15484d55fcf764811921bbd7583119d58cb0467d58b62829da5757a2d88fa"
+      },
+      "baseline": {
+        "detected": false,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": false,
+        "functional_tests_passed": 12,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "predicate-email-air_email_v1"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": false,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": true
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3567,
+        "sha256": "4044c886a63314e98f76f4017111db22acd89b54092e768037ce3bdadcf7603c"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/accept-leading-domain-dot",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-leading-domain-dot"
+    },
+    {
+      "id": "accept-trailing-domain-dot",
+      "control": false,
+      "defect": "The guest accepts an email whose domain ends with a dot.",
+      "category": "input_validation",
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+      "expected_baseline_detection": false,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1453,
+        "artifact_sha256": "463c479fc09ef3547672670ac53dda5b1f9dd37baba07a34f08138a77552eb40"
+      },
+      "baseline": {
+        "detected": false,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": false,
+        "functional_tests_passed": 12,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "predicate-email-air_email_v1"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": false,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": true
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3548,
+        "sha256": "46562efbfb1b4586fa42dc2b1920437ceb2cb274d28459e549de9e77953a1bb1"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/accept-trailing-domain-dot",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-trailing-domain-dot"
+    },
+    {
+      "id": "accept-empty-name",
+      "control": false,
+      "defect": "The guest permits an empty name.",
+      "category": "input_validation",
+      "ordinary_equivalent": "The existing integration test.",
+      "expected_baseline_detection": true,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1477,
+        "artifact_sha256": "82bf3c7dbb14777d3da4159e9b95b834ed0ad68d49049b24eee1fbf32ea66cba"
+      },
+      "baseline": {
+        "detected": true,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": true,
+        "functional_tests_passed": 11,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "predicate-name-non_empty"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": true,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3590,
+        "sha256": "41903eef4520b06c1cf6b1b8a95fee9e4e8164413b47a5c641a3710fd1ebd32d"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/accept-empty-name",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-empty-name"
+    },
+    {
+      "id": "allow-duplicate-email",
+      "control": false,
+      "defect": "The guest converts the duplicate-email result into a successful ID.",
+      "category": "business_invariant",
+      "ordinary_equivalent": "The existing duplicate integration test.",
+      "expected_baseline_detection": true,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1481,
+        "artifact_sha256": "fc91c92597afb72c8bd4701d797d9bd4d9c42860b8a0601add2dbfa57cdad61a"
+      },
+      "baseline": {
+        "detected": true,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": true,
+        "functional_tests_passed": 11,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "invariant-unique-email"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": true,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3567,
+        "sha256": "115eca908da1904c1ec7fcbe970a3408db5617cabda6c5d2e79516bb1059a23e"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/allow-duplicate-email",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/allow-duplicate-email"
+    },
+    {
+      "id": "fake-id-without-insert",
+      "control": false,
+      "defect": "The guest returns a positive ID without performing the declared insert.",
+      "category": "missing_effect",
+      "ordinary_equivalent": "A duplicate or database-state integration test.",
+      "expected_baseline_detection": true,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1492,
+        "artifact_sha256": "28b635ea7eb24d9b30624e51365c6bcbf85571dda3df9e1f6074da338580bba8"
+      },
+      "baseline": {
+        "detected": true,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": true,
+        "functional_tests_passed": 8,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "postcondition-database_row_matches_response_id",
+          "invariant-unique-email",
+          "effect-unavailable-insert_user"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": true,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3636,
+        "sha256": "0de5b9aaa3a5eaa7312ae495a3ac5e9242af34df0199b1b5d8cea427fb53a1e4"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/fake-id-without-insert",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/fake-id-without-insert"
+    },
+    {
+      "id": "wrong-returned-id",
+      "control": false,
+      "defect": "The guest persists the row but returns an ID that does not identify it.",
+      "category": "postcondition",
+      "ordinary_equivalent": "The existing exact first-ID assertion or a database postcondition test.",
+      "expected_baseline_detection": true,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1494,
+        "artifact_sha256": "c6f55010e738e8d7381d462ebee37b87448fc35041ad0cb45ea4211b326a7a42"
+      },
+      "baseline": {
+        "detected": true,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": true,
+        "functional_tests_passed": 11,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "postcondition-database_row_matches_response_id"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": true,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3588,
+        "sha256": "d3f367888339f04bbb32cb4ff21c56e44cb2b9fb98938c3ef9679b2cc043eea1"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/wrong-returned-id",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/wrong-returned-id"
+    },
+    {
+      "id": "mask-storage-failure",
+      "control": false,
+      "defect": "The guest converts storage failure into a successful ID.",
+      "category": "error_mapping",
+      "ordinary_equivalent": "The existing unavailable-storage integration test.",
+      "expected_baseline_detection": true,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1481,
+        "artifact_sha256": "ae219b678ddd26212aa557421a18297e913e7c9d02b5e1c3691e1bf652663c9c"
+      },
+      "baseline": {
+        "detected": true,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": true,
+        "functional_tests_passed": 11,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": false,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": false,
+        "dynamic_detected": true,
+        "failed_dynamic_checks": [
+          "effect-unavailable-insert_user"
+        ]
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": true,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3567,
+        "sha256": "8f837577c4c4c39b8c944f9518e96291b2024ea2676ee2d0aadc22678676e884"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/mask-storage-failure",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/mask-storage-failure"
+    },
+    {
+      "id": "environment-import",
+      "control": false,
+      "defect": "The guest requests an undeclared environment capability.",
+      "category": "capability",
+      "ordinary_equivalent": "A manually maintained Wasmtime import allowlist.",
+      "expected_baseline_detection": true,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1541,
+        "artifact_sha256": "aa339f06ffb244bb9f3aae9340bdf797cc477f36f129aa5d04f8b78bbe7cc8bc"
+      },
+      "baseline": {
+        "detected": true,
+        "compiler_detected": false,
+        "runtime_policy_detected": true,
+        "functional_tests_detected": false,
+        "functional_tests_passed": null,
+        "functional_tests_total": null
+      },
+      "air": {
+        "detected": true,
+        "static_detected": true,
+        "capability_manifest_detected": true,
+        "dependency_policy_detected": false,
+        "dynamic_detected": false,
+        "failed_dynamic_checks": []
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": true,
+        "manual_capability_policy_detected": true,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3841,
+        "sha256": "20d21f52aedf683eadfece38c7338ddc680e1628f10dae2b1eae706a4e90bd52"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/environment-import",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/environment-import"
+    },
+    {
+      "id": "outbound-http-import",
+      "control": false,
+      "defect": "The guest requests an undeclared outbound-network capability.",
+      "category": "capability",
+      "ordinary_equivalent": "A manually maintained Wasmtime import allowlist.",
+      "expected_baseline_detection": true,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1527,
+        "artifact_sha256": "b89ff8efdc61c14c8c674bdcee81d85912de6668313785002e01e3a808e694c1"
+      },
+      "baseline": {
+        "detected": true,
+        "compiler_detected": false,
+        "runtime_policy_detected": true,
+        "functional_tests_detected": false,
+        "functional_tests_passed": null,
+        "functional_tests_total": null
+      },
+      "air": {
+        "detected": true,
+        "static_detected": true,
+        "capability_manifest_detected": true,
+        "dependency_policy_detected": false,
+        "dynamic_detected": false,
+        "failed_dynamic_checks": []
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": true,
+        "manual_capability_policy_detected": true,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3817,
+        "sha256": "4a7cf71b80eea0dd23070371245ad83f932526a1fd2a75d7bd62d9dbb5fc4f90"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/outbound-http-import",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/outbound-http-import"
+    },
+    {
+      "id": "other-table-import",
+      "control": false,
+      "defect": "The guest requests a SQLite operation for an undeclared table.",
+      "category": "capability",
+      "ordinary_equivalent": "A manually maintained Wasmtime import allowlist.",
+      "expected_baseline_detection": true,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1484,
+        "artifact_sha256": "72796a4d176a659e0588da27aafacf022cb6a8310bd501e4d81db57a28325f24"
+      },
+      "baseline": {
+        "detected": true,
+        "compiler_detected": false,
+        "runtime_policy_detected": true,
+        "functional_tests_detected": false,
+        "functional_tests_passed": null,
+        "functional_tests_total": null
+      },
+      "air": {
+        "detected": true,
+        "static_detected": true,
+        "capability_manifest_detected": true,
+        "dependency_policy_detected": false,
+        "dynamic_detected": false,
+        "failed_dynamic_checks": []
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": true,
+        "manual_capability_policy_detected": true,
+        "manual_dependency_policy_detected": false,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 0,
+        "transitive": 0,
+        "graph_depth": 0,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": true,
+        "diagnostics": []
+      },
+      "source": {
+        "bytes": 3587,
+        "sha256": "7015bc1b61e90cf119afe161f84dfa039c989837943dc2b6da75422c6916f345"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/other-table-import",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/other-table-import"
+    },
+    {
+      "id": "undeclared-local-dependency",
+      "control": false,
+      "defect": "The candidate adds a direct dependency forbidden by the contract.",
+      "category": "dependency",
+      "ordinary_equivalent": "Cargo metadata plus a dependency policy tool.",
+      "expected_baseline_detection": false,
+      "compile": {
+        "success": true,
+        "artifact_bytes": 1481,
+        "artifact_sha256": "e4ea115ba9596d3fb0bb223b85ae967daa744c387080616873d35ade8173dc33"
+      },
+      "baseline": {
+        "detected": false,
+        "compiler_detected": false,
+        "runtime_policy_detected": false,
+        "functional_tests_detected": false,
+        "functional_tests_passed": 12,
+        "functional_tests_total": 12
+      },
+      "air": {
+        "detected": true,
+        "static_detected": true,
+        "capability_manifest_detected": false,
+        "dependency_policy_detected": true,
+        "dynamic_detected": false,
+        "failed_dynamic_checks": []
+      },
+      "ordinary_augmented": {
+        "detected": true,
+        "existing_baseline_detected": false,
+        "manual_capability_policy_detected": false,
+        "manual_dependency_policy_detected": true,
+        "additional_integration_tests_detected": false
+      },
+      "dependency_metrics": {
+        "direct": 1,
+        "transitive": 0,
+        "graph_depth": 1,
+        "build_scripts": false
+      },
+      "dependency_check": {
+        "passed": false,
+        "diagnostics": [
+          "direct dependency limit exceeded",
+          "dependency graph depth exceeded"
+        ]
+      },
+      "source": {
+        "bytes": 3638,
+        "sha256": "9fd34dfdd1c0f286c80edba56e08646d53658af619a10b51bf709653c0cc1d50"
+      },
+      "raw_directory": "results/001-post-users/verification-experiment/raw/undeclared-local-dependency",
+      "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/undeclared-local-dependency"
+    }
+  ]
+}

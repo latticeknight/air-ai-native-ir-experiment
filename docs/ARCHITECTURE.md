@@ -1,5 +1,9 @@
 # AIR architecture
 
+> Historical executable-language architecture.
+> The compiler is frozen and must not be expanded.
+> The later specification-layer experiment and final decision are documented in [SPECIFICATION_LAYER.md](SPECIFICATION_LAYER.md) and [the Benchmark 001 report](../reports/001-air-specification-verification.md).
+
 ## Purpose
 
 AIR is a machine-oriented executable specification that sits above WebAssembly.

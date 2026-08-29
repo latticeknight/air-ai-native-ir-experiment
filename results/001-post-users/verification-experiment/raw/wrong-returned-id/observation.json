@@ -1,0 +1,54 @@
+{
+  "id": "wrong-returned-id",
+  "control": false,
+  "defect": "The guest persists the row but returns an ID that does not identify it.",
+  "category": "postcondition",
+  "ordinary_equivalent": "The existing exact first-ID assertion or a database postcondition test.",
+  "expected_baseline_detection": true,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1494,
+    "artifact_sha256": "c6f55010e738e8d7381d462ebee37b87448fc35041ad0cb45ea4211b326a7a42"
+  },
+  "baseline": {
+    "detected": true,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": true,
+    "functional_tests_passed": 11,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "postcondition-database_row_matches_response_id"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": true,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": false
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3588,
+    "sha256": "d3f367888339f04bbb32cb4ff21c56e44cb2b9fb98938c3ef9679b2cc043eea1"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/wrong-returned-id",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/wrong-returned-id"
+}

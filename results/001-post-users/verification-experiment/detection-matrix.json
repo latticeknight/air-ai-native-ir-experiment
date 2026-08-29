@@ -1,0 +1,365 @@
+[
+  {
+    "id": "accept-domain-without-dot",
+    "defect": "The guest accepts an address whose domain contains no dot.",
+    "category": "input_validation",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": false,
+      "stages": []
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "predicate-email-air_email_v1"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "additional_integration_tests"
+      ]
+    }
+  },
+  {
+    "id": "accept-multiple-at",
+    "defect": "The guest accepts an address containing more than one at sign.",
+    "category": "input_validation",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": false,
+      "stages": []
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "predicate-email-air_email_v1"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "additional_integration_tests"
+      ]
+    }
+  },
+  {
+    "id": "accept-ascii-whitespace",
+    "defect": "The guest accepts an email containing ASCII whitespace.",
+    "category": "input_validation",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": false,
+      "stages": []
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "predicate-email-air_email_v1"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "additional_integration_tests"
+      ]
+    }
+  },
+  {
+    "id": "accept-leading-domain-dot",
+    "defect": "The guest accepts an email whose domain begins with a dot.",
+    "category": "input_validation",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": false,
+      "stages": []
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "predicate-email-air_email_v1"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "additional_integration_tests"
+      ]
+    }
+  },
+  {
+    "id": "accept-trailing-domain-dot",
+    "defect": "The guest accepts an email whose domain ends with a dot.",
+    "category": "input_validation",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": false,
+      "stages": []
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "predicate-email-air_email_v1"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "additional_integration_tests"
+      ]
+    }
+  },
+  {
+    "id": "accept-empty-name",
+    "defect": "The guest permits an empty name.",
+    "category": "input_validation",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": true,
+      "stages": [
+        "existing_functional_tests"
+      ]
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "predicate-name-non_empty"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "existing_baseline"
+      ]
+    }
+  },
+  {
+    "id": "allow-duplicate-email",
+    "defect": "The guest converts the duplicate-email result into a successful ID.",
+    "category": "business_invariant",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": true,
+      "stages": [
+        "existing_functional_tests"
+      ]
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "invariant-unique-email"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "existing_baseline"
+      ]
+    }
+  },
+  {
+    "id": "fake-id-without-insert",
+    "defect": "The guest returns a positive ID without performing the declared insert.",
+    "category": "missing_effect",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": true,
+      "stages": [
+        "existing_functional_tests"
+      ]
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "postcondition-database_row_matches_response_id",
+        "invariant-unique-email",
+        "effect-unavailable-insert_user"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "existing_baseline"
+      ]
+    }
+  },
+  {
+    "id": "wrong-returned-id",
+    "defect": "The guest persists the row but returns an ID that does not identify it.",
+    "category": "postcondition",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": true,
+      "stages": [
+        "existing_functional_tests"
+      ]
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "postcondition-database_row_matches_response_id"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "existing_baseline"
+      ]
+    }
+  },
+  {
+    "id": "mask-storage-failure",
+    "defect": "The guest converts storage failure into a successful ID.",
+    "category": "error_mapping",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": true,
+      "stages": [
+        "existing_functional_tests"
+      ]
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_derived_dynamic_checks"
+      ],
+      "failed_dynamic_checks": [
+        "effect-unavailable-insert_user"
+      ]
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "existing_baseline"
+      ]
+    }
+  },
+  {
+    "id": "environment-import",
+    "defect": "The guest requests an undeclared environment capability.",
+    "category": "capability",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": true,
+      "stages": [
+        "wasmtime_host_policy"
+      ]
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "generated_capability_manifest"
+      ],
+      "failed_dynamic_checks": []
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "existing_baseline",
+        "manual_capability_manifest"
+      ]
+    }
+  },
+  {
+    "id": "outbound-http-import",
+    "defect": "The guest requests an undeclared outbound-network capability.",
+    "category": "capability",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": true,
+      "stages": [
+        "wasmtime_host_policy"
+      ]
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "generated_capability_manifest"
+      ],
+      "failed_dynamic_checks": []
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "existing_baseline",
+        "manual_capability_manifest"
+      ]
+    }
+  },
+  {
+    "id": "other-table-import",
+    "defect": "The guest requests a SQLite operation for an undeclared table.",
+    "category": "capability",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": true,
+      "stages": [
+        "wasmtime_host_policy"
+      ]
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "generated_capability_manifest"
+      ],
+      "failed_dynamic_checks": []
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "existing_baseline",
+        "manual_capability_manifest"
+      ]
+    }
+  },
+  {
+    "id": "undeclared-local-dependency",
+    "defect": "The candidate adds a direct dependency forbidden by the contract.",
+    "category": "dependency",
+    "compiled": true,
+    "existing_baseline": {
+      "detected": false,
+      "stages": []
+    },
+    "air_verification": {
+      "detected": true,
+      "stages": [
+        "contract_dependency_policy"
+      ],
+      "failed_dynamic_checks": []
+    },
+    "ordinary_augmented": {
+      "detected": true,
+      "stages": [
+        "cargo_metadata_policy"
+      ]
+    }
+  }
+]

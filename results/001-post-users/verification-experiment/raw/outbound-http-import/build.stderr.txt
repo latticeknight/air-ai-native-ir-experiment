@@ -1,0 +1,2 @@
+   Compiling mutation-candidate v0.1.0 (/tmp/air-verification-outbound-http-import-flt52E)
+    Finished `release` profile [optimized] target(s) in 0.11s

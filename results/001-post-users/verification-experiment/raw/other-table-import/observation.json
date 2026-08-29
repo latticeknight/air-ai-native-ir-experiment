@@ -1,0 +1,52 @@
+{
+  "id": "other-table-import",
+  "control": false,
+  "defect": "The guest requests a SQLite operation for an undeclared table.",
+  "category": "capability",
+  "ordinary_equivalent": "A manually maintained Wasmtime import allowlist.",
+  "expected_baseline_detection": true,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1484,
+    "artifact_sha256": "72796a4d176a659e0588da27aafacf022cb6a8310bd501e4d81db57a28325f24"
+  },
+  "baseline": {
+    "detected": true,
+    "compiler_detected": false,
+    "runtime_policy_detected": true,
+    "functional_tests_detected": false,
+    "functional_tests_passed": null,
+    "functional_tests_total": null
+  },
+  "air": {
+    "detected": true,
+    "static_detected": true,
+    "capability_manifest_detected": true,
+    "dependency_policy_detected": false,
+    "dynamic_detected": false,
+    "failed_dynamic_checks": []
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": true,
+    "manual_capability_policy_detected": true,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": false
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3587,
+    "sha256": "7015bc1b61e90cf119afe161f84dfa039c989837943dc2b6da75422c6916f345"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/other-table-import",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/other-table-import"
+}

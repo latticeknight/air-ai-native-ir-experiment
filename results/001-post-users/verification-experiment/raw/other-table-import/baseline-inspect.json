@@ -1,0 +1,7 @@
+{
+  "status": 1,
+  "signal": null,
+  "timed_out": false,
+  "stdout": "",
+  "stderr": "benchmark-host: undeclared capability import `air_sqlite_v1.insert_secrets`\n"
+}

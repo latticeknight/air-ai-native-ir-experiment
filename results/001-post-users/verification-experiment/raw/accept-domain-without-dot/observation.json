@@ -1,0 +1,54 @@
+{
+  "id": "accept-domain-without-dot",
+  "control": false,
+  "defect": "The guest accepts an address whose domain contains no dot.",
+  "category": "input_validation",
+  "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+  "expected_baseline_detection": false,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1397,
+    "artifact_sha256": "16cd3c5cfcf49acf497a8106d7b85fa081c9a8cd8141a0568ae7098f918efa0d"
+  },
+  "baseline": {
+    "detected": false,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": false,
+    "functional_tests_passed": 12,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "predicate-email-air_email_v1"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": false,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": true
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3437,
+    "sha256": "539cc74b7d713f8a5b67206f50795f84b9f55056c3aab0af5079ef710d1daa16"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/accept-domain-without-dot",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-domain-without-dot"
+}

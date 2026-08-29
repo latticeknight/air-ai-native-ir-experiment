@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "generated_from": "air.contract",
+  "runtime": {
+    "endpoint": {
+      "method": "POST",
+      "path": "/users",
+      "content_type": "application/json"
+    },
+    "body_max_bytes": 32768,
+    "input_fields": [
+      "name",
+      "email"
+    ],
+    "valid_input": {
+      "name": "Valid name",
+      "email": "email@example.test"
+    },
+    "outcomes": {
+      "success": {
+        "status": 201,
+        "body": {
+          "kind": "closed_object",
+          "fields": {
+            "id": {
+              "type": "positive_integer",
+              "required": true
+            }
+          }
+        }
+      },
+      "invalid_json": {
+        "status": 400,
+        "body": {
+          "error": "invalid_json"
+        }
+      },
+      "invalid_name": {
+        "status": 400,
+        "body": {
+          "error": "invalid_name"
+        }
+      },
+      "invalid_email": {
+        "status": 400,
+        "body": {
+          "error": "invalid_email"
+        }
+      },
+      "duplicate_email": {
+        "status": 409,
+        "body": {
+          "error": "duplicate_email"
+        }
+      },
+      "storage_failure": {
+        "status": 500,
+        "body": {
+          "error": "storage_failure"
+        }
+      }
+    },
+    "effects": [
+      {
+        "id": "insert_user",
+        "kind": "sqlite_insert",
+        "database": "benchmark",
+        "table": "users",
+        "columns": [
+          "name",
+          "email"
+        ],
+        "on_duplicate": "duplicate_email",
+        "on_unavailable": "storage_failure"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "id": "required-name",
+      "class": "dynamic",
+      "generator": "omit_required_field",
+      "field": "name",
+      "expected": {
+        "status": 400,
+        "body": {
+          "error": "invalid_json"
+        }
+      }
+    },
+    {
+      "id": "predicate-name-non_empty",
+      "class": "dynamic",
+      "generator": "predicate_counterexamples",
+      "field": "name",
+      "predicate": "non_empty",
+      "expected": {
+        "status": 400,
+        "body": {
+          "error": "invalid_name"
+        }
+      }
+    },
+    {
+      "id": "required-email",
+      "class": "dynamic",
+      "generator": "omit_required_field",
+      "field": "email",
+      "expected": {
+        "status": 400,
+        "body": {
+          "error": "invalid_json"
+        }
+      }
+    },
+    {
+      "id": "predicate-email-air_email_v1",
+      "class": "dynamic",
+      "generator": "predicate_counterexamples",
+      "field": "email",
+      "predicate": "air_email_v1",
+      "expected": {
+        "status": 400,
+        "body": {
+          "error": "invalid_email"
+        }
+      }
+    },
+    {
+      "id": "closed-input-object",
+      "class": "dynamic",
+      "generator": "add_unknown_field",
+      "expected": {
+        "status": 400,
+        "body": {
+          "error": "invalid_json"
+        }
+      }
+    },
+    {
+      "id": "body-size-limit",
+      "class": "dynamic",
+      "generator": "exceed_body_limit",
+      "maximum_bytes": 32768,
+      "expected": {
+        "status": 400,
+        "body": {
+          "error": "invalid_json"
+        }
+      }
+    },
+    {
+      "id": "success-outcome",
+      "class": "dynamic",
+      "generator": "valid_input",
+      "expected": {
+        "status": 201,
+        "body": {
+          "kind": "closed_object",
+          "fields": {
+            "id": {
+              "type": "positive_integer",
+              "required": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "postcondition-response_field",
+      "class": "dynamic",
+      "generator": "response_field",
+      "rule": {
+        "kind": "response_field",
+        "outcome": "success",
+        "field": "id",
+        "predicate": "positive_integer"
+      }
+    },
+    {
+      "id": "postcondition-database_row_matches_response_id",
+      "class": "dynamic",
+      "generator": "database_row_matches_response_id",
+      "rule": {
+        "kind": "database_row_matches_response_id",
+        "effect": "insert_user",
+        "response_field": "id",
+        "input_to_columns": {
+          "name": "name",
+          "email": "email"
+        }
+      }
+    },
+    {
+      "id": "invariant-unique-email",
+      "class": "dynamic",
+      "generator": "unique",
+      "rule": {
+        "kind": "unique",
+        "effect": "insert_user",
+        "columns": [
+          "email"
+        ],
+        "violation_outcome": "duplicate_email"
+      },
+      "expected": {
+        "status": 409,
+        "body": {
+          "error": "duplicate_email"
+        }
+      }
+    },
+    {
+      "id": "effect-unavailable-insert_user",
+      "class": "dynamic",
+      "generator": "capability_unavailable",
+      "effect": "insert_user",
+      "expected": {
+        "status": 500,
+        "body": {
+          "error": "storage_failure"
+        }
+      }
+    },
+    {
+      "id": "wasm-import-allowlist",
+      "class": "static",
+      "generator": "capability_manifest"
+    },
+    {
+      "id": "dependency-limits",
+      "class": "static",
+      "generator": "cargo_metadata",
+      "limits": {
+        "maximum_direct": 0,
+        "maximum_transitive": 0,
+        "maximum_graph_depth": 0,
+        "build_scripts": false
+      }
+    }
+  ]
+}

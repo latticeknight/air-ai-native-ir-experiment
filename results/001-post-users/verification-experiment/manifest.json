@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "benchmark": "001-post-users",
+  "contract": "benchmarks/001-post-users/verification/air.contract.json",
+  "contract_sha256": "82598b55a85ff9ee3f9e185b983a81740b44ced62e36398c4d06e43717f54ad2",
+  "base_rust_source": "benchmarks/001-post-users/rust/src/lib.rs",
+  "base_rust_sha256": "7387fc946d9202885ccc8cff83ad17c497072f651b956c8744e35efb25d64e48",
+  "mutation_count": 14,
+  "ordinary_comparator": {
+    "openapi": "benchmarks/001-post-users/verification/baseline/openapi.json",
+    "runtime_capability_manifest": "benchmarks/001-post-users/verification/baseline/runtime-capability-manifest.json",
+    "dependency_policy": "benchmarks/001-post-users/verification/baseline/dependency-policy.json",
+    "additional_tests": "benchmark-runner/verification-experiment/ordinary-additional.mjs"
+  },
+  "mutations": [
+    {
+      "id": "accept-domain-without-dot",
+      "defect": "The guest accepts an address whose domain contains no dot.",
+      "category": "input_validation",
+      "expected_baseline_detection": false,
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation."
+    },
+    {
+      "id": "accept-multiple-at",
+      "defect": "The guest accepts an address containing more than one at sign.",
+      "category": "input_validation",
+      "expected_baseline_detection": false,
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation."
+    },
+    {
+      "id": "accept-ascii-whitespace",
+      "defect": "The guest accepts an email containing ASCII whitespace.",
+      "category": "input_validation",
+      "expected_baseline_detection": false,
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation."
+    },
+    {
+      "id": "accept-leading-domain-dot",
+      "defect": "The guest accepts an email whose domain begins with a dot.",
+      "category": "input_validation",
+      "expected_baseline_detection": false,
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation."
+    },
+    {
+      "id": "accept-trailing-domain-dot",
+      "defect": "The guest accepts an email whose domain ends with a dot.",
+      "category": "input_validation",
+      "expected_baseline_detection": false,
+      "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation."
+    },
+    {
+      "id": "accept-empty-name",
+      "defect": "The guest permits an empty name.",
+      "category": "input_validation",
+      "expected_baseline_detection": true,
+      "ordinary_equivalent": "The existing integration test."
+    },
+    {
+      "id": "allow-duplicate-email",
+      "defect": "The guest converts the duplicate-email result into a successful ID.",
+      "category": "business_invariant",
+      "expected_baseline_detection": true,
+      "ordinary_equivalent": "The existing duplicate integration test."
+    },
+    {
+      "id": "fake-id-without-insert",
+      "defect": "The guest returns a positive ID without performing the declared insert.",
+      "category": "missing_effect",
+      "expected_baseline_detection": true,
+      "ordinary_equivalent": "A duplicate or database-state integration test."
+    },
+    {
+      "id": "wrong-returned-id",
+      "defect": "The guest persists the row but returns an ID that does not identify it.",
+      "category": "postcondition",
+      "expected_baseline_detection": true,
+      "ordinary_equivalent": "The existing exact first-ID assertion or a database postcondition test."
+    },
+    {
+      "id": "mask-storage-failure",
+      "defect": "The guest converts storage failure into a successful ID.",
+      "category": "error_mapping",
+      "expected_baseline_detection": true,
+      "ordinary_equivalent": "The existing unavailable-storage integration test."
+    },
+    {
+      "id": "environment-import",
+      "defect": "The guest requests an undeclared environment capability.",
+      "category": "capability",
+      "expected_baseline_detection": true,
+      "ordinary_equivalent": "A manually maintained Wasmtime import allowlist."
+    },
+    {
+      "id": "outbound-http-import",
+      "defect": "The guest requests an undeclared outbound-network capability.",
+      "category": "capability",
+      "expected_baseline_detection": true,
+      "ordinary_equivalent": "A manually maintained Wasmtime import allowlist."
+    },
+    {
+      "id": "other-table-import",
+      "defect": "The guest requests a SQLite operation for an undeclared table.",
+      "category": "capability",
+      "expected_baseline_detection": true,
+      "ordinary_equivalent": "A manually maintained Wasmtime import allowlist."
+    },
+    {
+      "id": "undeclared-local-dependency",
+      "defect": "The candidate adds a direct dependency forbidden by the contract.",
+      "category": "dependency",
+      "expected_baseline_detection": false,
+      "ordinary_equivalent": "Cargo metadata plus a dependency policy tool."
+    }
+  ],
+  "tools": {
+    "node": "v24.12.0",
+    "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+    "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+    "host_wasmtime_crate": "48.0.1"
+  }
+}

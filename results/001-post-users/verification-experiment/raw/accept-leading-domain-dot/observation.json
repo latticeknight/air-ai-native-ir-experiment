@@ -1,0 +1,54 @@
+{
+  "id": "accept-leading-domain-dot",
+  "control": false,
+  "defect": "The guest accepts an email whose domain begins with a dot.",
+  "category": "input_validation",
+  "ordinary_equivalent": "An additional integration test or asserted JSON Schema format implementation.",
+  "expected_baseline_detection": false,
+  "compile": {
+    "success": true,
+    "artifact_bytes": 1447,
+    "artifact_sha256": "b5f15484d55fcf764811921bbd7583119d58cb0467d58b62829da5757a2d88fa"
+  },
+  "baseline": {
+    "detected": false,
+    "compiler_detected": false,
+    "runtime_policy_detected": false,
+    "functional_tests_detected": false,
+    "functional_tests_passed": 12,
+    "functional_tests_total": 12
+  },
+  "air": {
+    "detected": true,
+    "static_detected": false,
+    "capability_manifest_detected": false,
+    "dependency_policy_detected": false,
+    "dynamic_detected": true,
+    "failed_dynamic_checks": [
+      "predicate-email-air_email_v1"
+    ]
+  },
+  "ordinary_augmented": {
+    "detected": true,
+    "existing_baseline_detected": false,
+    "manual_capability_policy_detected": false,
+    "manual_dependency_policy_detected": false,
+    "additional_integration_tests_detected": true
+  },
+  "dependency_metrics": {
+    "direct": 0,
+    "transitive": 0,
+    "graph_depth": 0,
+    "build_scripts": false
+  },
+  "dependency_check": {
+    "passed": true,
+    "diagnostics": []
+  },
+  "source": {
+    "bytes": 3567,
+    "sha256": "4044c886a63314e98f76f4017111db22acd89b54092e768037ce3bdadcf7603c"
+  },
+  "raw_directory": "results/001-post-users/verification-experiment/raw/accept-leading-domain-dot",
+  "candidate_snapshot": "results/001-post-users/verification-experiment/candidates/accept-leading-domain-dot"
+}

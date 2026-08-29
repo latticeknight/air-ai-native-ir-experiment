@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "maximum_direct": 0,
+  "maximum_transitive": 0,
+  "maximum_graph_depth": 0,
+  "build_scripts": false
+}
