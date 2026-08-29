@@ -321,6 +321,10 @@ async function invokeCodex({ configuration, workspace, prompt, threadId, lastMes
     configuration.model,
     "--config",
     `model_reasoning_effort=\"${configuration.reasoning}\"`,
+    "--config",
+    'sandbox_mode="workspace-write"',
+    "--config",
+    "sandbox_workspace_write.network_access=false",
   ];
   const args = threadId
     ? ["exec", "resume", ...common, threadId, "-"]
@@ -577,9 +581,19 @@ async function evaluateCandidate(configuration, result, attemptNumber, candidate
             .map((test) => ({ test: test.name, failure: test.failure })),
         };
       } else {
+        const functionalDiagnostic = cleanDiagnostic(
+          functionalRun.stderr || functionalRun.stdout,
+          result.workspace,
+        );
+        if (/host exited before listening|failed to start|startup/i.test(functionalDiagnostic)) {
+          runtimeStartupSuccess = false;
+          startupDiagnostic = [startupDiagnostic, functionalDiagnostic]
+            .filter(Boolean)
+            .join("\n");
+        }
         functional.failures.push({
           test: "harness_startup",
-          failure: cleanDiagnostic(functionalRun.stderr || functionalRun.stdout, result.workspace),
+          failure: functionalDiagnostic,
         });
       }
 
@@ -870,7 +884,7 @@ function emptySecurity() {
 }
 
 function isParseDiagnostic(value) {
-  return / at line \d+, column \d+|unexpected (token|end|content)|expected .* at line/i.test(value);
+  return /(?:^|\n)\s*(?:air:\s*)?\d+:\d+:| at line \d+, column \d+|unexpected (token|end|content)|expected .* at line/i.test(value);
 }
 
 function isRustParseDiagnostic(value) {

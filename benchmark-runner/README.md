@@ -36,7 +36,7 @@ Run the frozen 20-pair experiment:
 
 ```sh
 node benchmark-runner/ai-generation/run.mjs \
-  --experiment-id b001-gpt-5-6-luna-medium-r20-v1 \
+  --experiment-id b001-gpt-5-6-luna-medium-r20-v2 \
   --runs 20 \
   --max-repairs 3 \
   --model gpt-5.6-luna \
@@ -48,7 +48,7 @@ Generate its statistical report with the same arguments:
 
 ```sh
 node benchmark-runner/ai-generation/report.mjs \
-  --experiment-id b001-gpt-5-6-luna-medium-r20-v1 \
+  --experiment-id b001-gpt-5-6-luna-medium-r20-v2 \
   --runs 20 \
   --max-repairs 3 \
   --model gpt-5.6-luna \
