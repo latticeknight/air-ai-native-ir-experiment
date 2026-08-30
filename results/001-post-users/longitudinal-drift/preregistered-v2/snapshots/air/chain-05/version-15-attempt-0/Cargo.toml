@@ -1,0 +1,21 @@
+[package]
+name = "longitudinal-candidate"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+serde = { version = "1.0.228", default-features = false, features = ["alloc", "derive"] }
+serde_json = { version = "1.0.145", default-features = false, features = ["alloc"] }
+wee_alloc = "0.4.5"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true

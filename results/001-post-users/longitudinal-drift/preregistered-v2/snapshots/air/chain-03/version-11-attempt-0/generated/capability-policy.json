@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "1f1c8e12e7522e3eec288fd78905820b428bb9f1dd9a66945fdac9c6b027f1af",
+  "allowed_imports": [
+    {
+      "module": "air_users_v1",
+      "name": "get_user"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "insert_user"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "soft_delete_user"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "update_name"
+    }
+  ],
+  "resources": {
+    "guest_memory_bytes": 16777216,
+    "fuel_per_request": 20000000
+  }
+}

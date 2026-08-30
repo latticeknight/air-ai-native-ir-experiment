@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "oneOf": [
+    {
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 100 }
+      },
+      "additionalProperties": false
+    },
+    {
+      "required": ["email"],
+      "properties": {
+        "email": { "type": "string", "format": "email" }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "properties": {
+    "name": { "type": "string", "minLength": 1, "maxLength": 100 },
+    "email": { "type": "string", "format": "email" }
+  },
+  "additionalProperties": false
+}

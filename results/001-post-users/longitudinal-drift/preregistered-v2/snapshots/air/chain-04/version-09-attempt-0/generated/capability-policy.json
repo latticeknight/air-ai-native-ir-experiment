@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "9400071c701cf3d6c2790d18f59437e5b698f42679f1d8a0f8fd7ea367d458e3",
+  "allowed_imports": [
+    {
+      "module": "air_audit_v1",
+      "name": "append_email_change"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "get_user"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "insert_user"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "update_email"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "update_name"
+    }
+  ],
+  "resources": {
+    "guest_memory_bytes": 16777216,
+    "fuel_per_request": 20000000
+  }
+}

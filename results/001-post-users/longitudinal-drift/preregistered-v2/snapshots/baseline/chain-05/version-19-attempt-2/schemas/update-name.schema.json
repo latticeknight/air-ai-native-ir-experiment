@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": { "type": "string", "minLength": 2, "maxLength": 80 },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "readOnly": true,
+      "description": "Accepted for compatibility but immutable through this endpoint."
+    }
+  },
+  "additionalProperties": false
+}

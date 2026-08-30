@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "requirements": [
+    "LD-001-create-user",
+    "LD-001-email-validation",
+    "LD-001-duplicate-email",
+    "LD-001-capability-boundary",
+    "LD-002-name-length-1-100",
+    "LD-003-verified-default",
+    "LD-004-user-lookup",
+    "LD-005-public-field-filter",
+    "LD-006-name-update",
+    "LD-006-ordinary-email-immutable",
+    "LD-007-administrator-role",
+    "LD-007-admin-email-update",
+    "LD-008-email-change-audit",
+    "LD-009-audit-hidden"
+  ]
+}

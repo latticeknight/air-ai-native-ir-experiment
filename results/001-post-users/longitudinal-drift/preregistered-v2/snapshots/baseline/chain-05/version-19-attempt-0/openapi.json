@@ -1,0 +1,189 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Benchmark 001 users API", "version": "1" },
+  "paths": {
+    "/users": {
+      "post": {
+        "operationId": "createUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "./schemas/create-user.schema.json" } }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["id", "verified", "status"],
+                  "properties": {
+                    "id": { "type": "integer", "minimum": 1 },
+                    "verified": { "type": "boolean" },
+                    "status": { "type": "string", "enum": ["active", "suspended"] }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public user",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PublicUser" }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found, including soft-deleted users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "not_found" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateUserName",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "./schemas/update-user.schema.json" } }
+          }
+        },
+        "responses": {
+          "204": { "description": "Name updated" },
+          "400": { "description": "Invalid request" },
+          "404": { "description": "User not found" },
+          "409": {
+            "description": "Suspended users cannot be modified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "user_suspended" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "204": { "description": "User soft-deleted" },
+          "403": { "description": "Administrator role required" },
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+    "/users/{id}/status": {
+      "patch": {
+        "operationId": "updateUserStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "./schemas/update-status.schema.json" } }
+          }
+        },
+        "responses": {
+          "204": { "description": "Status updated" },
+          "400": { "description": "Invalid request" },
+          "403": { "description": "Administrator role required" },
+          "404": { "description": "User not found" }
+        }
+      }
+    },
+    "/users/{id}/profile": {
+      "put": {
+        "operationId": "updateUserProfile",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "./schemas/update-profile.schema.json" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile timezone stored",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["timezone"],
+                  "properties": { "timezone": { "type": "string", "minLength": 1 } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid request" },
+          "500": { "description": "Storage failure" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PublicUser": { "$ref": "./schemas/public-user.schema.json" }
+    }
+  }
+}

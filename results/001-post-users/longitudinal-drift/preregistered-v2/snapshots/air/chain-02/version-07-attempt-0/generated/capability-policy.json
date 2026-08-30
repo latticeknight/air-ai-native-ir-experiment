@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "b83a4647b7accaae93f656fae59ada1c524eb2ec42f1bf7699369672ef6d3f30",
+  "allowed_imports": [
+    {
+      "module": "air_users_v1",
+      "name": "get_user"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "insert_user"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "update_email"
+    },
+    {
+      "module": "air_users_v1",
+      "name": "update_name"
+    }
+  ],
+  "resources": {
+    "guest_memory_bytes": 16777216,
+    "fuel_per_request": 20000000
+  }
+}

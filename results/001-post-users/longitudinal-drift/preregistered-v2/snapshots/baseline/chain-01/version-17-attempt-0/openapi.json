@@ -1,0 +1,257 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Benchmark 001 users API", "version": "1" },
+  "x-outbound-network": false,
+  "paths": {
+    "/users": {
+      "post": {
+        "operationId": "createUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "./schemas/create-user.schema.json" } }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created. The response contains only the public creation fields and never includes audit records or audit metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["id", "verified"],
+                  "properties": {
+                    "id": { "type": "integer", "minimum": 1 },
+                    "verified": { "type": "boolean" }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/status": {
+      "patch": {
+        "operationId": "updateUserStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "./schemas/update-user-status.schema.json" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status updated. Administrator role required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok"],
+                  "properties": { "ok": { "const": true } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A suspension status and non-empty reason are required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "enum": ["invalid_json", "invalid_status"] } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Administrator role required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "forbidden" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "not_found" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public non-deleted user. Deleted and unknown users produce the same not_found response. Audit records and audit metadata are never included.",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/PublicUser" } }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "not_found" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  { "$ref": "./schemas/update-user-name.schema.json" }
+                ],
+                "description": "Name updates are available to the existing actors. Email is immutable for every actor."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Name updated. The response contains no audit records or audit metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok"],
+                  "properties": { "ok": { "const": true } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "not_found" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Suspended users cannot be modified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "user_suspended" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User marked deleted. Existing email-audit history is preserved. Administrator role required.",
+            "content": {}
+          },
+          "403": {
+            "description": "Administrator role required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "forbidden" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "not_found" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PublicUser": { "$ref": "./schemas/public-user.schema.json" },
+      "UpdateUserStatus": { "$ref": "./schemas/update-user-status.schema.json" }
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Benchmark 001 users API", "version": "1" },
+  "paths": {
+    "/users/{id}": {
+      "get": {
+        "operationId": "getUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/PublicUser" } }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "not_found" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  { "$ref": "./schemas/update-name.schema.json" },
+                  { "$ref": "./schemas/update-email.schema.json" }
+                ],
+                "description": "A name-only update is available to the existing actors. An email-only update requires the administrator actor role supplied by the shared host. Every successful email-only update appends an audit record containing the user ID and old and new email values."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "User updated" },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "enum": ["invalid_json", "invalid_name", "invalid_email"] } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "duplicate_email" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "not_found" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "post": {
+        "operationId": "createUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "./schemas/create-user.schema.json" } }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["id", "verified"],
+                  "properties": {
+                    "id": { "type": "integer", "minimum": 1 },
+                    "verified": { "type": "boolean" }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PublicUser": { "$ref": "./schemas/public-user.schema.json" }
+    }
+  }
+}

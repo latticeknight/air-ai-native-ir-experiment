@@ -1,0 +1,94 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Benchmark 001 users API",
+    "version": "15"
+  },
+  "x-air-contract-sha256": "4696ade1ce9e98bf064acde46da56d841ea01860e845780703d55c65a6d9fca6",
+  "paths": {
+    "/users": {
+      "post": {
+        "operationId": "create_user",
+        "responses": {
+          "200": {
+            "description": "Contract-defined response"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "get_user",
+        "responses": {
+          "200": {
+            "description": "Contract-defined response"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "update_user",
+        "responses": {
+          "200": {
+            "description": "Contract-defined response"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "delete_user",
+        "responses": {
+          "200": {
+            "description": "Contract-defined response"
+          }
+        }
+      }
+    },
+    "/users/{id}/status": {
+      "patch": {
+        "operationId": "update_user_status",
+        "responses": {
+          "200": {
+            "description": "Contract-defined response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PublicUser": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "email",
+          "verified",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "suspended"
+            ]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

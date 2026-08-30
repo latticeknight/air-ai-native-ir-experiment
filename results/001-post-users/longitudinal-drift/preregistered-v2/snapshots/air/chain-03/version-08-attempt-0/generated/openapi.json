@@ -1,0 +1,68 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Benchmark 001 users API",
+    "version": "8"
+  },
+  "x-air-contract-sha256": "1a4690dd27b9c42f90194bc39d6cad19915e1ccab8947f87412b3fd73153e89f",
+  "paths": {
+    "/users": {
+      "post": {
+        "operationId": "create_user",
+        "responses": {
+          "200": {
+            "description": "Contract-defined response"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "get_user",
+        "responses": {
+          "200": {
+            "description": "Contract-defined response"
+          }
+        }
+      },
+      "patch": {
+        "operationId": "update_user",
+        "responses": {
+          "200": {
+            "description": "Contract-defined response"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PublicUser": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "email",
+          "verified"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

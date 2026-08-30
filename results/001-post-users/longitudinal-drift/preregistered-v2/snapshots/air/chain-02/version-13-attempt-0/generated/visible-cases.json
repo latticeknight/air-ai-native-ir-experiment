@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "e8112b0379af896527d9bfb1a118f0266d7c3b2eb481722c1bb5ad6bfec97946",
+  "requirements": [
+    "LD-001-capability-boundary",
+    "LD-001-create-user",
+    "LD-001-duplicate-email",
+    "LD-001-email-validation",
+    "LD-002-name-length-1-100",
+    "LD-003-verified-default",
+    "LD-004-user-lookup",
+    "LD-005-public-field-filter",
+    "LD-006-name-update",
+    "LD-007-administrator-role",
+    "LD-009-audit-hidden",
+    "LD-010-email-capabilities-revoked",
+    "LD-010-email-immutable-all",
+    "LD-011-soft-delete-preserves-audit",
+    "LD-012-deleted-user-hidden",
+    "LD-013-user-status"
+  ]
+}

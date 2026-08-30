@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "f22e60099a01f4962dc09be501f0571d21021140b451cd4de195fc2f241ec149",
+  "allowed_imports": [
+    {
+      "module": "air_users_v1",
+      "name": "insert_user"
+    }
+  ],
+  "resources": {
+    "guest_memory_bytes": 16777216,
+    "fuel_per_request": 20000000
+  }
+}

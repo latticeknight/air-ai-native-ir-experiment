@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "0a692ab918f9a0be7ea91c7eef62c78854e3c6a7fda8c3eb15c33b7cd694896b",
+  "requirements": [
+    "LD-001-capability-boundary",
+    "LD-001-create-user",
+    "LD-001-duplicate-email",
+    "LD-001-email-validation",
+    "LD-002-name-length-1-100",
+    "LD-003-verified-default",
+    "LD-004-user-lookup",
+    "LD-005-public-field-filter",
+    "LD-006-name-update",
+    "LD-006-ordinary-email-immutable",
+    "LD-007-admin-email-update",
+    "LD-007-administrator-role"
+  ]
+}

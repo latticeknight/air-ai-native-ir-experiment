@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "benchmark": "001-post-users",
+  "version": 7,
+  "requirements": {
+    "active": [
+      "LD-001-create-user",
+      "LD-001-email-validation",
+      "LD-001-duplicate-email",
+      "LD-001-capability-boundary",
+      "LD-002-name-length-1-100",
+      "LD-003-verified-default",
+      "LD-004-user-lookup",
+      "LD-005-public-field-filter",
+      "LD-006-name-update",
+      "LD-006-ordinary-email-immutable",
+      "LD-007-administrator-role",
+      "LD-007-admin-email-update"
+    ],
+    "retired": []
+  },
+  "routes": [
+    { "method": "POST", "path": "/users", "operation": "create_user" },
+    { "method": "GET", "path": "/users/{id}", "operation": "get_user" },
+    { "method": "PATCH", "path": "/users/{id}", "operation": "update_user" }
+  ],
+  "public_user_fields": ["id", "name", "email", "verified"],
+  "validation": {
+    "name": { "minimum": 1, "maximum": 100, "unit": "unicode_scalars" },
+    "email": "strict_email_v1"
+  },
+  "capabilities": [
+    { "id": "users.get", "module": "air_users_v1", "name": "get_user" },
+    { "id": "users.insert", "module": "air_users_v1", "name": "insert_user" },
+    { "id": "users.update_name", "module": "air_users_v1", "name": "update_name" },
+    { "id": "users.update_email", "module": "air_users_v1", "name": "update_email" }
+  ],
+  "invariants": [
+    "duplicate_email_rejected",
+    "no_filesystem",
+    "no_environment",
+    "no_outbound_network",
+    "users_table_only"
+  ],
+  "dependencies": {
+    "maximum_direct": 3,
+    "allowed_direct": ["serde", "serde_json", "wee_alloc"],
+    "build_scripts_allowed": false
+  },
+  "resources": {
+    "guest_memory_bytes": 16777216,
+    "fuel_per_request": 20000000
+  }
+}

@@ -1,6 +1,6 @@
 # AIR - AI-Native IR Experiment
 
-> **Status: Frozen implementation archive with one preregistered longitudinal follow-up in progress.**
+> **Status: Frozen implementation archive with the longitudinal follow-up complete and inconclusive.**
 
 AIR investigated whether software generated and maintained by AI would benefit from a machine-first portable representation instead of a conventional implementation language.
 The executable language was built, tested against Rust/Wasm, redirected toward specification-driven verification, and then stopped when ordinary tooling reproduced its measured advantages with less custom infrastructure.
@@ -11,7 +11,7 @@ The final result is negative:
 
 This repository is a research archive, not a production language, security product, or request for contributors to resume AIR development.
 It preserves the working prototype, frozen benchmark, generated candidates, adversarial tests, mutation experiment, raw evidence, and the results that falsified the hypothesis.
-One narrowly scoped follow-up now tests whether a persistent AIR contract reduces intent drift during repeated AI-maintained changes.
+One narrowly scoped follow-up tested whether a persistent AIR contract reduces intent drift during repeated AI-maintained changes.
 It does not add executable AIR features or alter the earlier conclusions.
 
 ## Question
@@ -175,8 +175,8 @@ See the [final specification-layer report](reports/001-air-specification-verific
 
 ## Experiment 4 - Longitudinal specification drift
 
-AIR has been reopened only for one preregistered maintenance experiment.
-The new hypothesis is that a persistent machine-readable AIR contract may preserve requirements, capabilities, invariants, and intent more reliably across 20 sequential AI-driven versions than a strong conventional Rust, OpenAPI, JSON Schema, test, dependency-policy, and Wasmtime-policy workflow.
+AIR was reopened only for one preregistered maintenance experiment.
+The hypothesis was that a persistent machine-readable AIR contract may preserve requirements, capabilities, invariants, and intent more reliably across 20 sequential AI-driven versions than a strong conventional Rust, OpenAPI, JSON Schema, test, dependency-policy, and Wasmtime-policy workflow.
 
 Both pipelines begin with the same Rust/Wasm implementation and use the same model, shared Wasmtime host, flat database capabilities, independent oracle, repair limit, and fixed change sequence.
 AIR is a canonical JSON contract and generator in this experiment, not an executable implementation language.
@@ -184,12 +184,20 @@ AIR is a canonical JSON contract and generator in this experiment, not an execut
 The protocol, complete change sequence, drift taxonomy, and materiality thresholds are committed before any experimental model call.
 Five paired chains per pipeline are required for the preregistered result.
 
-**Status: PROTOCOL REVISION 2 PREREGISTERED - EXECUTION NOT YET STARTED.**
+Revision 2 completed all 5 chains per pipeline and all 20 versions, but every chain recorded at least one preregistered protocol-integrity failure.
+The failures included modification of the immutable shared host-capability document and attempted parent-directory, external-workspace, or network access.
+Because zero paired chains remained valid, comparative statistics cannot be used as evidence.
+
+**Conclusion: INCONCLUSIVE.**
+
+**Recommendation: CHANGE DIRECTION.**
+
+> The longitudinal experiment produced no valid evidence that AIR preserves accumulated intent better than the conventional baseline.
 
 Protocol revision 1 was aborted at version 2 because a required neutral tracking identifier was absent from both pipelines' input.
 No revision-1 partial output is treated as experimental evidence.
 
-See the [longitudinal hypothesis](docs/drift-hypothesis.md) and [experiment protocol](experiments/longitudinal-drift/README.md).
+See the [longitudinal report](reports/001-air-longitudinal-drift.md), [longitudinal hypothesis](docs/drift-hypothesis.md), and [experiment protocol](experiments/longitudinal-drift/README.md).
 
 ## Final conclusion
 

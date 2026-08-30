@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "18c75cb9ec242f929ec2d9f5f2213c40ff2c168e1276a8fe7bfc479bec5d3254",
+  "contract_version": 8,
+  "active_requirements": [
+    "LD-001-capability-boundary",
+    "LD-001-create-user",
+    "LD-001-duplicate-email",
+    "LD-001-email-validation",
+    "LD-002-name-length-1-100",
+    "LD-003-verified-default",
+    "LD-004-user-lookup",
+    "LD-005-public-field-filter",
+    "LD-006-name-update",
+    "LD-006-ordinary-email-immutable",
+    "LD-007-admin-email-update",
+    "LD-007-administrator-role",
+    "LD-008-email-change-audit"
+  ],
+  "retired_requirements": [],
+  "route_count": 3,
+  "capability_count": 5,
+  "public_user_fields": [
+    "email",
+    "id",
+    "name",
+    "verified"
+  ]
+}

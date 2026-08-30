@@ -1,0 +1,199 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Benchmark 001 users API", "version": "1" },
+  "paths": {
+    "/users": {
+      "post": {
+        "operationId": "createUser",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "./schemas/create-user.schema.json" } }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created without audit records or audit metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["id", "verified"],
+                  "properties": {
+                    "id": { "type": "integer", "minimum": 1 },
+                    "verified": { "type": "boolean" }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}/status": {
+      "patch": {
+        "operationId": "updateUserStatus",
+        "description": "Updates a user's public status. Administrator role required.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "./schemas/update-status.schema.json" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User status updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok"],
+                  "properties": { "ok": { "const": true } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid status request" },
+          "403": { "description": "Administrator role required" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Storage failure" }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public user without audit records or audit metadata",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/PublicUser" } }
+            }
+          },
+          "404": {
+            "description": "User not found or deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "not_found" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  { "$ref": "./schemas/update-name.schema.json" }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated without audit records or audit metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok"],
+                  "properties": { "ok": { "const": true } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": { "description": "Invalid name or request" },
+          "409": {
+            "description": "Suspended users cannot be modified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["error"],
+                  "properties": { "error": { "const": "user_suspended" } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": { "description": "User not found" },
+          "500": { "description": "Storage failure" }
+        }
+      },
+      "delete": {
+        "operationId": "deleteUser",
+        "description": "Soft-deletes a user while preserving email-audit history. Administrator role required.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "minimum": 1 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User marked deleted without removing email-audit history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok"],
+                  "properties": { "ok": { "const": true } },
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": { "description": "Administrator role required" },
+          "404": { "description": "User not found" },
+          "500": { "description": "Storage failure" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PublicUser": { "$ref": "./schemas/public-user.schema.json" }
+    }
+  }
+}

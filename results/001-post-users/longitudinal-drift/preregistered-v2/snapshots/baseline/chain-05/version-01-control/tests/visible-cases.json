@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "requirements": [
+    "LD-001-create-user",
+    "LD-001-email-validation",
+    "LD-001-duplicate-email",
+    "LD-001-capability-boundary"
+  ]
+}

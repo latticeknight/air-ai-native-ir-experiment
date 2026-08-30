@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "977e8087e69e08ccd38c6ded6c00e80f3ee350ea425b990a28ad398f10663ffd",
+  "requirements": [
+    "LD-001-capability-boundary",
+    "LD-001-create-user",
+    "LD-001-duplicate-email",
+    "LD-001-email-validation",
+    "LD-002-name-length-1-100",
+    "LD-003-verified-default",
+    "LD-004-user-lookup"
+  ]
+}

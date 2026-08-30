@@ -1,0 +1,494 @@
+#![no_std]
+
+extern crate alloc;
+
+use alloc::alloc::{Layout, alloc as allocate_bytes, dealloc as deallocate_bytes};
+use alloc::string::String;
+use alloc::vec;
+use core::slice;
+
+use serde::Deserialize;
+use serde_json::{Value, json};
+
+mod validation;
+
+const OPERATION_BUFFER: usize = 65_536;
+
+#[global_allocator]
+static ALLOCATOR: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+#[panic_handler]
+fn panic(_: &core::panic::PanicInfo<'_>) -> ! {
+    core::arch::wasm32::unreachable()
+}
+
+#[link(wasm_import_module = "air_users_v1")]
+// The endpoint imports only the declared user capabilities. Network imports and
+// outbound network access are prohibited by the contract.
+unsafe extern "C" {
+    fn get_user(input_ptr: i32, input_len: i32, output_ptr: i32, output_capacity: i32) -> i32;
+    fn insert_user(input_ptr: i32, input_len: i32, output_ptr: i32, output_capacity: i32) -> i32;
+    fn soft_delete_user(
+        input_ptr: i32,
+        input_len: i32,
+        output_ptr: i32,
+        output_capacity: i32,
+    ) -> i32;
+    fn update_name(input_ptr: i32, input_len: i32, output_ptr: i32, output_capacity: i32) -> i32;
+    fn update_status(input_ptr: i32, input_len: i32, output_ptr: i32, output_capacity: i32) -> i32;
+}
+
+#[link(wasm_import_module = "air_profiles_v1")]
+unsafe extern "C" {
+    fn upsert_profile(input_ptr: i32, input_len: i32, output_ptr: i32, output_capacity: i32)
+    -> i32;
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum Actor {
+    Role(String),
+    Object { role: String },
+}
+
+impl Actor {
+    fn role(&self) -> &str {
+        match self {
+            Self::Role(role) | Self::Object { role } => role,
+        }
+    }
+}
+
+#[derive(Deserialize)]
+struct Request {
+    method: String,
+    path: String,
+    #[serde(default, alias = "actorRole", alias = "role")]
+    actor_role: Option<Actor>,
+    #[serde(default)]
+    actor: Option<Actor>,
+    body: Value,
+}
+
+impl Request {
+    fn actor_role(&self) -> &str {
+        self.actor_role
+            .as_ref()
+            .map(Actor::role)
+            .or_else(|| self.actor.as_ref().map(Actor::role))
+            .unwrap_or("")
+    }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn alloc(length: i32) -> i32 {
+    let Ok(length) = usize::try_from(length) else {
+        return 0;
+    };
+    allocate(length).map_or(0, |pointer| pointer as i32)
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn dealloc(pointer: i32, length: i32) {
+    let (Ok(pointer), Ok(length)) = (usize::try_from(pointer), usize::try_from(length)) else {
+        return;
+    };
+    if let Ok(layout) = Layout::array::<u8>(length.max(1)) {
+        unsafe { deallocate_bytes(pointer as *mut u8, layout) };
+    }
+}
+
+#[unsafe(no_mangle)]
+pub extern "C" fn handle_request(pointer: i32, length: i32) -> i64 {
+    let request = read_request(pointer, length);
+    let response = match request {
+        Some(request) => dispatch(request),
+        None => response(400, json!({ "error": "invalid_json" })),
+    };
+    emit(&response)
+}
+
+fn dispatch(request: Request) -> Value {
+    if request.actor_role.is_none() && request.actor.is_none() {
+        return response(400, json!({ "error": "invalid_json" }));
+    }
+    if request.method == "GET" {
+        return lookup_user(&request.path);
+    }
+    if request.method == "PATCH" {
+        if request.path.ends_with("/status") {
+            return update_status_user(request.path.as_str(), request.actor_role(), &request.body);
+        }
+        return update_user(&request.path, &request.body);
+    }
+    if request.method == "DELETE" {
+        return delete_user(&request.path, request.actor_role());
+    }
+    if request.method == "PUT" && request.path.ends_with("/profile") {
+        return upsert_user_profile(&request.path, &request.body);
+    }
+    if request.method == "POST" && request.path == "/users" {
+        return create_user(&request.body);
+    }
+    response(404, json!({ "error": "not_found" }))
+}
+
+fn create_user(body: &Value) -> Value {
+    let Some(body) = body.as_object() else {
+        return response(400, json!({ "error": "invalid_json" }));
+    };
+    if body.len() != 2 || !body.contains_key("name") || !body.contains_key("email") {
+        return response(400, json!({ "error": "invalid_json" }));
+    }
+    let Some(name) = body.get("name").and_then(Value::as_str) else {
+        return response(400, json!({ "error": "invalid_json" }));
+    };
+    let Some(email) = body.get("email").and_then(Value::as_str) else {
+        return response(400, json!({ "error": "invalid_json" }));
+    };
+    if !validation::valid_name(name) {
+        return response(400, json!({ "error": "invalid_name" }));
+    }
+    if !validation::valid_email(email) {
+        return response(400, json!({ "error": "invalid_email" }));
+    }
+    let stored = call_operation(
+        insert_user,
+        &json!({ "name": name, "email": email, "verified": false, "status": "active" }),
+    );
+    if stored.get("ok") == Some(&Value::Bool(true)) {
+        response(
+            201,
+            json!({ "id": stored["id"], "verified": false, "status": "active" }),
+        )
+    } else if stored.get("error").and_then(Value::as_str) == Some("duplicate_email") {
+        response(409, json!({ "error": "duplicate_email" }))
+    } else {
+        response(500, json!({ "error": "storage_failure" }))
+    }
+}
+
+fn update_status_user(path: &str, actor_role: &str, body: &Value) -> Value {
+    let Some(id_text) = path.strip_prefix("/users/") else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    let Some(id_text) = id_text.strip_suffix("/status") else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id_text.is_empty() || id_text.contains('/') {
+        return response(404, json!({ "error": "not_found" }));
+    }
+    let Ok(id) = id_text.parse::<u64>() else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id == 0 {
+        return response(404, json!({ "error": "not_found" }));
+    }
+    if actor_role != "administrator" {
+        return response(403, json!({ "error": "forbidden" }));
+    }
+
+    let existing = call_operation(get_user, &json!({ "id": id }));
+    if existing.get("ok") == Some(&Value::Bool(true)) {
+        if suspended_user(&existing) {
+            return response(403, json!({ "error": "user_suspended" }));
+        }
+    } else if existing.get("error").and_then(Value::as_str) == Some("not_found") {
+        return response(404, json!({ "error": "not_found" }));
+    } else {
+        return response(500, json!({ "error": "storage_failure" }));
+    }
+
+    let Some(fields) = body.as_object() else {
+        return response(400, json!({ "error": "invalid_json" }));
+    };
+    if !fields.contains_key("status") {
+        return response(400, json!({ "error": "invalid_json" }));
+    }
+    let Some(status) = fields.get("status").and_then(Value::as_str) else {
+        return response(400, json!({ "error": "invalid_status" }));
+    };
+    if status != "suspended" {
+        return response(400, json!({ "error": "invalid_status" }));
+    }
+    if fields.len() != 2 || !fields.contains_key("reason") {
+        return response(400, json!({ "error": "invalid_json" }));
+    }
+    let Some(reason) = fields.get("reason").and_then(Value::as_str) else {
+        return response(400, json!({ "error": "invalid_json" }));
+    };
+    if reason.is_empty() {
+        return response(400, json!({ "error": "invalid_json" }));
+    }
+
+    let stored = call_operation(
+        update_status,
+        &json!({ "id": id, "status": status, "reason": reason }),
+    );
+    if stored.get("ok") == Some(&Value::Bool(true)) {
+        response(200, json!({ "id": id, "status": status }))
+    } else if stored.get("error").and_then(Value::as_str) == Some("not_found") {
+        response(404, json!({ "error": "not_found" }))
+    } else {
+        response(500, json!({ "error": "storage_failure" }))
+    }
+}
+
+fn update_user(path: &str, body: &Value) -> Value {
+    let Some(id_text) = path.strip_prefix("/users/") else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id_text.is_empty() || id_text.contains('/') {
+        return response(404, json!({ "error": "not_found" }));
+    }
+    let Ok(id) = id_text.parse::<u64>() else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id == 0 {
+        return response(404, json!({ "error": "not_found" }));
+    }
+    let Some(fields) = body.as_object() else {
+        return response(400, json!({ "error": "invalid_json" }));
+    };
+    if fields.len() != 1 {
+        return response(400, json!({ "error": "invalid_json" }));
+    }
+    if fields.contains_key("email") {
+        return response(400, json!({ "error": "invalid_json" }));
+    }
+    if !fields.contains_key("name") {
+        return response(400, json!({ "error": "invalid_json" }));
+    }
+    let Some(name) = fields.get("name").and_then(Value::as_str) else {
+        return response(400, json!({ "error": "invalid_json" }));
+    };
+    if !validation::valid_name(name) {
+        return response(400, json!({ "error": "invalid_name" }));
+    }
+
+    let existing = call_operation(get_user, &json!({ "id": id }));
+    if existing.get("ok") == Some(&Value::Bool(true)) {
+        if suspended_user(&existing) {
+            return response(403, json!({ "error": "user_suspended" }));
+        }
+    } else if existing.get("error").and_then(Value::as_str) == Some("not_found") {
+        return response(404, json!({ "error": "not_found" }));
+    } else {
+        return response(500, json!({ "error": "storage_failure" }));
+    }
+
+    let stored = call_operation(update_name, &json!({ "id": id, "name": name }));
+    if stored.get("ok") == Some(&Value::Bool(true)) {
+        response(200, json!({ "id": id, "name": name }))
+    } else if stored.get("error").and_then(Value::as_str) == Some("not_found") {
+        response(404, json!({ "error": "not_found" }))
+    } else {
+        response(500, json!({ "error": "storage_failure" }))
+    }
+}
+
+fn upsert_user_profile(path: &str, body: &Value) -> Value {
+    let Some(id_text) = path.strip_prefix("/users/") else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    let Some(id_text) = id_text.strip_suffix("/profile") else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id_text.is_empty() || id_text.contains('/') {
+        return response(404, json!({ "error": "not_found" }));
+    }
+    let Ok(id) = id_text.parse::<u64>() else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id == 0 {
+        return response(404, json!({ "error": "not_found" }));
+    }
+    let Some(fields) = body.as_object() else {
+        return response(400, json!({ "error": "invalid_json" }));
+    };
+    if fields.len() != 1 || !fields.contains_key("timezone") {
+        return response(400, json!({ "error": "invalid_json" }));
+    }
+    let Some(timezone) = fields.get("timezone").and_then(Value::as_str) else {
+        return response(400, json!({ "error": "invalid_json" }));
+    };
+    if timezone.is_empty() {
+        return response(400, json!({ "error": "invalid_timezone" }));
+    }
+
+    let existing = call_operation(get_user, &json!({ "id": id }));
+    if existing.get("ok") == Some(&Value::Bool(true)) {
+        if suspended_user(&existing) {
+            return response(403, json!({ "error": "user_suspended" }));
+        }
+    } else if existing.get("error").and_then(Value::as_str) == Some("not_found") {
+        return response(404, json!({ "error": "not_found" }));
+    } else {
+        return response(500, json!({ "error": "storage_failure" }));
+    }
+
+    let stored = call_operation(
+        upsert_profile,
+        &json!({ "user_id": id, "timezone": timezone }),
+    );
+    if stored.get("ok") == Some(&Value::Bool(true)) {
+        let Some(stored_timezone) = stored.get("timezone").and_then(Value::as_str) else {
+            return response(500, json!({ "error": "storage_failure" }));
+        };
+        response(200, json!({ "timezone": stored_timezone }))
+    } else if stored.get("error").and_then(Value::as_str) == Some("not_found") {
+        response(404, json!({ "error": "not_found" }))
+    } else {
+        response(500, json!({ "error": "storage_failure" }))
+    }
+}
+
+fn suspended_user(stored: &Value) -> bool {
+    stored
+        .get("user")
+        .and_then(Value::as_object)
+        .and_then(|user| user.get("status"))
+        .and_then(Value::as_str)
+        == Some("suspended")
+}
+
+fn delete_user(path: &str, actor_role: &str) -> Value {
+    let Some(id_text) = path.strip_prefix("/users/") else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id_text.is_empty() || id_text.contains('/') {
+        return response(404, json!({ "error": "not_found" }));
+    }
+    let Ok(id) = id_text.parse::<u64>() else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id == 0 {
+        return response(404, json!({ "error": "not_found" }));
+    }
+    if actor_role != "administrator" {
+        return response(403, json!({ "error": "forbidden" }));
+    }
+
+    let stored = call_operation(soft_delete_user, &json!({ "id": id }));
+    if stored.get("ok") == Some(&Value::Bool(true)) {
+        response(204, json!(null))
+    } else if stored.get("error").and_then(Value::as_str) == Some("not_found") {
+        response(404, json!({ "error": "not_found" }))
+    } else {
+        response(500, json!({ "error": "storage_failure" }))
+    }
+}
+
+fn lookup_user(path: &str) -> Value {
+    let Some(id_text) = path.strip_prefix("/users/") else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id_text.is_empty() || id_text.contains('/') {
+        return response(404, json!({ "error": "not_found" }));
+    }
+    let Ok(id) = id_text.parse::<u64>() else {
+        return response(404, json!({ "error": "not_found" }));
+    };
+    if id == 0 {
+        return response(404, json!({ "error": "not_found" }));
+    }
+
+    let stored = call_operation(get_user, &json!({ "id": id }));
+    if stored.get("ok") == Some(&Value::Bool(true)) {
+        let Some(user) = stored.get("user").and_then(Value::as_object) else {
+            return response(500, json!({ "error": "storage_failure" }));
+        };
+        if deleted_user(user) {
+            return response(404, json!({ "error": "not_found" }));
+        }
+        return response(200, public_user(user));
+    }
+    if stored.get("error").and_then(Value::as_str) == Some("not_found") {
+        response(404, json!({ "error": "not_found" }))
+    } else {
+        response(500, json!({ "error": "storage_failure" }))
+    }
+}
+
+fn deleted_user(user: &serde_json::Map<String, Value>) -> bool {
+    user.get("status").and_then(Value::as_str) == Some("deleted")
+        || user.get("is_deleted").and_then(Value::as_bool) == Some(true)
+        || user.get("deleted").and_then(Value::as_bool) == Some(true)
+        || user.get("deleted_at").is_some_and(|value| !value.is_null())
+}
+
+fn public_user(user: &serde_json::Map<String, Value>) -> Value {
+    let mut public = serde_json::Map::new();
+    for field in ["id", "name", "email", "verified", "status"] {
+        if let Some(value) = user.get(field) {
+            public.insert(String::from(field), value.clone());
+        }
+    }
+    Value::Object(public)
+}
+
+type Operation = unsafe extern "C" fn(i32, i32, i32, i32) -> i32;
+
+fn call_operation(operation: Operation, input: &Value) -> Value {
+    let Ok(input) = serde_json::to_vec(input) else {
+        return json!({ "ok": false, "error": "storage_failure" });
+    };
+    let mut output = vec![0_u8; OPERATION_BUFFER];
+    let length = unsafe {
+        operation(
+            input.as_ptr() as i32,
+            input.len() as i32,
+            output.as_mut_ptr() as i32,
+            output.len() as i32,
+        )
+    };
+    let Ok(length) = usize::try_from(length) else {
+        return json!({ "ok": false, "error": "storage_failure" });
+    };
+    serde_json::from_slice(&output[..length])
+        .unwrap_or_else(|_| json!({ "ok": false, "error": "storage_failure" }))
+}
+
+fn response(status: u16, body: Value) -> Value {
+    json!({ "status": status, "body": body })
+}
+
+fn read_request(pointer: i32, length: i32) -> Option<Request> {
+    let (Ok(pointer), Ok(length)) = (usize::try_from(pointer), usize::try_from(length)) else {
+        return None;
+    };
+    let bytes = unsafe { slice::from_raw_parts(pointer as *const u8, length) };
+    serde_json::from_slice(bytes).ok()
+}
+
+fn emit(value: &Value) -> i64 {
+    let Ok(bytes) = serde_json::to_vec(value) else {
+        return 0;
+    };
+    let pointer = alloc(i32::try_from(bytes.len()).unwrap_or(0));
+    if pointer == 0 {
+        return 0;
+    }
+    unsafe {
+        core::ptr::copy_nonoverlapping(bytes.as_ptr(), pointer as *mut u8, bytes.len());
+    }
+    ((pointer as u32 as u64) << 32 | bytes.len() as u64) as i64
+}
+
+fn allocate(length: usize) -> Option<*mut u8> {
+    let layout = Layout::array::<u8>(length.max(1)).ok()?;
+    let pointer = unsafe { allocate_bytes(layout) };
+    (!pointer.is_null()).then_some(pointer)
+}
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn memcmp(left: *const u8, right: *const u8, length: usize) -> i32 {
+    for index in 0..length {
+        let left_byte = unsafe { *left.add(index) };
+        let right_byte = unsafe { *right.add(index) };
+        if left_byte != right_byte {
+            return i32::from(left_byte) - i32::from(right_byte);
+        }
+    }
+    0
+}

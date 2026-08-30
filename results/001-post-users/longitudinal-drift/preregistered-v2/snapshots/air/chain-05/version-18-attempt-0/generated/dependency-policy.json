@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "contract_sha256": "1b5225b578cf9b25252879d382e224661270234a4f610c5f78c6b823ab7d7130",
+  "maximum_direct": 3,
+  "allowed_direct": [
+    "serde",
+    "serde_json",
+    "wee_alloc"
+  ],
+  "build_scripts_allowed": false
+}

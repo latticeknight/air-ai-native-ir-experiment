@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "outbound_network": {
+    "allowed": false,
+    "scope": "all_endpoints"
+  },
+  "allowed_imports": [
+    { "module": "air_profiles_v1", "name": "upsert_profile" },
+    { "module": "air_users_v1", "name": "get_user" },
+    { "module": "air_users_v1", "name": "insert_user" },
+    { "module": "air_users_v1", "name": "soft_delete_user" },
+    { "module": "air_users_v1", "name": "update_name" },
+    { "module": "air_users_v1", "name": "update_status" }
+  ],
+  "resources": {
+    "guest_memory_bytes": 16777216,
+    "fuel_per_request": 20000000
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "benchmark": "001-post-users",
+  "version": 15,
+  "requirements": {
+    "active": [
+      "LD-001-create-user",
+      "LD-001-email-validation",
+      "LD-001-duplicate-email",
+      "LD-001-capability-boundary",
+      "LD-002-name-length-1-100",
+      "LD-003-verified-default",
+      "LD-004-user-lookup",
+      "LD-005-public-field-filter",
+      "LD-006-name-update",
+      "LD-007-administrator-role",
+      "LD-009-audit-hidden",
+      "LD-010-email-immutable-all",
+      "LD-010-email-capabilities-revoked",
+      "LD-011-soft-delete-preserves-audit",
+      "LD-012-deleted-user-hidden",
+      "LD-013-user-status",
+      "LD-014-suspended-user-immutable",
+      "LD-015-hidden-suspension-reason"
+    ],
+    "retired": [
+      "LD-006-ordinary-email-immutable",
+      "LD-007-admin-email-update",
+      "LD-008-email-change-audit"
+    ]
+  },
+  "routes": [
+    { "method": "POST", "path": "/users", "operation": "create_user" },
+    { "method": "GET", "path": "/users/{id}", "operation": "get_user" },
+    { "method": "PATCH", "path": "/users/{id}", "operation": "update_user" },
+    { "method": "PATCH", "path": "/users/{id}/status", "operation": "update_user_status" },
+    { "method": "DELETE", "path": "/users/{id}", "operation": "delete_user" }
+  ],
+  "public_user_fields": ["id", "name", "email", "verified", "status"],
+  "validation": {
+    "name": { "minimum": 1, "maximum": 100, "unit": "unicode_scalars" },
+    "email": "strict_email_v1"
+  },
+  "capabilities": [
+    { "id": "users.get", "module": "air_users_v1", "name": "get_user" },
+    { "id": "users.insert", "module": "air_users_v1", "name": "insert_user" },
+    { "id": "users.soft_delete", "module": "air_users_v1", "name": "soft_delete_user" },
+    { "id": "users.update_name", "module": "air_users_v1", "name": "update_name" },
+    { "id": "users.update_status", "module": "air_users_v1", "name": "update_status" }
+  ],
+  "invariants": [
+    "duplicate_email_rejected",
+    "no_filesystem",
+    "no_environment",
+    "no_outbound_network",
+    "users_table_only"
+  ],
+  "dependencies": {
+    "maximum_direct": 3,
+    "allowed_direct": ["serde", "serde_json", "wee_alloc"],
+    "build_scripts_allowed": false
+  },
+  "resources": {
+    "guest_memory_bytes": 16777216,
+    "fuel_per_request": 20000000
+  }
+}

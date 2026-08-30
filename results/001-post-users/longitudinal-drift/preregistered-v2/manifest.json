@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "experiment": "air-longitudinal-drift-001",
+  "experiment_id": "preregistered-v2",
+  "benchmark": "001-post-users",
+  "pipelines": [
+    "baseline",
+    "air"
+  ],
+  "chains_per_pipeline": 5,
+  "versions_per_chain": 20,
+  "model": "gpt-5.6-luna",
+  "reasoning": "medium",
+  "maximum_repairs_per_version": 2,
+  "timeout_ms_per_model_turn": 600000,
+  "fresh_context_per_version": true,
+  "repair_context": "resume_current_version_only",
+  "network_access": false,
+  "runner_git_commit": "0a1904bd2f828c780cb51b5aaa75406a4fd951ce",
+  "protocol_sha256": "26e9b1154733f6320a6e3182df5d21e2dc23337ddb65ac05e79cd4f381c1114d",
+  "requirements_sha256": "1fe8ce5a4b191aad5ada8125a771e40663d883647a6a2dc294133f31887af4ea",
+  "oracle_sha256": "7f502519617057232d12786841fb84d8f384342ab7e5ff9adcedddc8ca30a8b1",
+  "codex_cli": "codex-cli 0.148.0-alpha.21",
+  "rustc": "rustc 1.96.0 (ac68faa20 2026-05-25)",
+  "cargo": "cargo 1.96.0 (30a34c682 2026-05-25)",
+  "node": "v24.12.0",
+  "platform": "darwin 25.6.0 arm64",
+  "created_at": "2026-08-29T19:22:31.098Z"
+}
